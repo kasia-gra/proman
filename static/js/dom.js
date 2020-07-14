@@ -117,6 +117,10 @@ function addNewStatusListeners() {
     //Add "Save Changes" button on new status popup listener
     const saveHandler = function (e) {
         const boardID = modal.getAttribute('board');
+        const input = document.querySelector('#new-status-title')
+        const newStatus = input.value;
+        input.value = '';
+        console.log(boardID, newStatus)
     }
     saveButton.addEventListener('click', saveHandler);
 }
