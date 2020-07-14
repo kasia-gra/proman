@@ -1,8 +1,9 @@
-import csv
+import csv, os
 
-STATUSES_FILE = './data/statuses.csv'
-BOARDS_FILE = './data/boards.csv'
-CARDS_FILE = './data/cards.csv'
+FOLDER = FOLDER = f"{os.path.abspath(os.path.dirname(__file__))}"
+STATUSES_FILE = FOLDER + '/data/statuses.csv'
+BOARDS_FILE = FOLDER + '/data/boards.csv'
+CARDS_FILE = FOLDER + '/data/cards.csv'
 
 _cache = {}  # We store cached data in this dict to avoid multiple file readings
 

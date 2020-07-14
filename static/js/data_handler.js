@@ -13,8 +13,8 @@ export let dataHandler = {
             method: 'GET',
             credentials: 'same-origin'
         })
-        .then(response => response.json())  // parse the response as JSON
-        .then(json_response => callback(json_response));  // Call the `callback` with the returned object
+            .then(response => response.json())  // parse the response as JSON
+            .then(json_response => callback(json_response));  // Call the `callback` with the returned object
     },
     _api_post: function (url, data, callback) {
         // it is not called from outside
@@ -32,11 +32,15 @@ export let dataHandler = {
             callback(response);
         });
     },
-    getBoard: function (boardId, callback) {
+    getBoard: function (callback) {
         // the board is retrieved and then the callback function is called with the board
     },
     getStatuses: function (callback) {
         // the statuses are retrieved and then the callback function is called with the statuses
+        this._api_get('/get-statuses', (response) => {
+            this._data['title'] = response;
+            callback(response);
+        });
     },
     getStatus: function (statusId, callback) {
         // the status is retrieved and then the callback function is called with the status
