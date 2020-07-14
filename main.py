@@ -20,7 +20,19 @@ def get_boards():
     """
     All the boards
     """
-    return data_handler.get_boards()
+    list_of_boards = data_handler.get_boards()
+    for board in list_of_boards:
+        board['statuses'] = board['statuses'].split(",")
+    return list_of_boards
+
+
+@app.route("/get-statuses")
+@json_response
+def get_statuses():
+    """
+    All the boards
+    """
+    return data_handler.get_statuses()
 
 
 @app.route("/get-cards/<int:board_id>")

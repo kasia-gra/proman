@@ -1,7 +1,6 @@
 import csv
 import os
 
-
 FOLDER = f"{os.path.abspath(os.path.dirname(__file__))}"
 STATUSES_FILE = FOLDER + '/data/statuses.csv'
 BOARDS_FILE = FOLDER + '/data/boards.csv'
