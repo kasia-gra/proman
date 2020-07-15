@@ -32,7 +32,14 @@ def save_new_status(dict_data):
 
 def save_new_board_data(dict_data):
     with open(BOARDS_FILE, 'a', newline='') as csvfile:
-        fieldnames = ['id', 'title', 'statuses', ]
+        fieldnames = ['id', 'title', 'statuses']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writerow(dict_data)
+
+
+def save_new_card_data(dict_data):
+    with open(CARDS_FILE, 'a', newline='') as csvfile:
+        fieldnames = ['id', 'board_id', 'title', 'status_id', 'order']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writerow(dict_data)
 
