@@ -51,7 +51,7 @@ function getDataFromModalInputs(modalInputs) {
 function openModalOnClick(modal, openingButtonId) {
     let openingButton = document.querySelector(openingButtonId);
     openingButton.addEventListener("click", function () {
-        modal.className = "modal-show";
+        modal.className = "modal-background";
     });
 }
 
