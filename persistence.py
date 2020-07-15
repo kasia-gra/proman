@@ -29,6 +29,14 @@ def save_new_board_data(dict_data):
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writerow(dict_data)
 
+
+def save_new_card_data(dict_data):
+    with open(CARDS_FILE, 'a', newline='') as csvfile:
+        fieldnames = ['id', 'board_id', 'title', 'status_id', 'order']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writerow(dict_data)
+
+
 def _get_data(data_type, file, force):
     """
     Reads defined type of data from file or cache
