@@ -22,6 +22,7 @@ export let dom = {
                     dataHandler.getBoards(function (boards) {
                         dom.showBoards(boards)
                         addNewStatusListeners();
+                        addEventListenersToCards();
                         boards.map(function (board) {
                             for (let boardAssignedStatusId of board.statuses) {
                                 statuses.map(function (statusDict) {
@@ -69,7 +70,6 @@ export let dom = {
             cards.map(function (card){
                 let cardElementHTML = createCard(card.title);
                 let statusContainer, status;
-                console.log(typeof(card.status_id))
                 switch (card.status_id) {
                     case 0 : status = 0;
                         break;
@@ -185,3 +185,24 @@ function createCard(title) {
     `
 }
 
+
+function addEventListenersToCards() {
+    document.addEventListener('click', editCardTitle);
+}
+
+function editCardTitle(e) {
+    if(e.target && e.target.className === 'card') {
+        let input = document.createElement('input');    //create input
+        input.setAttribute('id', 'card-input');
+        input.type = 'text';
+        input.addEventListener('keyup', function(event){    //add listener on input
+            if(event.key === 'Enter') {
+                event.preventDefault();
+                let title = document.getElementById('card-input').value;   //get value from input
+                // TODO tutaj odpalić data handlera
+                e.target.innerHTML = title;
+            }
+        })
+    }
+
+}
