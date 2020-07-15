@@ -6,6 +6,18 @@ ALTER TABLE IF EXISTS ONLY public.boards DROP CONSTRAINT IF EXISTS pk_id CASCADE
 
 ALTER TABLE IF EXISTS ONLY public.statuses DROP CONSTRAINT IF EXISTS pk_id CASCADE;
 
+ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS pk_id CASCADE;
+
+DROP TABLE IF EXISTS public.users;
+CREATE TABLE users (
+    id serial,
+    name text,
+    password text,
+    email text,
+    boards text,
+    PRIMARY KEY (id)
+);
+
 
 
 
@@ -14,6 +26,7 @@ CREATE TABLE boards (
     id serial,
     title text,
     statuses text,
+    user_id integer,
     PRIMARY KEY (id)
 );
 
@@ -75,3 +88,6 @@ ALTER TABLE ONLY cards
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES statuses(id);
+
+ALTER TABLE ONLY boards
+    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id);
