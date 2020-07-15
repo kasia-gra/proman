@@ -19,8 +19,8 @@ export let modalsHandlers = {
             let dataInputsDict = getDataFromModalInputs(modalInputs);
             let additionalData = generateAdditionalDataForNewBoard();
             let dataToPost = {...dataInputsDict, ...additionalData }
-            dataHandler.createNewBoard(dataToPost, function () {
-                console.log("test")
+            dataHandler.createNewBoard(dataToPost, function (new_board) {
+                console.log(new_board)
             })
         })
     }
@@ -61,7 +61,7 @@ function generateAdditionalDataForNewBoard() {
     let allBoards  = document.getElementsByClassName("board");
     let latestBoardId = allBoards[allBoards.length -1]
     let newBoardId = parseInt(latestBoardId.dataset.boardId) + 1;
-    console.log(latestBoardId.dataset.boardId)
-    console.log(parseInt(latestBoardId.dataset.boardId))
+    // console.log(latestBoardId.dataset.boardId)
+    // console.log(parseInt(latestBoardId.dataset.boardId))
     return {id: newBoardId, statuses: defaultBoardStatuses}
 }
