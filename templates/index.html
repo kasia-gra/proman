@@ -73,6 +73,27 @@
         </div>
     </div>
 
+    <div id="modal-create-status" class="modal-create-status modal fade" role="dialog" tabindex="-1"
+     aria-labelledby="Set a new status column" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content create-status">
+                <div class="modal-header">
+                    <button type="button" class="close close-modal-create-status" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5><label>Enter a new status:</label></h5>
+                    <input type="text" id="new-status-title" size="16">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="save-status">Save Status</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
         <div class="board-container" id="board-container">
             <button class="board-add" id="add-board-button">Add Board</button>
         </div>

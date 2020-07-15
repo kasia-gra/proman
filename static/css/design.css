@@ -128,8 +128,7 @@ section.board{
     padding-right: 16px;
 }
 
-.modal-show {
-    display: block;
+.modal-background {
     top: 0;
     position: fixed;
     z-index: 1;
@@ -140,6 +139,9 @@ section.board{
     background-color: rgba(0, 0, 0, 0.4);
 }
 
+.modal-show {
+    display: block;
+}
 
 .modal-hide {
     display: none;
@@ -148,13 +150,17 @@ section.board{
 
 .modal-content {
     background: #ddd url(http://cdn.backgroundhost.com/backgrounds/subtlepatterns/diagonal-noise.png);
-    width: 400px;
+    /*width: 200px;*/
     max-width: 100%;
-    padding: 0;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    /*padding: 2em;*/
+    /*position: fixed;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
+}
+
+.modal-body {
+    align-self: center;
 }
 
 .modal-header {
