@@ -67,7 +67,9 @@ getCard: function (cardId, callback) {
 ,
 createNewBoard: function (dataDict, callback) {
     // creates new board, saves it and calls the callback function with its data
-        this._api_post('/get-boards', dataDict, (dataDict) => {callback(dataDict)});
+        this._api_post('/get-boards', dataDict, (data) => {
+        this._data['new_board'] = data;
+        callback(data)});
 }
 ,
 createNewCard: function (cardTitle, boardId, statusId, callback) {
