@@ -32,15 +32,21 @@ def get_boards():
         return list_of_boards
 
 
-
-
-@app.route("/get-statuses")
+@app.route("/get-statuses", methods=['GET', 'POST'])
 @json_response
 def get_statuses():
     """
     All the boards
     """
-    return data_handler.get_statuses()
+    if request.method == 'GET':
+        return data_handler.get_statuses()
+    elif request.method == 'POST':
+        data = request.get_json()
+        data_dict = dict(data.items())
+        persistence.save_new_status(data_dict)
+        return data_dict
+    else:
+        render_template('index.html')
 
 
 @app.route("/get-cards/<int:board_id>", methods=["GET", "POST"])
