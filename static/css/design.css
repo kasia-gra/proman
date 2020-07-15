@@ -150,11 +150,31 @@ section.board{
 
 .modal-content {
     background: #ddd url(http://cdn.backgroundhost.com/backgrounds/subtlepatterns/diagonal-noise.png);
-    width: 200px;
+    /*width: 200px;*/
     max-width: 100%;
-    padding: 2em;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    /*padding: 2em;*/
+    /*position: fixed;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
+}
+
+.modal-body {
+    align-self: center;
+}
+
+.modal-header {
+    padding: 0;
+    text-align: right;
+    display: block;
+}
+
+.modal.body {
+    padding: 1em;
+}
+
+.close-modal {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-right: 1em;
 }

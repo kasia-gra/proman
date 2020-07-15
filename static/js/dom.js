@@ -1,5 +1,6 @@
 // It uses data_handler.js to visualize elements
 import {dataHandler} from "./data_handler.js";
+import {modalsHandlers} from "./modals_handler.js"
 
 export let dom = {
         init: function () {
@@ -16,12 +17,13 @@ export let dom = {
 
         loadBoards: function () {
             // retrieves boards and makes showBoards called
-            const getAllStatusesDict = dataHandler.getStatuses(function (response) {
+            dataHandler.getStatuses(function (statuses) {
                     dataHandler.getBoards(function (boards) {
                         dom.showBoards(boards)
+                        addNewStatusListeners();
                         boards.map(function (board) {
                             for (let boardAssignedStatusId of board.statuses) {
-                                response.map(function (statusDict) {
+                                statuses.map(function (statusDict) {
                                     if (boardAssignedStatusId == statusDict.id) {
                                         let statusColumnElementHTML = createColumnsStatusesForBoard(statusDict.id ,statusDict.title);
                                         let columnsContainer = document.querySelector(`#columns-board-id-${board.id}`)
@@ -84,22 +86,33 @@ export let dom = {
                 let statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .board-column`);
                 statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
             })
-        },
+        }
+        ,
+        addNewBoard: function () {
+            modalsHandlers.openAddDataModal("#modal-create-board", "#add-board-button");
+            modalsHandlers.submitModalData("#modal-create-board")
+            // let modal = document.getElementById("add-board-button");
+            // modal.addEventListener("click", function () {dataHandler.createNewBoard(data, function () {
+            //     console.log(data)
+            // })})
+        }
 // here comes more features
-    }
-;
+    };
 
 
 let createBoard = function (boardTitle, boardId) {
     return `
-            <section class="board" id="board-id-${boardId}">
+            <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
                 <div class="board-header" id="header-board-${boardId}">
                     <span class="board-title">${boardTitle}</span>
+                    <button class="board-add" id="add-card-board-${boardId}">Add Card</button>
+                    <button class="board-add-status" id="add-status-board-${boardId}"
+                    type="button" data-toggle="modal" data-target="#modal-create-status">Add Status</button>
                     <button class="board-add-card" id="add-card-board-${boardId}">Add Card</button>
                     <button class="board-add-status" id="add-status-board-${boardId}"">Add Status</button>
                     <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
                 </div>
-                <div class="board-columns" id="columns-board-id-${boardId}">column</div>
+                <div class="board-columns" id="columns-board-id-${boardId}"></div>
             </section>`
 }
 
@@ -112,6 +125,23 @@ let createColumnsStatusesForBoard = function (statusId, columnStatusTitle) {
                 </div>
             </div>
     `
+}
+
+function addNewStatusListeners() {
+    const addButtons = document.querySelectorAll("button[id^='add-status-board']"); //"Add Status" buttons
+    const modal = document.querySelector('#modal-create-status'); // Popup
+    const saveButton = document.querySelector('#save-status'); //"Save Status" button
+    //Add "Add Status" button listener
+    const addHandler = function (e) {
+        const boardID = this.id[this.id.length - 1];
+        modal.setAttribute('board', boardID)
+    }
+    addButtons.forEach(button => button.addEventListener('click', addHandler));
+    //Add "Save Changes" button on new status popup listener
+    const saveHandler = function (e) {
+        const boardID = modal.getAttribute('board');
+    }
+    saveButton.addEventListener('click', saveHandler);
 }
 
 let addListenerToAddCardBtn = function() {
