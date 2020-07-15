@@ -25,6 +25,7 @@ def get_boards():
         data_dict = dict(data.items())
         persistence.save_new_board_data(data_dict)
         return data_dict
+
     else:
         list_of_boards = data_handler.get_boards()
         for board in list_of_boards:
