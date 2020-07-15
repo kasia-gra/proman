@@ -32,10 +32,10 @@ CREATE TABLE boards (
 
 
 
-INSERT INTO boards (id, title, statuses) VALUES
-    (0, 'Board 1', '0,1,2,3'),
-    (1, 'Board 2', '0,1,2,3'),
-    (2, 'Board 3', '0,1,2,3');
+INSERT INTO boards (title, statuses) VALUES
+    ('Board 1', '0,1,2,3'),
+    ('Board 2', '0,1,2,3'),
+    ('Board 3', '0,1,2,3');
 SELECT pg_catalog.setval('boards_id_seq', 2, true);
 
 
