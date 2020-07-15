@@ -25,7 +25,7 @@ def _read_csv(file_name):
 
 def save_new_board_data(dict_data):
     with open(BOARDS_FILE, 'a', newline='') as csvfile:
-        fieldnames = ['id', 'title', 'statuses',]
+        fieldnames = ['id', 'title', 'statuses']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writerow(dict_data)
 
