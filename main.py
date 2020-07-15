@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, request
 from util import json_response
 
-import data_handler, persistence
+import data_handler, persistence, data_manager.database_manager
 
 app = Flask(__name__)
 
@@ -56,17 +56,14 @@ def get_cards_for_board(board_id: int):
     All cards that belongs to a board
     :param board_id: id of the parent board
     """
-    cards = persistence.get_cards()
-    last_card_id = len(cards)
 
     if request.method == "POST":
         data = request.get_json()
         data_dict = dict(data.items())
-        data_dict['id'] = last_card_id + 1
-        persistence.save_new_card_data(data_dict)
+        data_manager.database_manager.save_new_card(data_dict)
         return data_dict
     else:
-        return data_handler.get_cards_for_board(board_id)
+        return data_manager.database_manager.get_cards_for_board(board_id)
 
 
 def main():

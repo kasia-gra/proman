@@ -72,11 +72,10 @@ export let dataHandler = {
         },
         createNewCard: function (cardTitle, boardId, statusId, callback) {
             // creates new card, saves it and calls the callback function with its data
-            let dataDict = {'id': 'xx', // TODO automatically ID will works on SQL database
-                    'board_id': boardId,
-                    'title': cardTitle,
-                    'status_id': statusId,
-                    'order': 0
+            let dataDict = { 'board_id': boardId,
+                            'title': cardTitle,
+                            'status_id': statusId,
+                            'order': 0
         };
             this._api_post(`/get-cards/${boardId}`, dataDict, (data) => {
             this._data['new_card'] = data;

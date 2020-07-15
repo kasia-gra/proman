@@ -49,24 +49,8 @@ export let dom = {
                 let boardsContainer = document.querySelector("#board-container");
                 boardsContainer.insertAdjacentHTML("beforeend", boardElementHTML);
             })
-
             addListenerToAddCardBtn();
 
-            // let boardList = '';
-            //
-            // for(let board of boards){
-            //     boardList += `
-            //         <li>${board.title}</li>
-            //     `;
-            // }
-            //
-            // const outerHtml = `
-            //     <ul class="board-container">
-            //         ${boardList}
-            //     </ul>
-            // `;
-            // let boardsContainer = document.querySelector('#boards');
-            // boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
         }
         ,
         loadCards: function (boardId) {
@@ -85,14 +69,15 @@ export let dom = {
             cards.map(function (card){
                 let cardElementHTML = createCard(card.title);
                 let statusContainer, status;
+                console.log(typeof(card.status_id))
                 switch (card.status_id) {
-                    case '0': status = 0;
+                    case 0 : status = 0;
                         break;
-                    case '1': status = 1;
+                    case 1 : status = 1;
                         break;
-                    case '2': status = 2;
+                    case 2 : status = 2;
                         break;
-                    case '3': status = 3;
+                    case 3 : status = 3;
                         break;
                 }
                 statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .status-${status} .board-column-content`);
@@ -102,7 +87,7 @@ export let dom = {
         ,
         addNewBoard: function () {
             modalsHandlers.openAddDataModal("#modal-create-board", "#add-board-button");
-            modalsHandlers.submitModalData("#modal-create-board")
+            modalsHandlers.submitModalData("#modal-create-board");
             // let modal = document.getElementById("add-board-button");
             // modal.addEventListener("click", function () {dataHandler.createNewBoard(data, function () {
             //     console.log(data)
