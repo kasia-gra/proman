@@ -23,8 +23,8 @@ export let modalsHandlers = {
             let additionalData = generateAdditionalDataForNewBoard();
             let dataToPost = {...dataInputsDict, ...additionalData}
             dataHandler.createNewBoard(dataInputsDict, function (new_board) {
-                appendHtmlWithBewBoard(new_board);
                 modal.className = "modal-hide";
+                appendHtmlWithBewBoard(new_board);
             })
         })
     }
