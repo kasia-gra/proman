@@ -71,7 +71,7 @@ export let dom = {
         loadCards: function (boardId) {
             // retrieves cards and makes showCards called
 
-            const allCardsDict = dataHandler.getCardsByBoardId(boardId, function (cards) {
+            dataHandler.getCardsByBoardId(boardId, function (cards) {
                 dom.showCards(cards)
             });
 
@@ -83,7 +83,18 @@ export let dom = {
 
             cards.map(function (card){
                 let cardElementHTML = createCard(card.title);
-                let statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .board-column`);
+                let statusContainer, status;
+                switch (card.status_id) {
+                    case '0': status = 0;
+                        break;
+                    case '1': status = 1;
+                        break;
+                    case '2': status = 2;
+                        break;
+                    case '3': status = 3;
+                        break;
+                }
+                statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .status-${status} .board-column-content`);
                 statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
             })
         }
@@ -105,11 +116,9 @@ let createBoard = function (boardTitle, boardId) {
             <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
                 <div class="board-header" id="header-board-${boardId}">
                     <span class="board-title">${boardTitle}</span>
-                    <button class="board-add" id="add-card-board-${boardId}">Add Card</button>
+                    <button class="board-add-card" id="add-card-board-${boardId}">Add Card</button>
                     <button class="board-add-status" id="add-status-board-${boardId}"
                     type="button" data-toggle="modal" data-target="#modal-create-status">Add Status</button>
-                    <button class="board-add-card" id="add-card-board-${boardId}">Add Card</button>
-                    <button class="board-add-status" id="add-status-board-${boardId}"">Add Status</button>
                     <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
                 </div>
                 <div class="board-columns" id="columns-board-id-${boardId}"></div>
