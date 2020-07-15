@@ -23,11 +23,19 @@ def _read_csv(file_name):
         return formatted_data
 
 
+def save_new_status(dict_data):
+    with open(STATUSES_FILE, 'a', newline='') as csv_file:
+        filednames = ['id', 'title']
+        writer = csv.DictWriter(csv_file, fieldnames=filednames)
+        writer.writerow(dict_data)
+
+
 def save_new_board_data(dict_data):
     with open(BOARDS_FILE, 'a', newline='') as csvfile:
-        fieldnames = ['id', 'title', 'statuses',]
+        fieldnames = ['id', 'title', 'statuses', ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writerow(dict_data)
+
 
 def _get_data(data_type, file, force):
     """
