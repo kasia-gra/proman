@@ -166,10 +166,11 @@ function addCard(button) {
     let statusId = 0; // by default
     let cardTitle = "Empty card"; // temporary
     let cardElementHTML = createCard(cardTitle);
-
+    dataHandler.createNewCard(cardTitle, boardId, statusId, function (new_board) {
+        console.log(new_board)
+    });
     let statusContainer = document.querySelector(`#board-id-${boardId} .board-column-content`);
     statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
-    dataHandler.createNewCard(cardTitle, boardId, statusId)
 }
 
 function createCard(title) {

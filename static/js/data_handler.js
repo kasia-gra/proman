@@ -30,7 +30,7 @@ export let dataHandler = {
     init: function () {
 }
 ,
-getBoards: function (callback) {
+    getBoards: function (callback) {
     // the boards are retrieved and then the callback function is called with the boards
 
         // Here we use an arrow function to keep the value of 'this' on dataHandler.
@@ -63,7 +63,7 @@ getBoards: function (callback) {
     getCard: function (cardId, callback) {
         // the card is retrieved and then the callback function is called with the card
     },
-    createNewBoard: function (boardTitle, callback) {
+    createNewBoard: function (dataDict, callback) {
         // creates new board, saves it and calls the callback function with its data
         this._api_post('/get-boards', dataDict, (data) => {
         this._data['new_board'] = data;
@@ -71,6 +71,16 @@ getBoards: function (callback) {
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
+        let dataDict = {'id': 'xx', // TODO automatically ID will works on SQL database
+                    'board_id': boardId,
+                    'title': cardTitle,
+                    'status_id': statusId,
+                    'order': 0
+        };
+
+        this._api_post(`/get-cards/${boardId}`, dataDict, (data) => {
+        this._data['new_card'] = data;
+        callback(data)});
     }
     // here comes more features
 };

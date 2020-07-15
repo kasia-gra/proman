@@ -44,14 +44,24 @@ def get_statuses():
     return data_handler.get_statuses()
 
 
-@app.route("/get-cards/<int:board_id>")
+@app.route("/get-cards/<int:board_id>", methods=["GET", "POST"])
 @json_response
 def get_cards_for_board(board_id: int):
     """
     All cards that belongs to a board
     :param board_id: id of the parent board
     """
-    return data_handler.get_cards_for_board(board_id)
+    cards = persistence.get_cards()
+    last_card_id = len(cards)
+
+    if request.method == "POST":
+        data = request.get_json()
+        data_dict = dict(data.items())
+        data_dict['id'] = last_card_id + 1
+        persistence.save_new_card_data(data_dict)
+        return data_dict
+    else:
+        return data_handler.get_cards_for_board(board_id)
 
 
 def main():
