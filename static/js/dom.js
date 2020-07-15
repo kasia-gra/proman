@@ -165,7 +165,7 @@ function addNewStatusListeners() {
                 const newStatus = {id: Number(statuses[statuses.length - 1].id) + 1, title: newStatusTitle};
                 const columnsContainer = document.querySelector(`#columns-board-id-${boardId}`);
                 dataHandler.createNewStatus(newStatus, (data) => null);
-                const newStatusColumn = createColumnsStatusesForBoard(newStatus.title);
+                const newStatusColumn = createColumnsStatusesForBoard(newStatus.id, newStatus.title);
                 columnsContainer.insertAdjacentHTML("beforeend", newStatusColumn)
             });
         } else alert('Wrong status name format. Use letters and numbers only.')
