@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request
 from util import json_response
 
+from data_manager import database_manager
 import data_handler, persistence
 
 app = Flask(__name__)
@@ -23,10 +24,16 @@ def get_boards():
     if request.method == "POST":
         data = request.get_json()
         data_dict = dict(data.items())
-        persistence.save_new_board_data(data_dict)
+        # persistence.save_new_board_data(data_dict)
+        # database_manager.save_new_board_data(data_dict)
+        # data_dict = database_manager.get_board_for_board_id(data_dict.id)
+        saved_data = database_manager.save_new_board_data(data_dict)
+        data_dict["id"] = saved_data[0]["id"]
+        print(data_dict)
         return data_dict
     else:
-        list_of_boards = data_handler.get_boards()
+        # list_of_boards = data_handler.get_boards()
+        list_of_boards = database_manager.get_boards()
         for board in list_of_boards:
             board['statuses'] = board['statuses'].split(",")
         return list_of_boards
