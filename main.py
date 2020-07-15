@@ -1,7 +1,7 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from util import json_response
 
-import data_handler
+import data_handler, persistence
 
 app = Flask(__name__)
 
@@ -14,16 +14,24 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/get-boards")
+@app.route("/get-boards", methods=["GET", "POST"])
 @json_response
 def get_boards():
     """
     All the boards
     """
-    list_of_boards = data_handler.get_boards()
-    for board in list_of_boards:
-        board['statuses'] = board['statuses'].split(",")
-    return list_of_boards
+    if request.method == "POST":
+        data = request.get_json()
+        data_dict = dict(data.items())
+        persistence.save_new_board_data(data_dict)
+        return data_dict
+    else:
+        list_of_boards = data_handler.get_boards()
+        for board in list_of_boards:
+            board['statuses'] = board['statuses'].split(",")
+        return list_of_boards
+
+
 
 
 @app.route("/get-statuses")

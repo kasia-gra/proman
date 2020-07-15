@@ -1,5 +1,6 @@
 // It uses data_handler.js to visualize elements
 import {dataHandler} from "./data_handler.js";
+import {modalsHandlers} from "./modals_handler.js"
 
 export let dom = {
         init: function () {
@@ -16,6 +17,11 @@ export let dom = {
 
         loadBoards: function () {
             // retrieves boards and makes showBoards called
+            // modalsHandlers.openCreateNewBoardModal("#modal-create-board", "#add-board-button");
+            // const data = {title: "test"};
+            // dataHandler.createNewBoard(data, function () {
+            //     console.log(data)
+            // })
             const getAllStatusesDict = dataHandler.getStatuses(function (response) {
                     dataHandler.getBoards(function (boards) {
                         dom.showBoards(boards)
@@ -72,6 +78,14 @@ export let dom = {
             // it adds necessary event listeners also
         }
         ,
+        addNewBoard: function () {
+            modalsHandlers.openAddDataModal("#modal-create-board", "#add-board-button");
+            modalsHandlers.submitModalData("#modal-create-board")
+            // let modal = document.getElementById("add-board-button");
+            // modal.addEventListener("click", function () {dataHandler.createNewBoard(data, function () {
+            //     console.log(data)
+            // })})
+        }
 // here comes more features
     }
 ;
@@ -79,7 +93,7 @@ export let dom = {
 
 let createBoard = function (boardTitle, boardId) {
     return `
-            <section class="board" id="board-id-${boardId}">
+            <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
                 <div class="board-header" id="header-board-${boardId}">
                     <span class="board-title">${boardTitle}</span>
                     <button class="board-add" id="add-card-board-${boardId}">Add Card</button>
@@ -100,3 +114,4 @@ let createColumnsStatusesForBoard = function (columnStatusTitle) {
             </div>
     `
 }
+
