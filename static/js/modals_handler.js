@@ -2,10 +2,9 @@ import {dataHandler} from "./data_handler.js";
 
 
 const defaultBoardStatuses = "0,1,2,3"
-const defaultBoardStatusesDict = [{"id": "0", "title": "new"},
-    {"id": "1", "title": "in progress"},
-    {"id": "2", "title": "testing"},
-    {"id": "3", "title": "done"}]
+const defaultStatuses = {"0": "new", "1": "in progress", "2": "testing", "3": "done"}
+
+
 
 export let modalsHandlers = {
 
@@ -23,10 +22,9 @@ export let modalsHandlers = {
             let dataInputsDict = getDataFromModalInputs(modalInputs);
             let additionalData = generateAdditionalDataForNewBoard();
             let dataToPost = {...dataInputsDict, ...additionalData}
-            dataHandler.createNewBoard(dataToPost, function (new_board) {
-                // console.log(new_board.statuses.split(","));
+            dataHandler.createNewBoard(dataInputsDict, function (new_board) {
+                modal.className = "modal-hide";
                 appendHtmlWithBewBoard(new_board);
-                addNewBoardStatusesToHtml(new_board, defaultBoardStatusesDict)
             })
         })
     }
@@ -64,17 +62,12 @@ function closeModalOnClick(modal) {
 
 
 function generateAdditionalDataForNewBoard() {
-    let allBoards = document.getElementsByClassName("board");
-    let latestBoardId = allBoards[allBoards.length - 1]
-    let newBoardId = parseInt(latestBoardId.dataset.boardId) + 1;
-    // console.log(latestBoardId.dataset.boardId)
-    // console.log(parseInt(latestBoardId.dataset.boardId))
-    return {id: newBoardId, statuses: defaultBoardStatuses}
+    return {statuses: defaultBoardStatuses}
 }
 
 
 let createNewBoardHtml = function (boardTitle, boardId) {
-    return `
+    let boardHeaderSection = `
             <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
                 <div class="board-header" id="header-board-${boardId}">
                     <span class="board-title">${boardTitle}</span>
@@ -83,20 +76,28 @@ let createNewBoardHtml = function (boardTitle, boardId) {
                     type="button" data-toggle="modal" data-target="#modal-create-status">Add Status</button>
                     <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
                 </div>
-                <div class="board-columns" id="columns-board-id-${boardId}"></div>
-            </section>`
+                <div class="board-columns" id="columns-board-id-${boardId}">
+                ` + assignColumnsStatusesForNewBoard(defaultStatuses) + `</div></section>`
+    return boardHeaderSection
 }
 
-let createColumnsStatusesForNewBoard = function (columnStatusTitle) {
-    return `
-            <div class="board-column">
-                <div class="board-column-title">${columnStatusTitle}</div>
-                <div class="board-column-content">
-                    <div class="card">Card</div>
-                </div>
-            </div>
-    `
+
+
+let assignColumnsStatusesForNewBoard = function (defaultStatuses) {
+        let sectionColumns = ""
+        let id = 0
+    Object.keys(defaultStatuses).map(function(statusID, statusTitle){
+        sectionColumns = sectionColumns +
+     `<div class="board-column status ${statusID}">
+         <div class="board-column-title">${statusTitle}</div>
+         <div class="board-column-content">
+             <div class="card">Card</div>
+         </div>
+     </div>`
+    });
+    return sectionColumns
 }
+
 
 let appendHtmlWithBewBoard = function (newBoard) {
     let boardElementHTML = createNewBoardHtml(newBoard.title, newBoard.id);

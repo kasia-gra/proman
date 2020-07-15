@@ -16,12 +16,14 @@ def save_new_board_data(cursor: RealDictCursor, new_board_data: dict):
     query = """
     INSERT INTO boards
     (title, statuses)
-    VALUES (%(title)s, '0,1,2,3');
+    VALUES (%(title)s, '0,1,2,3')
+    RETURNING *;
     """
     cursor.execute(query, {
         'title': new_board_data["title"]
         # 'statuses': new_board_data["statuses"]
     })
+    return cursor.fetchall()
 
 
 @connection.connection_handler
