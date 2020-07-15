@@ -162,3 +162,19 @@ section.board{
 .modal-body {
     align-self: center;
 }
+
+.modal-header {
+    padding: 0;
+    text-align: right;
+    display: block;
+}
+
+.modal.body {
+    padding: 1em;
+}
+
+.close-modal {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-right: 1em;
+}
