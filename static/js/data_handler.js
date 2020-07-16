@@ -24,7 +24,7 @@ export let dataHandler = {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(dataDict)
             })
-                .then(response => response.json())
+                .then(response => response.json(), error => alert(error))
                 .then(data => {callback(data)})
         },
         init: function () {

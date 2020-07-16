@@ -60,6 +60,15 @@ def update_board_title(cursor: RealDictCursor, data_dict: dict):
 
 
 @connection.connection_handler
-def save_new_status(cursor: RealDictCursor, new_status: dict):
-    query = sql.SQL('INSERT INTO statuses (title) VALUES {new_status}').format(new_status=sql.Literal(new_status))
+def get_statuses(cursor: RealDictCursor):
+    query = sql.SQL('SELECT * FROM statuses ORDER BY id;')
     cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def save_new_status(cursor: RealDictCursor, new_status: dict):
+    query = sql.SQL('INSERT INTO statuses (title) VALUES ({new_status_title}) RETURNING *;').\
+        format(new_status_title=sql.Literal(new_status['title']))
+    cursor.execute(query)
+    return cursor.fetchone()

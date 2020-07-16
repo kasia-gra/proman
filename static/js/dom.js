@@ -128,37 +128,38 @@ let createColumnsStatusesForBoard = function (statusId, columnStatusTitle) {
 }
 
 function addNewStatusListeners() {
-    const addButtons = document.querySelectorAll("button[id^='add-status-board']"); //"Add Status" buttons
     const modal = document.querySelector('#modal-create-status'); // Popup
     const saveButton = document.querySelector('#save-status'); //"Save Status" button
     //Add "Add Status" button listener
     const addHandler = function (e) {
-        $('#modal-create-status').modal()
-        const boardId = this.id[this.id.length - 1];
-        modal.setAttribute('board', boardId)
+        if (e.target.classList.contains('board-add-status')) {
+            $('#modal-create-status').modal()
+            const board = e.target.parentNode.parentNode
+            const boardId = board.id[board.id.length - 1];
+            modal.setAttribute('board', boardId)
+        }
     }
-    addButtons.forEach(button => button.addEventListener('click', addHandler));
+    document.addEventListener('click', addHandler)
     //Add "Save Changes" button on new status popup listener
-    const saveHandler = function (e) {
+    const saveHandler = function () {
         const input = document.querySelector('#new-status-title');
-        if (input.value.replace(' ', '').toLowerCase().match(/^[0-9a-z]+$/)) {
+        if (input.value.replace(/ /g, '').toLowerCase().match(/^[0-9a-z]+$/)) {
             const boardId = modal.getAttribute('board');
             const newStatusTitle = input.value;
             input.value = '';
             $('#modal-create-status').modal('toggle');
             //Send request to save the new status and add it to DOM
-            let getStatuses = new Promise((resolve) => {
-                dataHandler.getStatuses(statuses => resolve(statuses));
-            })
-            getStatuses.then(result => {
-                const statuses = result;
-                const newStatus = {id: Number(statuses[statuses.length - 1].id) + 1, title: newStatusTitle};
-                const columnsContainer = document.querySelector(`#columns-board-id-${boardId}`);
-                dataHandler.createNewStatus(newStatus, (data) => null);
-                const newStatusColumn = createColumnsStatusesForBoard(newStatus.id, newStatus.title);
-                columnsContainer.insertAdjacentHTML("beforeend", newStatusColumn)
-            });
-        } else alert('Wrong status name format. Use letters and numbers only.')
+            new Promise(((resolve, reject) => {
+                const newStatus = { title: newStatusTitle };
+                dataHandler.createNewStatus(newStatus, data => data ?
+                    resolve(data) : reject(new Error('Cannot save the new status. Try again?')));
+            })).then(newStatus => {
+                    console.log(`status \'${newStatus.title}\' saved`);
+                    const columnsContainer = document.querySelector(`#columns-board-id-${boardId}`);
+                    const newStatusColumn = createColumnsStatusesForBoard(newStatus.id, newStatus.title);
+                    columnsContainer.insertAdjacentHTML("beforeend", newStatusColumn);
+                }, error => alert(error));
+        } else alert('Use letters and numbers only. No big whitespace.')
     }
     saveButton.addEventListener('click', saveHandler);
 }

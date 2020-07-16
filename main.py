@@ -47,14 +47,12 @@ def get_statuses():
     All the boards
     """
     if request.method == 'GET':
-        return data_handler.get_statuses()
-    elif request.method == 'POST':
-        data = request.get_json()
-        data_dict = dict(data.items())
-        persistence.save_new_status(data_dict)
-        return data_dict
-    else:
-        render_template('index.html')
+        return database_manager.get_statuses()
+    if request.method == 'POST':
+        data_dict = request.get_json()
+        print(data_dict)
+        return database_manager.save_new_status(data_dict)
+    render_template('index.html')
 
 
 @app.route("/get-cards/<int:board_id>", methods=["GET", "POST"])
