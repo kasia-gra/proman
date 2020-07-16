@@ -8,7 +8,6 @@ export let cardsHandler = {
         let statusId = 0; // by default
         let cardTitle = "Empty card"; // temporary
         dataHandler.createNewCard(cardTitle, boardId, statusId, function (newCard) {
-            console.log(newCard)
             let cardElementHTML = cardsHandler.createCard(cardTitle, newCard.id);
             let statusContainer = document.querySelector(`#board-id-${boardId} .board-column-content`);
         statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
@@ -17,7 +16,6 @@ export let cardsHandler = {
 
     editCardTitle : function (e) {
         let cardId = (e.target.parentNode.id);
-        console.log(cardId)
         if(e.target && e.target.className === 'card-title') {
             if (!document.querySelector('#card-input')) {
                 let input = document.createElement('input');    //create input
@@ -60,9 +58,7 @@ export let cardsHandler = {
              let cardId = e.target.parentNode.parentNode.id;
              dataHandler.deleteCardById(cardId, function (data) {
               e.target.parentNode.parentNode.remove()
-                 console.log('usunietehehehe')
                 console.log(data)
-                 console.log(e.target)
              });
          }
      }

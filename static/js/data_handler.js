@@ -114,7 +114,6 @@ export let dataHandler = {
                  'title': title,
                  'id': cardId
              };
-             console.log(dataDict)
              this._api_post(`/edit-card`, dataDict, (data) => {
                  this._data['editedCard'] = data;
                  callback(data)
