@@ -81,7 +81,7 @@ INSERT INTO cards (board_id, title, status_id, "order") VALUES
        (2,'in progress card', 1, 0),
        (2,'planning', 2, 0),
        (2,'done card 1', 3, 0);
-SELECT pg_catalog.setval('cards_id_seq', 2, true);
+SELECT pg_catalog.setval('cards_id_seq', 10, true);
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id);
