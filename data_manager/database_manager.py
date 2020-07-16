@@ -47,6 +47,7 @@ def save_new_card(cursor:RealDictCursor, new_card: dict):
     RETURNING *;
     """)
     cursor.execute(query, new_card)
+    return cursor.fetchall()
 
 
 @connection.connection_handler

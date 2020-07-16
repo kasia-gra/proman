@@ -171,17 +171,19 @@ let addListenerToAddCardBtn = function() {
     }
 }
 
+
 function addCard(button) {
     let boardId = (button.target.id).slice(-1); // return number of board where btn is clicked
     let statusId = 0; // by default
     let cardTitle = "Empty card"; // temporary
-    let cardElementHTML = createCard(cardTitle);
-    dataHandler.createNewCard(cardTitle, boardId, statusId, function (new_board) {
-        console.log(new_board)
-    });
-    let statusContainer = document.querySelector(`#board-id-${boardId} .board-column-content`);
+    dataHandler.createNewCard(cardTitle, boardId, statusId, function (newCard) {
+        console.log(newCard)
+        let cardElementHTML = createCard(cardTitle, newCard.id);
+        let statusContainer = document.querySelector(`#board-id-${boardId} .board-column-content`);
     statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
+    });
 }
+
 
 function createCard(title, id) {
     if (!title) {title = "Empty card"}
@@ -194,6 +196,7 @@ function createCard(title, id) {
 function addEventListenersToCards() {
     document.addEventListener('click', editCardTitle);
 }
+
 
 function editCardTitle(e) {
     let cardId = (e.target.id);
