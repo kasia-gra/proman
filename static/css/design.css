@@ -194,3 +194,7 @@ textarea.board-title-input {
     text-decoration: none;
     cursor: pointer;
 }
+
+i {
+    float: left;
+}

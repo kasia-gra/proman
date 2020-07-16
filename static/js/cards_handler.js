@@ -17,7 +17,7 @@ export let cardsHandler = {
 
     editCardTitle : function (e) {
         let cardId = (e.target.id);
-        if(e.target && e.target.className === 'card') {
+        if(e.target && e.target.className === 'card-title') {
             if (!document.querySelector('#card-input')) {
                 let input = document.createElement('input');    //create input
                 input.setAttribute('id', 'card-input');
@@ -47,7 +47,10 @@ export let cardsHandler = {
     createCard : function (title, id) {
         if (!title) {title = "Empty card"}
         return `
-                <div class="card" id="${id}">${title}</div>
+            <div class="card">
+                <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                <div class="card-title" id="${id}">${title}</div>
+            </div>
         `
     }
 
