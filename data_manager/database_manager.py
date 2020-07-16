@@ -85,7 +85,11 @@ def get_statuses(cursor: RealDictCursor):
 
 @connection.connection_handler
 def save_new_status(cursor: RealDictCursor, new_status: dict):
-    query = sql.SQL('INSERT INTO statuses (title) VALUES ({new_status_title}) RETURNING *;').\
-        format(new_status_title=sql.Literal(new_status['title']))
+    query = sql.SQL('INSERT INTO statuses (title) VALUES ({status_title}) RETURNING *;').\
+        format(status_title=sql.Literal(new_status['title']))
     cursor.execute(query)
-    return cursor.fetchone()
+    new_status_response = cursor.fetchone()
+    query = sql.SQL('UPDATE ONLY boards SET statuses = CONCAT(statuses, {status_id}) WHERE id = {board_id}').\
+        format(status_id=sql.Literal(',' + str(new_status_response['id'])), board_id=sql.Literal(new_status['board']))
+    cursor.execute(query)
+    return new_status_response

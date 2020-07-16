@@ -111,9 +111,11 @@ let createBoard = function (boardTitle, boardId) {
                     <button class="board-add-card" id="add-card-board-${boardId}">Add Card</button>
                     <button class="board-add-status" id="add-status-board-${boardId}"
                     type="button">Add Status</button>
-                    <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
+                    <button class="board-toggle" data-toggle="collapse" data-target="#columns-board-id-${boardId}">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
                 </div>
-                <div class="board-columns" id="columns-board-id-${boardId}"></div>
+                <div class="board-columns collapse show" id="columns-board-id-${boardId}"></div>
             </section>`
 }
 
@@ -149,19 +151,11 @@ function addNewStatusListeners() {
             $('#modal-create-status').modal('toggle');
             //Send request to save the new status and add it to DOM
             new Promise(((resolve, reject) => {
-                const newStatus = { title: newStatusTitle };
+                const newStatus = { title: newStatusTitle, board: boardId };
                 dataHandler.createNewStatus(newStatus, data => data ?
                     resolve(data) : reject(new Error('Cannot save the new status. Try again?')));
             })).then(newStatus => {
-                    console.log(`status \'${newStatus.title}\' saved`);
-
                     const columnsContainer = document.querySelector(`#columns-board-id-${boardId}`);
-                    const boardStatuses = []
-                    Array.prototype.forEach.call(columnsContainer.children, node =>
-                        node.classList.forEach(c => c.includes('status') ?
-                            boardStatuses.push(c[c.length-1]) : null)
-                    );
-
                     const newStatusColumn = createColumnsStatusesForBoard(newStatus.id, newStatus.title);
                     columnsContainer.insertAdjacentHTML("beforeend", newStatusColumn);
                 }, error => alert(error));

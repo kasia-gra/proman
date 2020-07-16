@@ -37,7 +37,7 @@ def get_boards():
 
 @app.route("/statuses", methods=['GET', 'POST'])
 @json_response
-def get_statuses():
+def statuses():
     """
     All the boards
     """
