@@ -8,7 +8,6 @@ export let cardsHandler = {
         let statusId = 0; // by default
         let cardTitle = "Empty card"; // temporary
         dataHandler.createNewCard(cardTitle, boardId, statusId, function (newCard) {
-            console.log(newCard)
             let cardElementHTML = cardsHandler.createCard(cardTitle, newCard.id);
             let statusContainer = document.querySelector(`#board-id-${boardId} .board-column-content`);
         statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
@@ -16,7 +15,7 @@ export let cardsHandler = {
     },
 
     editCardTitle : function (e) {
-        let cardId = (e.target.id);
+        let cardId = (e.target.parentNode.id);
         if(e.target && e.target.className === 'card-title') {
             if (!document.querySelector('#card-input')) {
                 let input = document.createElement('input');    //create input
@@ -47,11 +46,20 @@ export let cardsHandler = {
     createCard : function (title, id) {
         if (!title) {title = "Empty card"}
         return `
-            <div class="card" draggable="true">
-                <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                <div class="card-title" id="${id}">${title}</div>
+            <div class="card" id="${id}">
+                <div class="card-remove"><i class="fas fa-trash-alt delete-card"></i></div>
+                <div class="card-title">${title}</div>
             </div>
         `
-    }
+    },
 
+     deleteCard : function(e) {
+         if (e.target && e.target.classList.contains('delete-card')) {
+             let cardId = e.target.parentNode.parentNode.id;
+             dataHandler.deleteCardById(cardId, function (data) {
+              e.target.parentNode.parentNode.remove()
+                console.log(data)
+             });
+         }
+     }
 }
