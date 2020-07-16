@@ -60,6 +60,8 @@ section.board{
 
 textarea.board-title-input {
     border: none;
+    height: 25px;
+    display: inline-block;
 }
 
 
