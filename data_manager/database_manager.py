@@ -1,4 +1,5 @@
 from psycopg2.extras import RealDictCursor
+from psycopg2 import sql
 import connection
 
 
@@ -37,6 +38,7 @@ def get_cards_for_board(cursor: RealDictCursor, board_id: int):
     cursor.execute(query, {'board_id': board_id})
     return cursor.fetchall()
 
+
 @connection.connection_handler
 def save_new_card(cursor:RealDictCursor, new_card: dict):
     query = (f"""
@@ -55,3 +57,9 @@ def update_board_title(cursor: RealDictCursor, data_dict: dict):
     WHERE id = %(board_id)s;
     """
     cursor.execute(query, {'board_id': data_dict["id"], 'title': data_dict["title"]})
+
+
+@connection.connection_handler
+def save_new_status(cursor:RealDictCursor, new_status: dict):
+    query = sql.SQL('INSERT INTO statuses (title) VALUES {new_status}').format(new_status=sql.Literal(new_status))
+    cursor.execute(query)
