@@ -137,7 +137,7 @@ function addNewStatusListeners() {
         if (e.target.classList.contains('board-add-status')) {
             $('#modal-create-status').modal()
             const board = e.target.parentNode.parentNode
-            const boardId = board.id[board.id.length - 1];
+            const boardId = board.id.replace( /^\D+/g, '');
             modal.setAttribute('board', boardId)
         }
     }
