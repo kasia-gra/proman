@@ -3,6 +3,7 @@ import {dataHandler} from "./data_handler.js";
 import {modalsHandlers} from "./modals_handler.js"
 import {changeBoardName} from "./change_board_name.js"
 import {cardsHandler} from "./cards_handler.js"
+import {eventManager} from "./event_manager.js"
 
 export let dom = {
         init: function () {
@@ -23,6 +24,7 @@ export let dom = {
                     dataHandler.getBoards(function (boards) {
                         dom.showBoards(boards)
                         addNewStatusListeners();
+                        eventManager.addListener.renameStatus();
                         addEventListenersToCards();
                         addListenersToDeleteCards()
                         boards.map(function (board) {

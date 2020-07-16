@@ -36,8 +36,9 @@ def get_boards():
 
 
 @app.route("/statuses", methods=['GET', 'POST'])
+@app.route("/statuses/<int:status_id>", methods=['PUT', 'DELETE'])
 @json_response
-def statuses():
+def statuses(status_id=None):
     """
     All the boards
     """
@@ -46,6 +47,9 @@ def statuses():
     if request.method == 'POST':
         data_dict = request.get_json()
         return database_manager.save_new_status(data_dict)
+    if request.method == 'PUT':
+        data_dict = request.get_json()
+        return database_manager.edit_status(data_dict)
     render_template('index.html')
 
 
