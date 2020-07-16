@@ -1,7 +1,7 @@
 // It uses data_handler.js to visualize elements
 import {dataHandler} from "./data_handler.js";
 import {modalsHandlers} from "./modals_handler.js"
-
+import {changeBoardName} from "./change_board_name.js"
 
 export let dom = {
         init: function () {
@@ -87,11 +87,16 @@ export let dom = {
         ,
         addNewBoard: function () {
             modalsHandlers.openAddDataModal("#modal-create-board", "#add-board-button");
-            modalsHandlers.submitModalData("#modal-create-board");
+            modalsHandlers.submitModalData("#modal-create-board")
+            changeBoardName.addEventListenersToBoardTitles ();
             // let modal = document.getElementById("add-board-button");
             // modal.addEventListener("click", function () {dataHandler.createNewBoard(data, function () {
             //     console.log(data)
             // })})
+        },
+
+        editBoardTitle: function () {
+            changeBoardName.addEventListenersToBoardTitles ();
         }
 // here comes more features
     };
