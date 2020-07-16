@@ -16,6 +16,7 @@ export let dataHandler = {
                 .then(response => response.json(), error => alert(error))  // parse the response as JSON
                 .then(json_response => callback(json_response));  // Call the `callback` with the returned object
         },
+
         _api_post: function (url, dataDict, callback) {
             // it is not called from outside
             // sends the data to the API, and calls callback function
@@ -25,8 +26,28 @@ export let dataHandler = {
                 body: JSON.stringify(dataDict)
             })
                 .then(response => response.json(), error => alert(error))
+                .then(data => {callback(data)});
+        },
+
+        _api_put: function (url, dataDict, callback) {
+            fetch(url, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(dataDict)
+            })
+                .then(response => response.json(), error => alert(error))
+                .then(data => callback(data), error => alert('Whoops!'));
+        },
+
+        _api_delete: function (url, callback) {
+
+            fetch(url, {
+                method: 'DELETE',
+            })
+                .then(response => response.json(), error => alert(error))
                 .then(data => {callback(data)})
         },
+
         init: function () {
         }
         ,
@@ -89,6 +110,12 @@ export let dataHandler = {
                 callback(data)
             });
         },
+        editStatus: function (dataDict, callback) {
+            this._api_put(`/statuses/${dataDict.id}`, dataDict, data => {
+                this._data['lastStatusEdit'] = data;
+                callback(data)
+            });
+        },
         editBoard: function (dataDict, callback) {
             // creates new board, saves it and calls the callback function with its data
             this._api_post('/edit-board', dataDict, (data) => {
@@ -103,11 +130,20 @@ export let dataHandler = {
                  'title': title,
                  'id': cardId
              };
-             console.log(dataDict)
-             this._api_post('/edit-card', dataDict, (data) => {
+             this._api_post(`/edit-card`, dataDict, (data) => {
                  this._data['editedCard'] = data;
                  callback(data)
              })
-         }
+         },
+
+        deleteCardById: function(cardId, callback) {
+            let dataDict = {'id': cardId};
+
+            this._api_delete(`/edit-card/${cardId}`, (data) => {
+                this._data['deletedCard'] = data;
+                callback(data)
+            })
+        }
+
         // here comes more features
     };

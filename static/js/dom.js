@@ -3,6 +3,7 @@ import {dataHandler} from "./data_handler.js";
 import {modalsHandlers} from "./modals_handler.js"
 import {changeBoardName} from "./change_board_name.js"
 import {cardsHandler} from "./cards_handler.js"
+import {eventManager} from "./event_manager.js"
 
 export let dom = {
         init: function () {
@@ -23,7 +24,9 @@ export let dom = {
                     dataHandler.getBoards(function (boards) {
                         dom.showBoards(boards)
                         addNewStatusListeners();
+                        eventManager.addListener.renameStatus();
                         addEventListenersToCards();
+                        addListenersToDeleteCards()
                         boards.map(function (board) {
                             for (let boardAssignedStatusId of board.statuses) {
                                 statuses.map(function (statusDict) {
@@ -136,7 +139,7 @@ function addNewStatusListeners() {
         if (e.target.classList.contains('board-add-status')) {
             $('#modal-create-status').modal()
             const board = e.target.parentNode.parentNode
-            const boardId = board.id[board.id.length - 1];
+            const boardId = board.id.match(/\d+/)[0];
             modal.setAttribute('board', boardId)
         }
     }
@@ -175,3 +178,9 @@ let addListenerToAddCardBtn = function() {
 function addEventListenersToCards() {
     document.addEventListener('click', cardsHandler.editCardTitle);
 }
+
+function addListenersToDeleteCards() {
+    document.addEventListener('click', cardsHandler.deleteCard)
+
+}
+
