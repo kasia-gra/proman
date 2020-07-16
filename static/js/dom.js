@@ -68,7 +68,7 @@ export let dom = {
             // it adds necessary event listeners also
 
             cards.map(function (card){
-                let cardElementHTML = createCard(card.title);
+                let cardElementHTML = createCard(card.title, card.id);
                 let statusContainer, status;
                 switch (card.status_id) {
                     case 0 : status = 0;
@@ -121,7 +121,7 @@ let createColumnsStatusesForBoard = function (statusId, columnStatusTitle) {
             <div class="board-column status-${statusId}">
                 <div class="board-column-title">${columnStatusTitle}</div>
                 <div class="board-column-content">
-                    <div class="card">Card</div>
+<!--                    <div class="card">Card</div>-->
                 </div>
             </div>
     `
@@ -183,10 +183,10 @@ function addCard(button) {
     statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
 }
 
-function createCard(title) {
+function createCard(title, id) {
     if (!title) {title = "Empty card"}
     return `
-            <div class="card">${title}</div>
+            <div class="card" id="${id}">${title}</div>
     `
 }
 
@@ -196,18 +196,26 @@ function addEventListenersToCards() {
 }
 
 function editCardTitle(e) {
+    let cardId = (e.target.id);
     if(e.target && e.target.className === 'card') {
-        let input = document.createElement('input');    //create input
-        input.setAttribute('id', 'card-input');
-        input.type = 'text';
-        input.addEventListener('keyup', function(event){    //add listener on input
-            if(event.key === 'Enter') {
-                event.preventDefault();
-                let title = document.getElementById('card-input').value;   //get value from input
-                // TODO tutaj odpalić data handlera
-                e.target.innerHTML = title;
-            }
-        })
-    }
+        if (!document.querySelector('#card-input')) {
+            let input = document.createElement('input');    //create input
+            input.setAttribute('id', 'card-input');
+            input.setAttribute('value', e.target.innerHTML);
+            input.type = 'text';
+            let oldTitle = e.target.innerHTML;
+            e.target.innerHTML = '';
+            e.target.appendChild(input);
 
+            input.addEventListener('keyup', function (event) {    //add listener on input
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    let title = document.getElementById('card-input').value;   //get value from input
+                    dataHandler.editCard(title, cardId, function(editedCard){}); // ask mentor about callback
+                    e.target.innerHTML = title;
+                }
+                else if (event.key === 'Escape') { e.target.innerHTML = oldTitle }
+            })
+        }
+    }
 }

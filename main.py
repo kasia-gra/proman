@@ -87,6 +87,18 @@ def edit_board():
         return "Error"
 
 
+@app.route("/edit-card", methods=["GET", "POST"])
+@json_response
+def edit_card():
+    if request.method == "POST":
+        data = request.get_json()
+        data_dict = dict(data.items())
+        database_manager.update_card_data(data_dict)
+        return 'DONE'
+    else:
+        return 'ERROR'
+
+
 def main():
     app.run(debug=True)
 
