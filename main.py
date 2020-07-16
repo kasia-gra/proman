@@ -50,7 +50,6 @@ def get_statuses():
         return database_manager.get_statuses()
     if request.method == 'POST':
         data_dict = request.get_json()
-        print(data_dict)
         return database_manager.save_new_status(data_dict)
     render_template('index.html')
 
