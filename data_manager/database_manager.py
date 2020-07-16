@@ -37,6 +37,15 @@ def get_cards_for_board(cursor: RealDictCursor, board_id: int):
     cursor.execute(query, {'board_id': board_id})
     return cursor.fetchall()
 
+@connection.connection_handler
+def save_new_card(cursor:RealDictCursor, new_card: dict):
+    query = (f"""
+            INSERT INTO cards
+            (board_id, title, status_id, "order")
+            VALUES (%(board_id)s, %(title)s, %(status_id)s, %(order)s)
+            """)
+    cursor.execute(query, new_card)
+
 
 @connection.connection_handler
 def update_board_title(cursor: RealDictCursor, data_dict: dict):

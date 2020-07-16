@@ -49,24 +49,8 @@ export let dom = {
                 let boardsContainer = document.querySelector("#board-container");
                 boardsContainer.insertAdjacentHTML("beforeend", boardElementHTML);
             })
-
             addListenerToAddCardBtn();
 
-            // let boardList = '';
-            //
-            // for(let board of boards){
-            //     boardList += `
-            //         <li>${board.title}</li>
-            //     `;
-            // }
-            //
-            // const outerHtml = `
-            //     <ul class="board-container">
-            //         ${boardList}
-            //     </ul>
-            // `;
-            // let boardsContainer = document.querySelector('#boards');
-            // boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
         }
         ,
         loadCards: function (boardId) {
@@ -85,14 +69,15 @@ export let dom = {
             cards.map(function (card){
                 let cardElementHTML = createCard(card.title);
                 let statusContainer, status;
+                console.log(typeof(card.status_id))
                 switch (card.status_id) {
-                    case '0': status = 0;
+                    case 0 : status = 0;
                         break;
-                    case '1': status = 1;
+                    case 1 : status = 1;
                         break;
-                    case '2': status = 2;
+                    case 2 : status = 2;
                         break;
-                    case '3': status = 3;
+                    case 3 : status = 3;
                         break;
                 }
                 statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .status-${status} .board-column-content`);
@@ -121,7 +106,7 @@ let createBoard = function (boardTitle, boardId) {
     return `
             <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
                 <div class="board-header" id="header-board-${boardId}">
-                    <span class="board-title"><textarea class="board-title-input">${boardTitle}</textarea></span>
+                    <span class="board-title">${boardTitle}</span>
                     <button class="board-add-card" id="add-card-board-${boardId}">Add Card</button>
                     <button class="board-add-status" id="add-status-board-${boardId}"
                     type="button">Add Status</button>
