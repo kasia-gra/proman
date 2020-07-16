@@ -60,6 +60,6 @@ def update_board_title(cursor: RealDictCursor, data_dict: dict):
 
 
 @connection.connection_handler
-def save_new_status(cursor:RealDictCursor, new_status: dict):
+def save_new_status(cursor: RealDictCursor, new_status: dict):
     query = sql.SQL('INSERT INTO statuses (title) VALUES {new_status}').format(new_status=sql.Literal(new_status))
     cursor.execute(query)
