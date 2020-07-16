@@ -9,19 +9,19 @@ const defaultStatuses = {"0": "new", "1": "in progress", "2": "testing", "3": "d
 export let modalsHandlers = {
 
     openAddDataModal: function (modalId, openingButtonId) {
-        let modal = document.querySelector(modalId);
+        const modal = document.querySelector(modalId);
         openModalOnClick(modal, openingButtonId);
         closeModalOnClick(modal);
     },
 
     submitModalData: function (modalId) {
-        let modal = document.querySelector(modalId);
-        let submitModalDataButton = modal.getElementsByClassName("submit-modal-data")[0];
-        let modalInputs = modal.querySelectorAll("input");
+        const modal = document.querySelector(modalId);
+        const submitModalDataButton = modal.getElementsByClassName("submit-modal-data")[0];
+        const modalInputs = modal.querySelectorAll("input");
         submitModalDataButton.addEventListener("click", function () {
-            let dataInputsDict = getDataFromModalInputs(modalInputs);
-            let additionalData = generateAdditionalDataForNewBoard();
-            let dataToPost = {...dataInputsDict, ...additionalData}
+            const dataInputsDict = getDataFromModalInputs(modalInputs);
+            const additionalData = generateAdditionalDataForNewBoard();
+            const dataToPost = {...dataInputsDict, ...additionalData}
             dataHandler.createNewBoard(dataInputsDict, function (new_board) {
                 modal.className = "modal-hide";
                 appendHtmlWithBewBoard(new_board);
