@@ -37,6 +37,7 @@ def get_cards_for_board(cursor: RealDictCursor, board_id: int):
     cursor.execute(query, {'board_id': board_id})
     return cursor.fetchall()
 
+
 @connection.connection_handler
 def save_new_card(cursor:RealDictCursor, new_card: dict):
     query = (f"""
