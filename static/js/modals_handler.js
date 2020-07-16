@@ -66,8 +66,8 @@ function generateAdditionalDataForNewBoard() {
 }
 
 
-let createNewBoardHtml = function (boardTitle, boardId) {
-    let boardHeaderSection = `
+const createNewBoardHtml = function (boardTitle, boardId) {
+    return `
             <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
                 <div class="board-header" id="header-board-${boardId}">
                     <span class="board-title">${boardTitle}</span>
@@ -77,8 +77,7 @@ let createNewBoardHtml = function (boardTitle, boardId) {
                     <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
                 </div>
                 <div class="board-columns" id="columns-board-id-${boardId}">
-                ` + assignColumnsStatusesForNewBoard(defaultStatuses) + `</div></section>`
-    return boardHeaderSection
+                ${assignColumnsStatusesForNewBoard(defaultStatuses)}</div></section>`
 }
 
 
