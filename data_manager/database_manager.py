@@ -42,11 +42,13 @@ def get_cards_for_board(cursor: RealDictCursor, board_id: int):
 @connection.connection_handler
 def save_new_card(cursor:RealDictCursor, new_card: dict):
     query = (f"""
-            INSERT INTO cards
-            (board_id, title, status_id, "order")
-            VALUES (%(board_id)s, %(title)s, %(status_id)s, %(order)s)
-            """)
+    INSERT INTO cards
+    (board_id, title, status_id, "order")
+    VALUES (%(board_id)s, %(title)s, %(status_id)s, %(order)s)
+    RETURNING *;
+    """)
     cursor.execute(query, new_card)
+    return cursor.fetchall()
 
 
 @connection.connection_handler
@@ -57,6 +59,16 @@ def update_board_title(cursor: RealDictCursor, data_dict: dict):
     WHERE id = %(board_id)s;
     """
     cursor.execute(query, {'board_id': data_dict["id"], 'title': data_dict["title"]})
+
+
+@connection.connection_handler
+def update_card_data(cursor: RealDictCursor, data_dict: dict):
+    query = """
+    UPDATE cards
+    SET title = %(title)s
+    WHERE id = %(id)s;
+    """
+    cursor.execute(query, data_dict)
 
 
 @connection.connection_handler

@@ -76,10 +76,11 @@ export let dataHandler = {
                             'title': cardTitle,
                             'status_id': statusId,
                             'order': 0
-        };
+            };
             this._api_post(`/get-cards/${boardId}`, dataDict, (data) => {
-            this._data['new_card'] = data;
-            callback(data)});
+            this._data['newCard'] = data;
+            callback(data)
+            });
         },
         createNewStatus: function (dataDict, callback) {
             //send a request to save a new statusinput.value
@@ -94,6 +95,19 @@ export let dataHandler = {
                 this._data['edited_board_data'] = data;
                 callback(data)
             });
-        }
+        },
+
+         editCard: function (title, cardId, callback) {
+             // the card is retrieved and then the callback function is called with the card
+             let dataDict = {
+                 'title': title,
+                 'id': cardId
+             };
+             console.log(dataDict)
+             this._api_post('/edit-card', dataDict, (data) => {
+                 this._data['editedCard'] = data;
+                 callback(data)
+             })
+         }
         // here comes more features
     };

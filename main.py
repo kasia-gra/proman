@@ -66,6 +66,10 @@ def get_cards_for_board(board_id: int):
     if request.method == "POST":
         data = request.get_json()
         data_dict = dict(data.items())
+
+        saved_data = database_manager.save_new_board_data(data_dict)
+        data_dict["id"] = saved_data[0]["id"]
+
         database_manager.save_new_card(data_dict)
         return data_dict
     else:
@@ -83,6 +87,18 @@ def edit_board():
         return "test"
     else:
         return "Error"
+
+
+@app.route("/edit-card", methods=["GET", "POST"])
+@json_response
+def edit_card():
+    if request.method == "POST":
+        data = request.get_json()
+        data_dict = dict(data.items())
+        database_manager.update_card_data(data_dict)
+        return 'DONE'
+    else:
+        return 'ERROR'
 
 
 def main():

@@ -2,7 +2,7 @@ import {dataHandler} from "./data_handler.js";
 
 
 const defaultBoardStatuses = "0,1,2,3"
-const defaultStatuses = {"0": "new", "1": "in progress", "2": "testing", "3": "done"}
+const defaultStatuses = {0: "new", 1: "in progress", 2: "testing", 3: "done"}
 
 
 
@@ -86,12 +86,11 @@ let createNewBoardHtml = function (boardTitle, boardId) {
 let assignColumnsStatusesForNewBoard = function (defaultStatuses) {
         let sectionColumns = ""
         let id = 0
-    Object.keys(defaultStatuses).map(function(statusTitle, statusId){
+    Object.keys(defaultStatuses).map(function(statusId){
         sectionColumns = sectionColumns +
      `<div class="board-column status ${statusId}">
-         <div class="board-column-title">${statusTitle}</div>
+         <div class="board-column-title">${defaultStatuses[statusId]}</div>
          <div class="board-column-content">
-             <div class="card">Card</div>
          </div>
      </div>`
     });
