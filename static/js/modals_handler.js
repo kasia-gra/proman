@@ -88,7 +88,7 @@ let assignColumnsStatusesForNewBoard = function (defaultStatuses) {
         let id = 0
     Object.keys(defaultStatuses).map(function(statusTitle, statusId){
         sectionColumns = sectionColumns +
-     `<div class="board-column status ${statusID}">
+     `<div class="board-column status ${statusId}">
          <div class="board-column-title">${statusTitle}</div>
          <div class="board-column-content">
              <div class="card">Card</div>
