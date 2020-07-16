@@ -24,6 +24,7 @@ export let dom = {
                         dom.showBoards(boards)
                         addNewStatusListeners();
                         addEventListenersToCards();
+                        addListenersToDeleteCards()
                         boards.map(function (board) {
                             for (let boardAssignedStatusId of board.statuses) {
                                 statuses.map(function (statusDict) {
@@ -174,3 +175,9 @@ let addListenerToAddCardBtn = function() {
 function addEventListenersToCards() {
     document.addEventListener('click', cardsHandler.editCardTitle);
 }
+
+function addListenersToDeleteCards() {
+    document.addEventListener('click', cardsHandler.deleteCard)
+
+}
+

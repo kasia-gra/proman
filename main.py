@@ -81,14 +81,19 @@ def edit_board():
         return "Error"
 
 
-@app.route("/edit-card", methods=["GET", "POST"])
+@app.route("/edit-card", methods=["GET", "POST", "DELETE"])  # TODO ask mentor about methods
+@app.route("/edit-card/<int:card_id>", methods=["GET", "POST", "DELETE"])
 @json_response
-def edit_card():
+def edit_card(card_id=None):
+
     if request.method == "POST":
         data = request.get_json()
         data_dict = dict(data.items())
         database_manager.update_card_data(data_dict)
         return 'DONE'
+    elif request.method == "DELETE":
+        database_manager.delete_card(card_id)
+        return 'DELETED'
     else:
         return 'ERROR'
 

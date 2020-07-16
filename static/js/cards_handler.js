@@ -16,7 +16,8 @@ export let cardsHandler = {
     },
 
     editCardTitle : function (e) {
-        let cardId = (e.target.id);
+        let cardId = (e.target.parentNode.id);
+        console.log(cardId)
         if(e.target && e.target.className === 'card-title') {
             if (!document.querySelector('#card-input')) {
                 let input = document.createElement('input');    //create input
@@ -47,11 +48,22 @@ export let cardsHandler = {
     createCard : function (title, id) {
         if (!title) {title = "Empty card"}
         return `
-            <div class="card">
-                <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                <div class="card-title" id="${id}">${title}</div>
+            <div class="card" id="${id}">
+                <div class="card-remove"><i class="fas fa-trash-alt delete-card"></i></div>
+                <div class="card-title">${title}</div>
             </div>
         `
-    }
+    },
 
+     deleteCard : function(e) {
+         if (e.target && e.target.classList.contains('delete-card')) {
+             let cardId = e.target.parentNode.parentNode.id;
+             dataHandler.deleteCardById(cardId, function (data) {
+              e.target.parentNode.parentNode.remove()
+                 console.log('usunietehehehe')
+                console.log(data)
+                 console.log(e.target)
+             });
+         }
+     }
 }

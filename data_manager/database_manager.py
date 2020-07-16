@@ -84,3 +84,13 @@ def save_new_status(cursor: RealDictCursor, new_status: dict):
         format(new_status_title=sql.Literal(new_status['title']))
     cursor.execute(query)
     return cursor.fetchone()
+
+
+@connection.connection_handler
+def delete_card(cursor: RealDictCursor, card_id: int):
+
+    query = sql.SQL("""
+        DELETE FROM cards
+        WHERE id = {id}
+        """).format(id=sql.Literal(card_id))
+    cursor.execute(query)
