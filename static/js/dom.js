@@ -1,7 +1,7 @@
 // It uses data_handler.js to visualize elements
 import {dataHandler} from "./data_handler.js";
 import {modalsHandlers} from "./modals_handler.js"
-
+import {changeBoardName} from "./change_board_name.js"
 
 export let dom = {
         init: function () {
@@ -103,10 +103,15 @@ export let dom = {
         addNewBoard: function () {
             modalsHandlers.openAddDataModal("#modal-create-board", "#add-board-button");
             modalsHandlers.submitModalData("#modal-create-board")
+            changeBoardName.addEventListenersToBoardTitles ();
             // let modal = document.getElementById("add-board-button");
             // modal.addEventListener("click", function () {dataHandler.createNewBoard(data, function () {
             //     console.log(data)
             // })})
+        },
+
+        editBoardTitle: function () {
+            changeBoardName.addEventListenersToBoardTitles ();
         }
 // here comes more features
     };
@@ -116,7 +121,7 @@ let createBoard = function (boardTitle, boardId) {
     return `
             <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
                 <div class="board-header" id="header-board-${boardId}">
-                    <span class="board-title">${boardTitle}</span>
+                    <span class="board-title"><textarea class="board-title-input">${boardTitle}</textarea></span>
                     <button class="board-add-card" id="add-card-board-${boardId}">Add Card</button>
                     <button class="board-add-status" id="add-status-board-${boardId}"
                     type="button">Add Status</button>

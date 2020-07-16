@@ -6,7 +6,8 @@ import connection
 def get_boards(cursor: RealDictCursor):
     cursor.execute(f"""
                     SELECT *
-                    FROM boards;
+                    FROM boards
+                    ORDER BY id;
                     """)
     return cursor.fetchall()
 
@@ -36,3 +37,12 @@ def get_cards_for_board(cursor: RealDictCursor, board_id: int):
     cursor.execute(query, {'board_id': board_id})
     return cursor.fetchall()
 
+
+@connection.connection_handler
+def update_board_title(cursor: RealDictCursor, data_dict: dict):
+    query = """
+    UPDATE boards
+    SET title = %(title)s
+    WHERE id = %(board_id)s;
+    """
+    cursor.execute(query, {'board_id': data_dict["id"], 'title': data_dict["title"]})

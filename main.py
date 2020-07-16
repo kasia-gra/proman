@@ -76,6 +76,19 @@ def get_cards_for_board(board_id: int):
         return data_handler.get_cards_for_board(board_id)
 
 
+@app.route("/edit-board", methods=["GET", "POST"])
+@json_response
+def edit_board():
+    if request.method == "POST":
+        data = request.get_json()
+        data_dict = dict(data.items())
+        print(data_dict)
+        database_manager.update_board_title(data_dict)
+        return "test"
+    else:
+        return "Error"
+
+
 def main():
     app.run(debug=True)
 

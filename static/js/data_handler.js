@@ -88,6 +88,13 @@ export let dataHandler = {
                 this._data['newStatus'] = data;
                 callback(data)
             });
+        },
+        editBoard: function (dataDict, callback) {
+            // creates new board, saves it and calls the callback function with its data
+            this._api_post('/edit-board', dataDict, (data) => {
+                this._data['edited_board_data'] = data;
+                callback(data)
+            });
         }
         // here comes more features
     };
