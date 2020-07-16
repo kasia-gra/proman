@@ -32,12 +32,11 @@ def get_boards():
         data_dict["id"] = saved_data[0]["id"]
         print(data_dict)
         return data_dict
-    else:
-        # list_of_boards = data_handler.get_boards()
-        list_of_boards = database_manager.get_boards()
-        for board in list_of_boards:
-            board['statuses'] = board['statuses'].split(",")
-        return list_of_boards
+
+    boards = data_handler.get_boards()
+    for board in boards:
+        board['statuses'] = board['statuses'].split(",")
+    return boards
 
 
 @app.route("/get-statuses", methods=['GET', 'POST'])
