@@ -2,6 +2,7 @@
 import {dataHandler} from "./data_handler.js";
 import {modalsHandlers} from "./modals_handler.js"
 import {changeBoardName} from "./change_board_name.js"
+import {cardsHandler} from "./cards_handler.js"
 
 export let dom = {
         init: function () {
@@ -68,7 +69,7 @@ export let dom = {
             // it adds necessary event listeners also
 
             cards.map(function (card){
-                let cardElementHTML = createCard(card.title, card.id);
+                let cardElementHTML = cardsHandler.createCard(card.title, card.id);
                 let statusContainer, status;
                 switch (card.status_id) {
                     case 0 : status = 0;
@@ -120,9 +121,7 @@ let createColumnsStatusesForBoard = function (statusId, columnStatusTitle) {
     return `
             <div class="board-column status-${statusId}">
                 <div class="board-column-title">${columnStatusTitle}</div>
-                <div class="board-column-content">
-<!--                    <div class="card">Card</div>-->
-                </div>
+                <div class="board-column-content"></div>
             </div>
     `
 }
@@ -164,58 +163,13 @@ function addNewStatusListeners() {
 }
 
 let addListenerToAddCardBtn = function() {
-
     let addButtons = document.querySelectorAll(".board-add-card");
     for (let button of addButtons) {
-        button.addEventListener("click", addCard);
+        button.addEventListener("click", cardsHandler.addCard);
     }
-}
-
-function addCard(button) {
-    let boardId = (button.target.id).slice(-1); // return number of board where btn is clicked
-    let statusId = 0; // by default
-    let cardTitle = "Empty card"; // temporary
-    let cardElementHTML = createCard(cardTitle);
-    dataHandler.createNewCard(cardTitle, boardId, statusId, function (new_board) {
-        console.log(new_board)
-    });
-    let statusContainer = document.querySelector(`#board-id-${boardId} .board-column-content`);
-    statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
-}
-
-function createCard(title, id) {
-    if (!title) {title = "Empty card"}
-    return `
-            <div class="card" id="${id}">${title}</div>
-    `
 }
 
 
 function addEventListenersToCards() {
-    document.addEventListener('click', editCardTitle);
-}
-
-function editCardTitle(e) {
-    let cardId = (e.target.id);
-    if(e.target && e.target.className === 'card') {
-        if (!document.querySelector('#card-input')) {
-            let input = document.createElement('input');    //create input
-            input.setAttribute('id', 'card-input');
-            input.setAttribute('value', e.target.innerHTML);
-            input.type = 'text';
-            let oldTitle = e.target.innerHTML;
-            e.target.innerHTML = '';
-            e.target.appendChild(input);
-
-            input.addEventListener('keyup', function (event) {    //add listener on input
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    let title = document.getElementById('card-input').value;   //get value from input
-                    dataHandler.editCard(title, cardId, function(editedCard){}); // ask mentor about callback
-                    e.target.innerHTML = title;
-                }
-                else if (event.key === 'Escape') { e.target.innerHTML = oldTitle }
-            })
-        }
-    }
+    document.addEventListener('click', cardsHandler.editCardTitle);
 }

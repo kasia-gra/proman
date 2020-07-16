@@ -78,7 +78,7 @@ export let dataHandler = {
                             'order': 0
             };
             this._api_post(`/get-cards/${boardId}`, dataDict, (data) => {
-            this._data['new_card'] = data;
+            this._data['newCard'] = data;
             callback(data)
             });
         },
