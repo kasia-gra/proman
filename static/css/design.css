@@ -50,11 +50,19 @@ section.board{
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
-.board-title{
-    margin: 13px;
+.board-title.  {
+    margin: 5px;
     display: inline-block;
     font-size: 20px;
+    border: none;
 }
+
+
+textarea.board-title-input {
+    border: none;
+}
+
+
 .board-title, .board-add, .board-toggle{
     display: inline-block;
 }
