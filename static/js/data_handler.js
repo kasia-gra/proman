@@ -26,7 +26,17 @@ export let dataHandler = {
                 body: JSON.stringify(dataDict)
             })
                 .then(response => response.json(), error => alert(error))
-                .then(data => {callback(data)})
+                .then(data => {callback(data)});
+        },
+
+        _api_put: function (url, dataDict, callback) {
+            fetch(url, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(dataDict)
+            })
+                .then(response => response.json(), error => alert(error))
+                .then(data => callback(data), error => alert('Whoops!'));
         },
 
         _api_delete: function (url, callback) {
@@ -97,6 +107,12 @@ export let dataHandler = {
             //send a request to save a new statusinput.value
             this._api_post('/statuses', dataDict, (data) => {
                 this._data['newStatus'] = data;
+                callback(data)
+            });
+        },
+        editStatus: function (dataDict, callback) {
+            this._api_put(`/statuses/${dataDict.id}`, dataDict, data => {
+                this._data['lastStatusEdit'] = data;
                 callback(data)
             });
         },
