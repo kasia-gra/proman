@@ -16,7 +16,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/get-boards", methods=["GET", "POST"])
+@app.route("/boards", methods=["GET", "POST"])
 @json_response
 def get_boards():
     """
@@ -25,22 +25,17 @@ def get_boards():
     if request.method == "POST":
         data = request.get_json()
         data_dict = dict(data.items())
-        # persistence.save_new_board_data(data_dict)
-        # database_manager.save_new_board_data(data_dict)
-        # data_dict = database_manager.get_board_for_board_id(data_dict.id)
         saved_data = database_manager.save_new_board_data(data_dict)
         data_dict["id"] = saved_data[0]["id"]
-        print(data_dict)
         return data_dict
     else:
-        # list_of_boards = data_handler.get_boards()
-        list_of_boards = database_manager.get_boards()
-        for board in list_of_boards:
+        boards = database_manager.get_boards()
+        for board in boards:
             board['statuses'] = board['statuses'].split(",")
-        return list_of_boards
+        return boards
 
 
-@app.route("/get-statuses", methods=['GET', 'POST'])
+@app.route("/statuses", methods=['GET', 'POST'])
 @json_response
 def get_statuses():
     """
@@ -54,7 +49,7 @@ def get_statuses():
     render_template('index.html')
 
 
-@app.route("/get-cards/<int:board_id>", methods=["GET", "POST"])
+@app.route("/cards/<int:board_id>", methods=["GET", "POST"])
 @json_response
 def get_cards_for_board(board_id: int):
     """

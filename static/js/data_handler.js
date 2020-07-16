@@ -35,7 +35,7 @@ export let dataHandler = {
 
             // Here we use an arrow function to keep the value of 'this' on dataHandler.
             //    if we would use function(){...} here, the value of 'this' would change.
-            this._api_get('/get-boards', (response) => {
+            this._api_get('/boards', (response) => {
                 this._data['boards'] = response;
                 callback(response);
             });
@@ -45,7 +45,7 @@ export let dataHandler = {
         },
         getStatuses: function (callback) {
             // the statuses are retrieved and then the callback function is called with the statuses
-            this._api_get('/get-statuses', (response) => {
+            this._api_get('/statuses', (response) => {
                 this._data['title'] = response;
                 callback(response);
             });
@@ -55,7 +55,7 @@ export let dataHandler = {
         },
         getCardsByBoardId: function (boardId, callback) {
             // the cards are retrieved and then the callback function is called wiqth the cards
-            this._api_get(`/get-cards/${boardId}`, (response) => {
+            this._api_get(`/cards/${boardId}`, (response) => {
                 this._data = response;
                 callback(response);
             });
@@ -65,7 +65,7 @@ export let dataHandler = {
         },
         createNewBoard: function (dataDict, callback) {
             // creates new board, saves it and calls the callback function with its data
-            this._api_post('/get-boards', dataDict, (data) => {
+            this._api_post('/boards', dataDict, (data) => {
                 this._data['new_board'] = data;
                 callback(data)
             });
@@ -77,14 +77,14 @@ export let dataHandler = {
                             'status_id': statusId,
                             'order': 0
             };
-            this._api_post(`/get-cards/${boardId}`, dataDict, (data) => {
+            this._api_post(`/cards/${boardId}`, dataDict, (data) => {
             this._data['newCard'] = data;
             callback(data)
             });
         },
         createNewStatus: function (dataDict, callback) {
             //send a request to save a new statusinput.value
-            this._api_post('/get-statuses', dataDict, (data) => {
+            this._api_post('/statuses', dataDict, (data) => {
                 this._data['newStatus'] = data;
                 callback(data)
             });
