@@ -93,3 +93,13 @@ def save_new_status(cursor: RealDictCursor, new_status: dict):
         format(status_id=sql.Literal(',' + str(new_status_response['id'])), board_id=sql.Literal(new_status['board']))
     cursor.execute(query)
     return new_status_response
+
+
+@connection.connection_handler
+def delete_card(cursor: RealDictCursor, card_id: int):
+
+    query = sql.SQL("""
+        DELETE FROM cards
+        WHERE id = {id}
+        """).format(id=sql.Literal(card_id))
+    cursor.execute(query)

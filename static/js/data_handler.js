@@ -16,6 +16,7 @@ export let dataHandler = {
                 .then(response => response.json(), error => alert(error))  // parse the response as JSON
                 .then(json_response => callback(json_response));  // Call the `callback` with the returned object
         },
+
         _api_post: function (url, dataDict, callback) {
             // it is not called from outside
             // sends the data to the API, and calls callback function
@@ -27,6 +28,16 @@ export let dataHandler = {
                 .then(response => response.json(), error => alert(error))
                 .then(data => {callback(data)})
         },
+
+        _api_delete: function (url, callback) {
+
+            fetch(url, {
+                method: 'DELETE',
+            })
+                .then(response => response.json(), error => alert(error))
+                .then(data => {callback(data)})
+        },
+
         init: function () {
         }
         ,
@@ -103,11 +114,20 @@ export let dataHandler = {
                  'title': title,
                  'id': cardId
              };
-             console.log(dataDict)
-             this._api_post('/edit-card', dataDict, (data) => {
+             this._api_post(`/edit-card`, dataDict, (data) => {
                  this._data['editedCard'] = data;
                  callback(data)
              })
-         }
+         },
+
+        deleteCardById: function(cardId, callback) {
+            let dataDict = {'id': cardId};
+
+            this._api_delete(`/edit-card/${cardId}`, (data) => {
+                this._data['deletedCard'] = data;
+                callback(data)
+            })
+        }
+
         // here comes more features
     };
