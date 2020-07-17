@@ -18,7 +18,7 @@ def index():
 
 @app.route("/boards", methods=["GET", "POST"])
 @json_response
-def get_boards():
+def boards_handler():
     """
     All the boards
     """

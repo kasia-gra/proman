@@ -54,8 +54,8 @@ export let dom = {
                 let boardElementHTML = createBoard(board.title, board.id);
                 let boardsContainer = document.querySelector("#board-container");
                 boardsContainer.insertAdjacentHTML("beforeend", boardElementHTML);
+
             })
-            addListenerToAddCardBtn();
 
         }
         ,
@@ -63,7 +63,8 @@ export let dom = {
             // retrieves cards and makes showCards called
 
             dataHandler.getCardsByBoardId(boardId, function (cards) {
-                dom.showCards(cards)
+                dom.showCards(cards);
+                addListenerToAddCardBtn();
             });
 
         }
@@ -74,18 +75,7 @@ export let dom = {
 
             cards.map(function (card){
                 let cardElementHTML = cardsHandler.createCard(card.title, card.id);
-                let statusContainer, status;
-                switch (card.status_id) {
-                    case 0 : status = 0;
-                        break;
-                    case 1 : status = 1;
-                        break;
-                    case 2 : status = 2;
-                        break;
-                    case 3 : status = 3;
-                        break;
-                }
-                statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .status-${status} .board-column-content`);
+                const statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .status-${card.status_id} .board-column-content`);
                 statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
             })
         }
@@ -155,7 +145,10 @@ function addNewStatusListeners() {
             $('#modal-create-status').modal('toggle');
             //Send request to save the new status and add it to DOM
             new Promise(((resolve, reject) => {
-                const newStatus = { title: newStatusTitle, board: boardId };
+                const newStatus = {
+                    title: newStatusTitle,
+                    board: boardId
+                };
                 dataHandler.createNewStatus(newStatus, data => data ?
                     resolve(data) : reject(new Error('Cannot save the new status. Try again?')));
             })).then(newStatus => {
@@ -164,7 +157,7 @@ function addNewStatusListeners() {
                     columnsContainer.insertAdjacentHTML("beforeend", newStatusColumn);
                 }, error => alert(error));
         } else alert('Use letters and numbers only. No big whitespace.')
-    }
+    };
     saveButton.addEventListener('click', saveHandler);
 }
 

@@ -21,7 +21,7 @@ function postData(currentElement) {
     window.onclick = function (event) {
         let isDataPosted = localStorage.getItem("posted")
         if (event.target != currentElement && isDataPosted == "false") {
-            let isDataPosted = localStorage.setItem("posted", "true");
+            localStorage.setItem("posted", "true");
             let textWithData = document.getElementById("board-title-to-post");
             let newTitle = textWithData.value;
             let boardId = textWithData.parentNode.parentNode.id.replace("header-board-", "");

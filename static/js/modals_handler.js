@@ -9,7 +9,7 @@ const defaultStatuses = {0: "new", 1: "in progress", 2: "testing", 3: "done"}
 export let modalsHandlers = {
 
     openAddDataModal: function (modalId, openingButtonId) {
-        let modal = document.querySelector(modalId);
+        const modal = document.querySelector(modalId);
         openModalOnClick(modal, openingButtonId);
         closeModalOnClick(modal);
     },
