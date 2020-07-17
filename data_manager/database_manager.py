@@ -97,6 +97,14 @@ def save_new_status(cursor: RealDictCursor, new_status: dict):
 
 
 @connection.connection_handler
+def edit_status(cursor: RealDictCursor, status_edit: dict):
+    query = sql.SQL('UPDATE ONLY statuses SET title = {new_title} WHERE id = {status_id} RETURNING *').\
+        format(new_title=sql.Literal(status_edit['title']), status_id=sql.Literal(status_edit['id']))
+    cursor.execute(query)
+    return cursor.fetchone()
+
+
+@connection.connection_handler
 def delete_card(cursor: RealDictCursor, card_id: int):
 
     query = sql.SQL("""

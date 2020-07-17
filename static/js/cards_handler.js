@@ -46,7 +46,7 @@ export let cardsHandler = {
     createCard : function (title, id) {
         if (!title) {title = "Empty card"}
         return `
-            <div class="card" id="${id}">
+            <div class="card" draggable="true" id="${id}">
                 <div class="card-remove"><i class="fas fa-trash-alt delete-card"></i></div>
                 <div class="card-title">${title}</div>
             </div>
