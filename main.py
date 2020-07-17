@@ -102,6 +102,18 @@ def edit_card(card_id=None):
         return 'ERROR'
 
 
+@app.route("/register", methods=["GET", "POST"])
+@json_response
+def registration():
+
+    if request.method == 'GET':
+        return "test?"
+
+    new_user_data = request.get_json()
+    database_manager.add_new_user(new_user_data)
+    return 'mission complete'
+
+
 def main():
     app.run(debug=True)
 

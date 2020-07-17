@@ -86,6 +86,7 @@ textarea.board-title-input {
 
 .board-column-content{
     min-height: 49px;
+    padding-bottom: 40px;
 }
 
 .board-column-content:empty{

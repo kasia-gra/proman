@@ -26,7 +26,8 @@ export let dom = {
                         addNewStatusListeners();
                         eventManager.addListener.renameStatus();
                         addEventListenersToCards();
-                        addListenersToDeleteCards()
+                        addListenersToDeleteCards();
+                        addListenerToRegister();
                         boards.map(function (board) {
                             for (let boardAssignedStatusId of board.statuses) {
                                 statuses.map(function (statusDict) {
@@ -184,3 +185,35 @@ function addListenersToDeleteCards() {
 
 }
 
+function addListenerToRegister() {
+    let registerBtn = document.querySelector('#register')
+    registerBtn.addEventListener('click', registerModal)
+}
+
+function registerModal(e) {
+    const saveButton = document.querySelector('#save-user');
+    saveButton.addEventListener('click', function (e) {
+        e.preventDefault()
+        let nameInput = document.querySelector('#user-name');
+        let emailInput = document.querySelector('#user-email');
+        let passwordInput = document.querySelector('#user-password');
+        if(validateInput(nameInput) && validateInputEmail(emailInput) && validateInput(passwordInput)) {
+            $('#modalRegisterForm').modal('toggle');
+            console.log('Valid inputs');
+        }
+        else {
+            emailInput.value = '';
+            passwordInput.value = '';
+            alert('Wrong input! Use letters and numbers only. Minimum 3 characters')}
+    });
+
+}
+
+function validateInputEmail(inputEmail) {
+    const emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    return !emailReg.test(inputEmail.value);
+}
+
+function validateInput(inputName) {
+      return inputName.value.length >= 3;
+}
