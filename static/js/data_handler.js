@@ -127,6 +127,13 @@ export let dataHandler = {
                 this._data['deletedCard'] = data;
                 callback(data)
             })
+        },
+
+        createNewUser: function(dataDict, callback) {
+            this._api_post('/register', dataDict, (data) => {
+                 this._data['editedCard'] = data;
+                 callback(data)
+             })
         }
 
         // here comes more features

@@ -66,6 +66,7 @@ def update_board_statuses(cursor: RealDictCursor, data_dict: dict):
     query = sql.SQL('UPDATE ONLY boards SET statuses = {statuses} WHERE id = {board_id}').format(statuses)
     cursor.execute(query)
 
+
 @connection.connection_handler
 def update_card_data(cursor: RealDictCursor, data_dict: dict):
     query = """
@@ -103,3 +104,11 @@ def delete_card(cursor: RealDictCursor, card_id: int):
         WHERE id = {id}
         """).format(id=sql.Literal(card_id))
     cursor.execute(query)
+
+
+@connection.connection_handler
+def add_new_user(cursor: RealDictCursor, new_user_data: dict):
+    cursor.execute("""
+        INSERT INTO users(name, password, email)
+        VALUES (%(name)s, %(password)s, %(email)s
+       """, new_user_data)
