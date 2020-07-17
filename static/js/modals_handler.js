@@ -15,13 +15,13 @@ export let modalsHandlers = {
     },
 
     submitModalData: function (modalId) {
-        let modal = document.querySelector(modalId);
-        let submitModalDataButton = modal.getElementsByClassName("submit-modal-data")[0];
-        let modalInputs = modal.querySelectorAll("input");
+        const modal = document.querySelector(modalId);
+        const submitModalDataButton = modal.getElementsByClassName("submit-modal-data")[0];
+        const modalInputs = modal.querySelectorAll("input");
         submitModalDataButton.addEventListener("click", function () {
-            let dataInputsDict = getDataFromModalInputs(modalInputs);
-            let additionalData = generateAdditionalDataForNewBoard();
-            let dataToPost = {...dataInputsDict, ...additionalData}
+            const dataInputsDict = getDataFromModalInputs(modalInputs);
+            const additionalData = generateAdditionalDataForNewBoard();
+            const dataToPost = {...dataInputsDict, ...additionalData}
             dataHandler.createNewBoard(dataInputsDict, function (new_board) {
                 modal.className = "modal-hide";
                 appendHtmlWithBewBoard(new_board);
@@ -31,9 +31,9 @@ export let modalsHandlers = {
 }
 
 function getAllModalInputFields(modalId) {
-    let modal = document.querySelector(modalId);
-    let submitModalDataButton = modal.getElementsByClassName("submit-modal-data")[0];
-    let modalInputs = modal.querySelectorAll("input");
+    const modal = document.querySelector(modalId);
+    const submitModalDataButton = modal.getElementsByClassName("submit-modal-data")[0];
+    const modalInputs = modal.querySelectorAll("input");
     return modalInputs
 }
 
@@ -66,9 +66,9 @@ function generateAdditionalDataForNewBoard() {
 }
 
 
-let createNewBoardHtml = function (boardTitle, boardId) {
-    let boardHeaderSection = `
-            <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
+const createNewBoardHtml = function (boardTitle, boardId) {
+     return
+            `<section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
                 <div class="board-header" id="header-board-${boardId}">
                     <span class="board-title"><textarea class="board-title-input">${boardTitle}</textarea></span>
                     <button class="board-add-card" id="add-card-board-${boardId}">Add Card</button>
@@ -76,9 +76,8 @@ let createNewBoardHtml = function (boardTitle, boardId) {
                     type="button">Add Status</button>
                     <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
                 </div>
-                <div class="board-columns" id="columns-board-id-${boardId}">
-                ` + assignColumnsStatusesForNewBoard(defaultStatuses) + `</div></section>`
-    return boardHeaderSection
+                <div class="board-columns" id="columns-board-id-${boardId}">${assignColumnsStatusesForNewBoard(defaultStatuses)}
+            </div></section>`
 }
 
 

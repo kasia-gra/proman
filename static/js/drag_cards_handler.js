@@ -23,7 +23,6 @@ let DragStart = function () {
 let DragEnd = function () {
     document.addEventListener('dragend', function (e) {
         if (e.target && e.target.className == 'card') {
-            console.log("DRAG ENDED");
             e.target.classList.remove("dragged");
         }
     });
@@ -33,7 +32,6 @@ let dragEnter = function () {
     document.addEventListener('dragenter', function (e) {
         if (e.target && e.target.className == "board-column-content") {
             let Slot = e.target;
-            console.log("TEST")
         }
     });
 }
@@ -62,7 +60,6 @@ let dragOver = function () {
 let dragDrop = function () {
     document.addEventListener('drop', function (e) {
         if (e.target && e.target.className == "board-column-content") {
-            console.log("dropping");
             e.preventDefault();
             let Slot = e.target;
             let draggedElement = document.querySelector(".dragged");
