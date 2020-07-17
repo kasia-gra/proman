@@ -66,6 +66,7 @@ def update_board_statuses(cursor: RealDictCursor, data_dict: dict):
     query = sql.SQL('UPDATE ONLY boards SET statuses = {statuses} WHERE id = {board_id}').format(statuses)
     cursor.execute(query)
 
+
 @connection.connection_handler
 def update_card_data(cursor: RealDictCursor, data_dict: dict):
     query = """

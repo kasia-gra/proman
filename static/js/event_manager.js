@@ -16,7 +16,9 @@ const handlers = {
         let statusId;
         status.classList.forEach(c => c.includes('status') ?
             statusId = c.match(/\d+/)[0] : null);
-        if(status.classList.contains('board-column')) {
+        let isTitle = false;
+        title.classList.forEach(c => c.includes('title') ? isTitle = true : null);
+        if(status.classList.contains('board-column') && isTitle) {
             if (!document.querySelector('#column-input')) {
                 let input = document.createElement('input');    //create input
                 input.setAttribute('id', 'column-input');
