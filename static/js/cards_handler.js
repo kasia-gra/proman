@@ -4,7 +4,7 @@ import {dataHandler} from "./data_handler.js";
 export let cardsHandler = {
 
     addCard : function (button) {
-        let boardId = (button.target.id).slice(-1); // return number of board where btn is clicked
+        let boardId = button.target.id.match(/\d+/)[0]; // return number of board where btn is clicked
         let statusId = 0; // by default
         let cardTitle = "Empty card"; // temporary
         dataHandler.createNewCard(cardTitle, boardId, statusId, function (newCard) {
