@@ -2,7 +2,7 @@ import {dataHandler} from "./data_handler.js";
 
 
 const defaultBoardStatuses = "0,1,2,3"
-const defaultStatuses = {0: "new", 1: "in progress", 2: "testing", 3: "done"}
+const defaultStatuses = {1: "new", 2: "in progress", 3: "testing", 4: "done"}
 
 
 
@@ -20,9 +20,10 @@ export let modalsHandlers = {
         const modalInputs = modal.querySelectorAll("input");
         submitModalDataButton.addEventListener("click", function () {
             const dataInputsDict = getDataFromModalInputs(modalInputs);
-            const additionalData = generateAdditionalDataForNewBoard();
-            const dataToPost = {...dataInputsDict, ...additionalData}
-            dataHandler.createNewBoard(dataInputsDict, function (new_board) {
+            // const additionalData = generateAdditionalDataForNewBoard();
+            const dataToPost = {...dataInputsDict}
+            console.log(dataToPost)
+            dataHandler.createNewBoard(dataToPost, function (new_board) {
                 modal.className = "modal-hide";
                 appendHtmlWithBewBoard(new_board);
             })

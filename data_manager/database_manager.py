@@ -1,38 +1,46 @@
-from psycopg2.extras import RealDictCursor, DictCursor
+from psycopg2.extras import RealDictCursor
 from psycopg2 import sql
 import connection
 
 
 @connection.connection_handler
-def get_boards_data(cursor: RealDictCursor):
+def get_boards(cursor: RealDictCursor):
+    cursor.execute(f"""
+                    SELECT boards.id, boards.title, ARRAY_AGG(s.title) AS statuses_list, ARRAY_AGG(s.id) AS ids
+                    FROM boards
+                    JOIN board_statuses bs on boards.id = bs.board_id
+                    JOIN statuses s on bs.status_id = s.id
+                    GROUP BY boards.title, boards.id
+                    ORDER BY boards.id;
+                    """)
+    return cursor.fetchall()
+
+@connection.connection_handler
+def get_all_cards(cursor: RealDictCursor):
     cursor.execute(f"""
                     SELECT s.title, boards.title, STRING_AGG(c.title, ', ') AS cards_list
                     FROM board_statuses
                     JOIN boards on board_statuses.board_id = boards.id
                     JOIN statuses s on board_statuses.status_id = s.id
                     JOIN cards c on boards.id = c.board_id
-                    WHERE s.id = c.status_id
-                    GROUP BY s.title, boards.title, boards.id, s.id
+                    GROUP BY boards.id, boards.title, s.title, s.id
                     ORDER BY boards.id, s.id
                     """)
     return cursor.fetchall()
-
-
 
 
 @connection.connection_handler
 def save_new_board_data(cursor: RealDictCursor, new_board_data: dict):
     query = """
     INSERT INTO boards
-    (title, statuses)
-    VALUES (%(title)s, '0,1,2,3')
+    VALUES (%(title)s)
     RETURNING *;
     """
     cursor.execute(query, {
         'title': new_board_data["title"]
-        # 'statuses': new_board_data["statuses"]
     })
     return cursor.fetchall()
+
 
 
 @connection.connection_handler

@@ -30,11 +30,7 @@ def get_boards():
         data_dict["id"] = saved_data[0]["id"]
         return data_dict
     else:
-        boards = database_manager.get_boards_data()
-        for el in boards:
-            print(el)
-        # for board in boards:
-        #     board['statuses'] = board['statuses'].split(",")
+        boards = database_manager.get_boards()
         return boards
 
 
