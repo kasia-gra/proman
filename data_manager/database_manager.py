@@ -6,14 +6,12 @@ import connection
 @connection.connection_handler
 def get_boards_data(cursor: RealDictCursor):
     cursor.execute(f"""
-                    SELECT s.title AS status_title, boards.title AS board_title, STRING_AGG(c.title, ', ') AS cards_list
-                    FROM board_statuses
-                    JOIN boards on board_statuses.board_id = boards.id
-                    JOIN statuses s on board_statuses.status_id = s.id
-                    JOIN cards c on boards.id = c.board_id
-                    WHERE s.id = c.status_id
-                    GROUP BY s.title, boards.title, boards.id, s.id
-                    ORDER BY boards.id, s.id
+                    SELECT boards.id, boards.title, STRING_AGG(s.title, ', ') AS statuses_list 
+                    FROM boards
+                    JOIN board_statuses bs on boards.id = bs.board_id
+                    JOIN statuses s on bs.status_id = s.id
+                    GROUP BY boards.title, boards.id
+                    ORDER BY boards.id;
                     """)
     return cursor.fetchall()
 
