@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request
-from util import json_response
+from util import json_response, jsonify
 import os
 
 from data_manager import database_manager
@@ -30,9 +30,11 @@ def get_boards():
         data_dict["id"] = saved_data[0]["id"]
         return data_dict
     else:
-        boards = database_manager.get_boards()
-        for board in boards:
-            board['statuses'] = board['statuses'].split(",")
+        boards = database_manager.get_boards_data()
+        for el in boards:
+            print(el)
+        # for board in boards:
+        #     board['statuses'] = board['statuses'].split(",")
         return boards
 
 
