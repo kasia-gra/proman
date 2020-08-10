@@ -6,7 +6,7 @@ import connection
 @connection.connection_handler
 def get_boards_data(cursor: RealDictCursor):
     cursor.execute(f"""
-                    SELECT s.title, boards.title, STRING_AGG(c.title, ', ') AS cards_list
+                    SELECT s.title AS status_title, boards.title AS board_title, STRING_AGG(c.title, ', ') AS cards_list
                     FROM board_statuses
                     JOIN boards on board_statuses.board_id = boards.id
                     JOIN statuses s on board_statuses.status_id = s.id
