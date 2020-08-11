@@ -1,6 +1,6 @@
 // It uses data_handler.js to visualize elements
 import {dataHandler} from "./data_handler.js";
-import {modalsHandlers} from "./modals_handler.js"
+import {boardsHandler} from "./boards_handler.js"
 import {changeBoardName} from "./change_board_name.js"
 import {cardsHandler} from "./cards_handler.js"
 import {eventManager} from "./event_manager.js"
@@ -30,7 +30,7 @@ export let dom = {
         // it adds necessary event listeners also
 
         boards.map(function (board) {
-            let boardElementHTML = createBoard(board.title, board.id);
+            let boardElementHTML = boardsHandler.createBoard(board.title, board.id);
             let boardsContainer = document.querySelector("#board-container");
             boardsContainer.insertAdjacentHTML("beforeend", boardElementHTML);
             dom.showStatuses(board);
@@ -42,10 +42,9 @@ export let dom = {
     }
     ,
 
-    showStatuses: function (board) {
-        console.log(board["statuses_list"]);
+    showStatuses: function (board) {;
         for (let statusIndex=0; statusIndex < board["statuses_list"].length; statusIndex++) {
-            let statusColumnElementHTML = createColumnsStatusesForBoard(board["ids"][statusIndex],
+            let statusColumnElementHTML = boardsHandler.createColumnsStatusesForBoard(board["ids"][statusIndex],
                 board["statuses_list"][statusIndex]);
             let columnsContainer = document.querySelector(`#columns-board-id-${board.id}`)
             columnsContainer.insertAdjacentHTML("beforeend", statusColumnElementHTML);
@@ -71,8 +70,8 @@ export let dom = {
     }
     ,
     addNewBoard: function () {
-        modalsHandlers.openAddDataModal("#modal-create-board", "#add-board-button");
-        modalsHandlers.submitModalData("#modal-create-board")
+        boardsHandler.openAddDataModal("#modal-create-board", "#add-board-button");
+        const res = boardsHandler.submitModalData("#modal-create-board")
         changeBoardName.addEventListenersToBoardTitles();
         // let modal = document.getElementById("add-board-button");
         // modal.addEventListener("click", function () {dataHandler.createNewBoard(data, function () {
@@ -86,31 +85,6 @@ export let dom = {
 // here comes more features
 };
 
-
-let createBoard = function (boardTitle, boardId) {
-    return `
-            <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
-                <div class="board-header" id="header-board-${boardId}">
-                    <span class="board-title"><textarea class="board-title-input">${boardTitle}</textarea></span>
-                    <button class="board-add-card" id="add-card-board-${boardId}">Add Card</button>
-                    <button class="board-add-status" id="add-status-board-${boardId}"
-                    type="button">Add Status</button>
-                    <button class="board-toggle" data-toggle="collapse" data-target="#columns-board-id-${boardId}">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="board-columns collapse show" id="columns-board-id-${boardId}"></div>
-            </section>`
-}
-
-let createColumnsStatusesForBoard = function (statusId, columnStatusTitle) {
-    return `
-            <div class="board-column status-${statusId}">
-                <div class="board-column-title">${columnStatusTitle}</div>
-                <div class="board-column-content"></div>
-            </div>
-    `
-}
 
 function addNewStatusListeners() {
     const modal = document.querySelector('#modal-create-status'); // Popup

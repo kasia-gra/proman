@@ -1,12 +1,31 @@
 import {dataHandler} from "./data_handler.js";
 
 
-const defaultBoardStatuses = "0,1,2,3"
-const defaultStatuses = {1: "new", 2: "in progress", 3: "testing", 4: "done"}
+export let boardsHandler = {
 
-
-
-export let modalsHandlers = {
+    createBoard: function (boardTitle, boardId) {
+        return `
+            <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
+                <div class="board-header" id="header-board-${boardId}">
+                    <span class="board-title"><textarea class="board-title-input">${boardTitle}</textarea></span>
+                    <button class="board-add-card" id="add-card-board-${boardId}">Add Card</button>
+                    <button class="board-add-status" id="add-status-board-${boardId}"
+                    type="button">Add Status</button>
+                    <button class="board-toggle" data-toggle="collapse" data-target="#columns-board-id-${boardId}">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="board-columns collapse show" id="columns-board-id-${boardId}"></div>
+            </section>`
+    },
+    createColumnsStatusesForBoard: function (statusId, columnStatusTitle) {
+        return `
+            <div class="board-column status-${statusId}">
+                <div class="board-column-title">${columnStatusTitle}</div>
+                <div class="board-column-content"></div>
+            </div>
+    `
+    },
 
     openAddDataModal: function (modalId, openingButtonId) {
         let modal = document.querySelector(modalId);
@@ -20,12 +39,13 @@ export let modalsHandlers = {
         const modalInputs = modal.querySelectorAll("input");
         submitModalDataButton.addEventListener("click", function () {
             const dataInputsDict = getDataFromModalInputs(modalInputs);
-            // const additionalData = generateAdditionalDataForNewBoard();
             const dataToPost = {...dataInputsDict}
             console.log(dataToPost)
             dataHandler.createNewBoard(dataToPost, function (new_board) {
                 modal.className = "modal-hide";
-                appendHtmlWithBewBoard(new_board);
+                console.log(new_board[0]);
+                appendHtmlWithBewBoard(new_board[0]);
+                return new_board
             })
         })
     }
@@ -62,55 +82,13 @@ function closeModalOnClick(modal) {
 }
 
 
-function generateAdditionalDataForNewBoard() {
-    return {statuses: defaultBoardStatuses}
-}
-
-
-let createNewBoardHtml = function (boardTitle, boardId) {
-    let boardHeaderSection = `
-            <section class="board" id="board-id-${boardId}" data-board-id='${boardId}'>
-                <div class="board-header" id="header-board-${boardId}">
-                    <span class="board-title"><textarea class="board-title-input">${boardTitle}</textarea></span>
-                    <button class="board-add-card" id="add-card-board-${boardId}">Add Card</button>
-                    <button class="board-add-status" id="add-status-board-${boardId}"
-                    type="button">Add Status</button>
-                    <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
-                </div>
-                <div class="board-columns" id="columns-board-id-${boardId}">
-                ` + assignColumnsStatusesForNewBoard(defaultStatuses) + `</div></section>`
-    return boardHeaderSection
-}
-
-
-
-
-let assignColumnsStatusesForNewBoard = function (defaultStatuses) {
-        let sectionColumns = ""
-        let id = 0
-    Object.keys(defaultStatuses).map(function(statusId){
-        sectionColumns = sectionColumns +
-     `<div class="board-column status ${statusId}">
-         <div class="board-column-title">${defaultStatuses[statusId]}</div>
-         <div class="board-column-content">
-         </div>
-     </div>`
-    });
-    return sectionColumns
-}
-
-
 let appendHtmlWithBewBoard = function (newBoard) {
-    let boardElementHTML = createNewBoardHtml(newBoard.title, newBoard.id);
+    let boardElementHTML = boardsHandler.createBoard(newBoard.title, newBoard.id);
     let boardsContainer = document.querySelector("#board-container");
     boardsContainer.insertAdjacentHTML("beforeend", boardElementHTML);
-}
-
-
-let addNewBoardStatusesToHtml = function (newBoard, defaultBoardStatusesDict) {
-    for (let defaultStatusId of newBoard.statuses.split(",")) {
-        let columnTitle = defaultBoardStatusesDict[defaultStatusId]
-        let statusColumnElementHTML = createColumnsStatusesForNewBoard(columnTitle.title);
+    for (let statusIndex = 0; statusIndex < newBoard["statuses_list"].length; statusIndex++) {
+        let statusColumnElementHTML = boardsHandler.createColumnsStatusesForBoard(newBoard["ids"][statusIndex],
+            newBoard["statuses_list"][statusIndex]);
         let columnsContainer = document.querySelector(`#columns-board-id-${newBoard.id}`)
         columnsContainer.insertAdjacentHTML("beforeend", statusColumnElementHTML);
     }
