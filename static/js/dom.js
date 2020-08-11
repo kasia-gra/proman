@@ -30,7 +30,6 @@ export let dom = {
         // it adds necessary event listeners also
 
         boards.map(function (board) {
-            dom.loadCards(board.id);
             let boardElementHTML = createBoard(board.title, board.id);
             let boardsContainer = document.querySelector("#board-container");
             boardsContainer.insertAdjacentHTML("beforeend", boardElementHTML);
