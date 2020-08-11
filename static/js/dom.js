@@ -148,12 +148,20 @@ function registerModal(e) {
     const saveButton = document.querySelector('#save-user');
     saveButton.addEventListener('click', function (e) {
         e.preventDefault()
+        const newUserData = {}
         let nameInput = document.querySelector('#user-name');
         let emailInput = document.querySelector('#user-email');
         let passwordInput = document.querySelector('#user-password');
+        console.log(nameInput.value)
         if (validateInput(nameInput) && validateInputEmail(emailInput) && validateInput(passwordInput)) {
             $('#modalRegisterForm').modal('toggle');
-            console.log('Valid inputs');
+            newUserData['name'] = nameInput.value;
+            newUserData['email'] = emailInput.value;
+            newUserData['password'] = passwordInput.value;
+            dataHandler.createNewUser(newUserData, function(){console.log(':D')})
+            // nameInput.value = '';
+            // emailInput.value = '';
+            // passwordInput.value = '';
         } else {
             emailInput.value = '';
             passwordInput.value = '';
@@ -163,9 +171,11 @@ function registerModal(e) {
 
 }
 
+
+
 function validateInputEmail(inputEmail) {
     const emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    return !emailReg.test(inputEmail.value);
+    return emailReg.test(inputEmail.value);
 }
 
 function validateInput(inputName) {

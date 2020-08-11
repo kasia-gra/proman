@@ -157,5 +157,5 @@ def delete_card(cursor: RealDictCursor, card_id: int):
 def add_new_user(cursor: RealDictCursor, new_user_data: dict):
     cursor.execute("""
         INSERT INTO users(name, password, email)
-        VALUES (%(name)s, %(password)s, %(email)s
+        VALUES (%(name)s, %(password)s, %(email)s)
        """, new_user_data)

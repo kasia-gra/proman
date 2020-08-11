@@ -143,7 +143,7 @@ export let dataHandler = {
         createNewUser: function(dataDict, callback) {
             this._api_post('/register', dataDict, (data) => {
                  this._data['editedCard'] = data;
-                 callback(data)
+                 callback()
              })
         }
 
