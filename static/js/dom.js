@@ -114,7 +114,7 @@ function addNewStatusListeners() {
                     resolve(data) : reject(new Error('Cannot save the new status. Try again?')));
             })).then(newStatus => {
                 const columnsContainer = document.querySelector(`#columns-board-id-${boardId}`);
-                const newStatusColumn = createColumnsStatusesForBoard(newStatus.id, newStatus.title);
+                const newStatusColumn = boardsHandler.createColumnsStatusesForBoard(newStatus.id, newStatus.title);
                 columnsContainer.insertAdjacentHTML("beforeend", newStatusColumn);
             }, error => alert(error));
         } else alert('Use letters and numbers only. No big whitespace.')
