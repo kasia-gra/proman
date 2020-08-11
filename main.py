@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request
 from util import json_response, jsonify
+import util
 import os
 
 from data_manager import database_manager
@@ -95,6 +96,7 @@ def registration():
         return "test?"
 
     new_user_data = request.get_json()
+    new_user_data['password'] = util.hash_password(new_user_data['password'])
     database_manager.add_new_user(new_user_data)
     return 'mission complete'
 
