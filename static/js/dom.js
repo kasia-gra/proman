@@ -141,36 +141,34 @@ function addListenersToDeleteCards() {
 
 function addListenerToRegister() {
     let registerBtn = document.querySelector('#register')
-    registerBtn.addEventListener('click', registerModal)
+    registerBtn.addEventListener('click', function() {
+        const saveButton = document.querySelector('#save-user');
+        saveButton.addEventListener('click', getUserDataFromModal);
+    });
 }
 
-function registerModal(e) {
-    const saveButton = document.querySelector('#save-user');
-    saveButton.addEventListener('click', function (e) {
-        e.preventDefault()
+function getUserDataFromModal(e) {
+     e.preventDefault()
         const newUserData = {}
         let nameInput = document.querySelector('#user-name');
         let emailInput = document.querySelector('#user-email');
         let passwordInput = document.querySelector('#user-password');
-        console.log(nameInput.value)
+
         if (validateInput(nameInput) && validateInputEmail(emailInput) && validateInput(passwordInput)) {
             $('#modalRegisterForm').modal('toggle');
             newUserData['name'] = nameInput.value;
             newUserData['email'] = emailInput.value;
             newUserData['password'] = passwordInput.value;
             dataHandler.createNewUser(newUserData, function(){console.log(':D')})
-            // nameInput.value = '';
-            // emailInput.value = '';
-            // passwordInput.value = '';
+            nameInput.value = '';
+            emailInput.value = '';
+            passwordInput.value = '';
         } else {
             emailInput.value = '';
             passwordInput.value = '';
             alert('Wrong input! Use letters and numbers only. Minimum 3 characters')
         }
-    });
-
 }
-
 
 
 function validateInputEmail(inputEmail) {
