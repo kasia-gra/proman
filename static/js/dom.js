@@ -4,6 +4,7 @@ import {boardsHandler} from "./boards_handler.js"
 import {changeBoardName} from "./change_board_name.js"
 import {cardsHandler} from "./cards_handler.js"
 import {eventManager} from "./event_manager.js"
+import {dragCardsHandler} from "./drag_cards_handler.js"
 
 export let dom = {
     init: function () {
@@ -66,6 +67,7 @@ export let dom = {
             let statusContainer;
             statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .status-${card.status_id} .board-column-content`);
             statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
+            dragCardsHandler.InitCardsDragDropListeners();
         })
     }
     ,
