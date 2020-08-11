@@ -74,13 +74,15 @@ export let dataHandler = {
         getStatus: function (statusId, callback) {
             // the status is retrieved and then the callback function is called with the status
         },
-        getCardsByBoardId: function (boardId, callback) {
-            // the cards are retrieved and then the callback function is called wiqth the cards
-            this._api_get(`/cards/${boardId}`, (response) => {
+
+        getAllCards: function(callback) {
+             this._api_get('/cards', (response) => {
                 this._data = response;
                 callback(response);
             });
+
         },
+
         getCard: function (cardId, callback) {
             // the card is retrieved and then the callback function is called with the card
         },
@@ -98,7 +100,7 @@ export let dataHandler = {
                             'status_id': statusId,
                             'order': 0
             };
-            this._api_post(`/cards/${boardId}`, dataDict, (data) => {
+            this._api_post('/cards', dataDict, (data) => {
             this._data['newCard'] = data;
             callback(data)
             });
@@ -130,7 +132,7 @@ export let dataHandler = {
                  'title': title,
                  'id': cardId
              };
-             this._api_post(`/edit-card`, dataDict, (data) => {
+             this._api_put(`/cards/${cardId}`, dataDict, (data) => {
                  this._data['editedCard'] = data;
                  callback(data)
              })

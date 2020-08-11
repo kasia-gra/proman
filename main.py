@@ -52,23 +52,24 @@ def statuses(status_id=None):
     render_template('index.html')
 
 
-@app.route("/cards/<int:board_id>", methods=["GET", "POST"])
+@app.route("/cards", methods={"GET", "POST"})
+@app.route("/cards/<int:card_id>", methods=["GET", "POST", "PUT", "DELETE"])
 @json_response
-def get_cards_for_board(board_id: int):
-    """
-    All cards that belongs to a board
-    :param board_id: id of the parent board
-    """
-
+def cards(card_id=None):
+    data = request.get_json()
     if request.method == "POST":
-        data = request.get_json()
         data_dict = dict(data.items())
         saved_data = database_manager.save_new_card(data_dict)
         data_dict["id"] = saved_data[0]["id"]
-        print(data_dict)
         return data_dict
+    elif request.method == 'DELETE':
+        database_manager.delete_card(card_id)
+    elif request.method == 'PUT':
+        data_dict = dict(data.items())
+        database_manager.update_card_data(data_dict)
+
     else:
-        return database_manager.get_cards_for_board(board_id)
+        return database_manager.get_all_cards()
 
 
 @app.route("/edit-board", methods=["GET", "POST"])
@@ -82,23 +83,6 @@ def edit_board():
         return "test"
     else:
         return "Error"
-
-
-@app.route("/edit-card", methods=["GET", "POST", "DELETE"])  # TODO ask mentor about methods
-@app.route("/edit-card/<int:card_id>", methods=["GET", "POST", "DELETE"])
-@json_response
-def edit_card(card_id=None):
-
-    if request.method == "POST":
-        data = request.get_json()
-        data_dict = dict(data.items())
-        database_manager.update_card_data(data_dict)
-        return 'DONE'
-    elif request.method == "DELETE":
-        database_manager.delete_card(card_id)
-        return 'DELETED'
-    else:
-        return 'ERROR'
 
 
 @app.route("/register", methods=["GET", "POST"])
