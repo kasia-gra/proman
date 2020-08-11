@@ -56,11 +56,15 @@ const handlers = {
             // noinspection JSUnusedAssignment
             statusId = statusId[1];
             const boardId = e.target.closest('section').id.match(/\d+$/)[0];
+            const removeButton = e.target.closest('.status-remove');
+            const removeIcon = removeButton.innerHTML;
+            removeButton.innerHTML = `<div class='loader'></div>`
             dataHandler.deleteStatus(
                 {statusId: statusId, boardId: boardId},
                 (deletedStatus) => {
                     if (statusId === deletedStatus.id.toString()) {
                         document.querySelector(`.status-${statusId}`).remove();
+                        removeButton.innerHTML = removeIcon;
                     }
                     else {
                         alert('Critical error. Please contact system administrator.')
