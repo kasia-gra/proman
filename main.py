@@ -52,6 +52,8 @@ def statuses(status_id=None):
     if request.method == 'PUT':
         data_dict = request.get_json()
         return database_manager.edit_status(data_dict)
+    if request.method == 'DELETE':
+        return None
     render_template('index.html')
 
 

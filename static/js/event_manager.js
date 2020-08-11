@@ -11,7 +11,7 @@ export const eventManager = {
 
 const handlers = {
     renameStatus: function (e) {
-        const status = e.target.parentNode;
+        const status = e.target.parentNode.parentNode;
         const title = e.target;
         let statusId;
         status.classList.forEach(c => c.includes('status') ?

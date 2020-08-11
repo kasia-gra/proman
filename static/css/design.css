@@ -99,6 +99,8 @@ textarea.board-title-input {
 
 .board-column-title{
     text-align: center;
+    display: inline-block;
+    margin: auto;
 }
 
 .card{
@@ -198,4 +200,14 @@ textarea.board-title-input {
 
 i {
     float: left;
+}
+
+.status-remove {
+    display: inline-block;
+    margin: 0 5px 0 5px;
+    float: right;
+}
+
+.board-column-title-container {
+    text-align: center;
 }

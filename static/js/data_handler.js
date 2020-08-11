@@ -104,14 +104,19 @@ export let dataHandler = {
             //send a request to save a new statusinput.value
             this._api_post('/statuses', dataDict, (data) => {
                 this._data['newStatus'] = data;
-                callback(data)
+                callback(data);
             });
         },
         editStatus: function (dataDict, callback) {
             this._api_put(`/statuses/${dataDict.id}`, dataDict, data => {
                 this._data['lastStatusEdit'] = data;
-                callback(data)
+                callback(data);
             });
+        },
+        deleteStatus: function (dataDict, callback) {
+            this._api_delete(`/statuses/${dataDict.id}`, dataDict, data => {
+                callback(data);
+            })
         },
         editBoard: function (dataDict, callback) {
             // creates new board, saves it and calls the callback function with its data
