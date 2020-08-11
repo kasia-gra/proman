@@ -35,7 +35,9 @@ export let dom = {
             let boardsContainer = document.querySelector("#board-container");
             boardsContainer.insertAdjacentHTML("beforeend", boardElementHTML);
             dom.showStatuses(board);
+
         })
+        dom.loadCards();
         addListenerToAddCardBtn();
 
     }
@@ -54,35 +56,17 @@ export let dom = {
 
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
-
-        dataHandler.getCardsByBoardId(boardId, function (cards) {
+        dataHandler.getAllCards(function(cards){
             dom.showCards(cards)
-        });
-
+        })
     }
     ,
     showCards: function (cards) {
-        // shows the cards of a board
-        // it adds necessary event listeners also
 
         cards.map(function (card) {
             let cardElementHTML = cardsHandler.createCard(card.title, card.id);
-            let statusContainer, status;
-            switch (card.status_id) {
-                case 0 :
-                    status = 0;
-                    break;
-                case 1 :
-                    status = 1;
-                    break;
-                case 2 :
-                    status = 2;
-                    break;
-                case 3 :
-                    status = 3;
-                    break;
-            }
-            statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .status-${status} .board-column-content`);
+            let statusContainer;
+            statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .status-${card.status_id} .board-column-content`);
             statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
         })
     }
