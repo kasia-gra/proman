@@ -159,3 +159,13 @@ def add_new_user(cursor: RealDictCursor, new_user_data: dict):
         INSERT INTO users(name, password, email)
         VALUES (%(name)s, %(password)s, %(email)s)
        """, new_user_data)
+
+
+@connection.connection_handler
+def get_names_and_emails(cursor: RealDictCursor):
+
+    cursor.execute('''
+        SELECT name, email
+        FROM users
+        ''')
+    return cursor.fetchall()

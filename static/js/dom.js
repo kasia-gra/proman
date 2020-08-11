@@ -155,14 +155,18 @@ function getUserDataFromModal(e) {
         let passwordInput = document.querySelector('#user-password');
 
         if (validateInput(nameInput) && validateInputEmail(emailInput) && validateInput(passwordInput)) {
-            $('#modalRegisterForm').modal('toggle');
             newUserData['name'] = nameInput.value;
             newUserData['email'] = emailInput.value;
             newUserData['password'] = passwordInput.value;
-            dataHandler.createNewUser(newUserData, function(){console.log(':D')})
-            nameInput.value = '';
-            emailInput.value = '';
-            passwordInput.value = '';
+            dataHandler.createNewUser(newUserData, function(message){
+                nameInput.value = '';
+                emailInput.value = '';
+                passwordInput.value = '';
+                if (message.includes('registered')) { $('#modalRegisterForm').modal('toggle') }
+                alert(message)
+
+            })
+
         } else {
             emailInput.value = '';
             passwordInput.value = '';

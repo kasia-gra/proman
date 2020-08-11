@@ -88,17 +88,27 @@ def edit_board():
         return "Error"
 
 
-@app.route("/register", methods=["GET", "POST"])
+@app.route("/users", methods=["GET", "POST"])
 @json_response
-def registration():
+def user_registration():
 
     if request.method == 'GET':
         return "test?"
 
     new_user_data = request.get_json()
+    users_data = database_manager.get_names_and_emails()
+    for user in users_data:
+        print(user)
+        if user['name'] == 'public':
+            continue
+        elif new_user_data['name'] in user['name']:
+            return "This name is already taken"
+        elif new_user_data['email'] in user['email']:
+            return "This email is already taken"
+
     new_user_data['password'] = util.hash_password(new_user_data['password'])
     database_manager.add_new_user(new_user_data)
-    return 'mission complete'
+    return "You have been registered"
 
 
 def main():
