@@ -6,7 +6,8 @@ import connection
 @connection.connection_handler
 def get_boards(cursor: RealDictCursor):
     cursor.execute(f"""
-                    SELECT boards.id, boards.title, ARRAY_AGG(s.title) AS statuses_list, ARRAY_AGG(s.id) AS ids
+                    SELECT boards.id, boards.title, ARRAY_AGG(s.title ORDER BY s.id) AS statuses_list, 
+                    ARRAY_AGG(s.id ORDER BY s.id) AS ids
                     FROM boards
                     JOIN board_statuses bs on boards.id = bs.board_id
                     JOIN statuses s on bs.status_id = s.id
