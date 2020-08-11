@@ -15,18 +15,14 @@ def get_boards(cursor: RealDictCursor):
                     """)
     return cursor.fetchall()
 
+
 @connection.connection_handler
 def get_all_cards(cursor: RealDictCursor):
     cursor.execute(f"""
-                    SELECT boards.id, boards.title, STRING_AGG(s.title, ', ') AS statuses_list 
-                    FROM boards
-                    JOIN board_statuses bs on boards.id = bs.board_id
-                    JOIN statuses s on bs.status_id = s.id
-                    GROUP BY boards.title, boards.id
-                    ORDER BY boards.id;
+                    SELECT *
+                    FROM cards
                     """)
     return cursor.fetchall()
-
 
 
 @connection.connection_handler
