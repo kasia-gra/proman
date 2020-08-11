@@ -14,7 +14,7 @@ export let cardsHandler = {
         });
     },
 
-    editCardTitle : function (e) {
+    editCard : function (e) {
         let cardId = (e.target.parentNode.id);
         if(e.target && e.target.className === 'card-title') {
             if (!document.querySelector('#card-input')) {
@@ -58,7 +58,6 @@ export let cardsHandler = {
              let cardId = e.target.parentNode.parentNode.id;
              dataHandler.deleteCardById(cardId, function (data) {
               e.target.parentNode.parentNode.remove()
-                console.log(data)
              });
          }
      }
