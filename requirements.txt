@@ -12,3 +12,5 @@ requests==2.24.0
 requests-cache==0.5.2
 urllib3==1.25.9
 Werkzeug==1.0.1
+
+bcrypt~=3.1.7
