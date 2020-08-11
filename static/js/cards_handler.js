@@ -5,7 +5,7 @@ export let cardsHandler = {
 
     addCard : function (button) {
         let boardId = button.target.id.match(/\d+/)[0]; // return number of board where btn is clicked
-        let statusId = 0; // by default
+        let statusId = 1; // by default
         let cardTitle = "Empty card"; // temporary
         dataHandler.createNewCard(cardTitle, boardId, statusId, function (newCard) {
             let cardElementHTML = cardsHandler.createCard(cardTitle, newCard.id);
@@ -30,12 +30,12 @@ export let cardsHandler = {
                     if (event.key === 'Enter') {
                         event.preventDefault();
                         let title = document.getElementById('card-input').value;   //get value from input
-                        if (title.replace(' ', '').toLowerCase().match(/^[0-9a-z]+$/)) {
+                        if (title.replace(/\s\s+/g, ' ').toLowerCase().match(/^[0-9a-z ]+$/)) {
                             dataHandler.editCard(title, cardId, function (editedCard) {
                             }); // ask mentor about callback
                             e.target.innerHTML = title;
                         }
-                        else alert('Wrong status name format. Use letters and numbers only.')
+                        else alert('Use letters and numbers only.')
                     }
                     else if (event.key === 'Escape') { e.target.innerHTML = oldTitle }
                 })
