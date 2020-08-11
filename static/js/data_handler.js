@@ -80,11 +80,6 @@ export let dataHandler = {
                 this._data = response;
                 callback(response);
             });
-
-        },
-
-        getCard: function (cardId, callback) {
-            // the card is retrieved and then the callback function is called with the card
         },
         createNewBoard: function (dataDict, callback) {
             // creates new board, saves it and calls the callback function with its data
@@ -139,9 +134,7 @@ export let dataHandler = {
          },
 
         deleteCardById: function(cardId, callback) {
-            let dataDict = {'id': cardId};
-
-            this._api_delete(`/edit-card/${cardId}`, (data) => {
+            this._api_delete(`/cards/${cardId}`, (data) => {
                 this._data['deletedCard'] = data;
                 callback(data)
             })

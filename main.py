@@ -65,12 +65,11 @@ def cards(card_id=None):
         saved_data = database_manager.save_new_card(data_dict)
         data_dict["id"] = saved_data[0]["id"]
         return data_dict
-    elif request.method == 'DELETE':
-        database_manager.delete_card(card_id)
     elif request.method == 'PUT':
         data_dict = dict(data.items())
-        database_manager.update_card_data(data_dict)
-
+        return database_manager.update_card_data(data_dict)
+    elif request.method == 'DELETE':
+        return database_manager.delete_card(card_id)
     else:
         return database_manager.get_all_cards()
 
