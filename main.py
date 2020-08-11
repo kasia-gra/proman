@@ -9,6 +9,7 @@ import data_handler, persistence
 app = Flask(__name__)
 app.secret_key = b'\xe8\x00\x04\xcd\x1b\xc1y\x9a\xba\x1f\xae\xc2\xf1\xed\xb0\x97\xdc`W\x91\x0fNc2'
 
+
 @app.route("/")
 def index():
     """

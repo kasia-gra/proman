@@ -102,8 +102,8 @@ def save_new_status(cursor: RealDictCursor, new_status: dict):
         format(status_title=sql.Literal(new_status['title']))
     cursor.execute(query)
     new_status_response = cursor.fetchone()
-    query = sql.SQL('UPDATE ONLY boards SET statuses = CONCAT(statuses, {status_id}) WHERE id = {board_id}').\
-        format(status_id=sql.Literal(',' + str(new_status_response['id'])), board_id=sql.Literal(new_status['board']))
+    query = sql.SQL('INSERT INTO board_statuses (status_id, board_id) VALUES ({status_id}, {board_id});').\
+        format(status_id=sql.Literal(new_status_response['id']), board_id=sql.Literal(new_status['board']))
     cursor.execute(query)
     return new_status_response
 
