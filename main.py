@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request
-from util import json_response
+from util import json_response, jsonify
 import os
 
 from data_manager import database_manager
@@ -31,8 +31,6 @@ def get_boards():
         return data_dict
     else:
         boards = database_manager.get_boards()
-        for board in boards:
-            board['statuses'] = board['statuses'].split(",")
         return boards
 
 
