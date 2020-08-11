@@ -157,7 +157,7 @@ let addListenerToAddCardBtn = function () {
 
 
 function addEventListenersToCards() {
-    document.addEventListener('click', cardsHandler.editCardTitle);
+    document.addEventListener('click', cardsHandler.editCard);
 }
 
 function addListenersToDeleteCards() {
