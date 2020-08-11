@@ -39,10 +39,11 @@ export let dataHandler = {
                 .then(data => callback(data), error => alert('Whoops!'));
         },
 
-        _api_delete: function (url, callback) {
-
+        _api_delete: function (url, dataDict, callback) {
             fetch(url, {
                 method: 'DELETE',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(dataDict)
             })
                 .then(response => response.json(), error => alert(error))
                 .then(data => {callback(data)})
@@ -114,7 +115,7 @@ export let dataHandler = {
             });
         },
         deleteStatus: function (dataDict, callback) {
-            this._api_delete(`/statuses/${dataDict.id}`, dataDict, data => {
+            this._api_delete(`/statuses/${dataDict.statusId}`, dataDict, data => {
                 callback(data);
             })
         },

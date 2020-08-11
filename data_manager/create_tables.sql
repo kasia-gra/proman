@@ -139,13 +139,13 @@ ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id);
 
 ALTER TABLE ONLY cards
-    ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES statuses(id);
+    ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES statuses(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY board_statuses
     ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id);
 
 ALTER TABLE ONLY board_statuses
-    ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES statuses(id);
+    ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES statuses(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY user_boards
     ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id);

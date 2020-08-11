@@ -144,6 +144,16 @@ def edit_status(cursor: RealDictCursor, status_edit: dict):
 
 
 @connection.connection_handler
+def delete_status(cursor: RealDictCursor, status: dict):
+    query = sql.SQL("""
+    DELETE FROM statuses s WHERE s.id = {status_id} RETURNING *
+    """).\
+        format(status_id=sql.Literal(status['statusId']))
+    cursor.execute(query)
+    return cursor.fetchone()
+
+
+@connection.connection_handler
 def delete_card(cursor: RealDictCursor, card_id: int):
 
     query = sql.SQL("""

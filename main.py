@@ -53,7 +53,8 @@ def statuses(status_id=None):
         data_dict = request.get_json()
         return database_manager.edit_status(data_dict)
     if request.method == 'DELETE':
-        return None
+        data_dict = request.get_json()
+        return database_manager.delete_status(data_dict)
     render_template('index.html')
 
 
