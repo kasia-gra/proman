@@ -26,10 +26,12 @@ def get_boards():
     """
     if request.method == "POST":
         data = request.get_json()
-        data_dict = dict(data.items())
-        saved_data = database_manager.save_new_board_data(data_dict)
-        data_dict["id"] = saved_data[0]["id"]
-        return data_dict
+        new_board_data = database_manager.save_new_board_data(data)
+        new_board_id = dict(new_board_data[0])["id"]
+        database_manager.update_new_board_default_statuses(new_board_id);
+        newly_created_board_data = database_manager.get_newly_created_board_data(new_board_id)
+        print(newly_created_board_data)
+        return newly_created_board_data
     else:
         boards = database_manager.get_boards()
         return boards

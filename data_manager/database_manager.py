@@ -17,6 +17,7 @@ def get_boards(cursor: RealDictCursor):
     return cursor.fetchall()
 
 
+
 @connection.connection_handler
 def get_all_cards(cursor: RealDictCursor):
     cursor.execute(f"""
@@ -25,18 +26,44 @@ def get_all_cards(cursor: RealDictCursor):
                     """)
     return cursor.fetchall()
 
-
 @connection.connection_handler
-def save_new_board_data(cursor: RealDictCursor, new_board_data: dict):
+def save_new_board_data(cursor: RealDictCursor, board_data: dict):
     query = """
     INSERT INTO boards
+    (title)
     VALUES (%(title)s)
     RETURNING *;
     """
     cursor.execute(query, {
-        'title': new_board_data["title"]
-        # 'statuses': new_board_data["statuses"]
+        'title': board_data["title"]
     })
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def update_new_board_default_statuses(cursor: RealDictCursor, new_board_id: int):
+    query = f"INSERT INTO board_statuses " \
+            f"(status_id, board_id)" \
+            f"VALUES " \
+            f"(1, {new_board_id})," \
+            f"(2, {new_board_id})," \
+            f"(3, {new_board_id})," \
+            f"(4, {new_board_id})" \
+            f"RETURNING *;"
+    cursor.execute(query)
+
+
+@connection.connection_handler
+def get_newly_created_board_data(cursor: RealDictCursor, board_id: int):
+    query = (f"""SELECT boards.id, boards.title, ARRAY_AGG(s.title) AS statuses_list, ARRAY_AGG(s.id) AS ids
+                FROM boards
+                JOIN board_statuses bs on boards.id = bs.board_id
+                JOIN statuses s on bs.status_id = s.id
+                GROUP BY boards.title, boards.id
+                HAVING boards.id = %(board_id)s
+                ORDER BY boards.id;
+                """)
+    cursor.execute(query, {'board_id': board_id})
     return cursor.fetchall()
 
 
