@@ -27,7 +27,7 @@ CREATE TABLE users (
 
 INSERT INTO users (name, password, email) VALUES
     ('public', null, null),
-    ('test', 'test', 'test@test.com');
+    ('test', '$2b$12$Fho8QWqqRxZVZyvz8.J2/OgbxTjPG6p8UylbTtwcEgMCUJGCb9Am6', 'test@test.com');
 SELECT pg_catalog.setval('users_id_seq', 2, true);
 
 

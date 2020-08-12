@@ -148,7 +148,6 @@ export let dataHandler = {
         },
 
         loginUser: function(dataDict, callback) {
-            console.log(dataDict)
             this._api_post('/login', dataDict, (data) => {
                 this._data['login'] = data;
                 callback(data)

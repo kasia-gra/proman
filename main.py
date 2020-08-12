@@ -98,12 +98,11 @@ def user_registration():
     new_user_data = request.get_json()
     users_data = database_manager.get_names_and_emails()
     for user in users_data:
-        print(user)
         if user['name'] == 'public':
             continue
-        elif new_user_data['name'] in user['name']:
+        elif new_user_data['name'] == user['name']:
             return "This name is already taken"
-        elif new_user_data['email'] in user['email']:
+        elif new_user_data['email'] == user['email']:
             return "This email is already taken"
 
     new_user_data['password'] = util.hash_password(new_user_data['password'])
@@ -112,13 +111,13 @@ def user_registration():
 
 
 @app.route("/login", methods=['GET', 'POST'])
+@json_response
 def login():
     if request.method == 'GET':
         return 'test'
 
     login_user_data = request.get_json()
     user = database_manager.get_user_by_email(login_user_data['email'])
-    print(user)
     if user is not None \
             and login_user_data['email'] in user['email'] \
             and util.verify_password(login_user_data['password'], user['password']):
@@ -127,6 +126,15 @@ def login():
         return 'You have been logged in.'
 
     return "Wrong email or password"
+
+
+@app.route("/logout", methods=['GET', 'POST'])
+@json_response
+def logout():
+    """Remove data from session"""
+
+    session.pop('email', None)
+    return 'You have been logged out!'
 
 
 def main():

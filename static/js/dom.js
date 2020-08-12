@@ -137,14 +137,12 @@ function addEventListenersToCards() {
 
 function addListenersToDeleteCards() {
     document.addEventListener('click', cardsHandler.deleteCard)
-
 }
 
 
 function addListenerToLogin() {
     const saveButton = document.querySelector('#login-user');
     saveButton.addEventListener('click', getUserLoginDataFromModal)
-
 }
 
 function getUserLoginDataFromModal(e) {
@@ -155,17 +153,14 @@ function getUserLoginDataFromModal(e) {
     if (validateInputEmail(emailInput) && validateInput(passwordInput)) {
         loginData['email'] = emailInput.value;
         loginData['password'] = passwordInput.value;
-
         dataHandler.loginUser(loginData, function(message) {
-            console.log(message);
+             if (message.includes('Logged')) { $('#modalRegisterForm').modal('toggle') }
             alert(message)
-            $('#modalLoginForm').modal('toggle')
         });
     }
-    else {
-            emailInput.value = '';
-            passwordInput.value = '';
-            alert('Wrong input! Use letters and numbers only. Minimum 3 characters') }
+    else { alert('Wrong input! Use letters and numbers only. Minimum 3 characters') }
+    emailInput.value = '';
+    passwordInput.value = '';
 }
 
 function addListenerToRegister() {
@@ -176,29 +171,24 @@ function addListenerToRegister() {
 
 function getUserRegistrationDataFromModal(e) {
      e.preventDefault()
-        const newUserData = {}
-        let nameInput = document.querySelector('#user-name');
-        let emailInput = document.querySelector('#user-email');
-        let passwordInput = document.querySelector('#user-password');
+    const newUserData = {}
+    let nameInput = document.querySelector('#user-name');
+    let emailInput = document.querySelector('#user-email');
+    let passwordInput = document.querySelector('#user-password');
 
-        if (validateInput(nameInput) && validateInputEmail(emailInput) && validateInput(passwordInput)) {
-            newUserData['name'] = nameInput.value;
-            newUserData['email'] = emailInput.value;
-            newUserData['password'] = passwordInput.value;
-            dataHandler.createNewUser(newUserData, function(message){
-                nameInput.value = '';
-                emailInput.value = '';
-                passwordInput.value = '';
-                if (message.includes('registered')) { $('#modalRegisterForm').modal('toggle') }
-                alert(message)
-
-            })
-
-        } else {
-            emailInput.value = '';
-            passwordInput.value = '';
-            alert('Wrong input! Use letters and numbers only. Minimum 3 characters')
-        }
+    if (validateInput(nameInput) && validateInputEmail(emailInput) && validateInput(passwordInput)) {
+        newUserData['name'] = nameInput.value;
+        newUserData['email'] = emailInput.value;
+        newUserData['password'] = passwordInput.value;
+        dataHandler.createNewUser(newUserData, function(message){
+            nameInput.value = '';
+            if (message.includes('registered')) { $('#modalRegisterForm').modal('toggle') }
+            alert(message)
+        })
+    }
+    else { alert('Wrong input! Use letters and numbers only. Minimum 3 characters') }
+    emailInput.value = '';
+    passwordInput.value = '';
 }
 
 
