@@ -71,8 +71,7 @@ INSERT INTO statuses (title) VALUES
     ('new'),
     ('in progress'),
     ('testing'),
-    ('done'),
-    ('new');
+    ('done');
 -- SELECT pg_catalog.setval('statuses_id_seq', 3, true);
 
 
