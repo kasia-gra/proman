@@ -43,9 +43,9 @@ const swapCardsOnDragOver = function (containers) {
         container.addEventListener('drop', e => {
             const afterElement = getDragAfterElement(container, e.clientY)
             const draggable = document.querySelector('.dragging')
-            const boardIdOfDraggable = (draggable.parentElement.parentElement.parentElement).id;
+            const boardIdOfDraggable = draggable.closest('section').id.match(/\d+$/)[0];
             const draggableCardOriginContainer = draggable.parentElement;
-            const boardIdOfDropContainer = (container.parentElement.parentElement).id;
+            const boardIdOfDropContainer = container.closest('section').id.match(/\d+$/)[0];
             if (boardIdOfDraggable == boardIdOfDropContainer) {
                 if (afterElement == null) {
                     container.appendChild(draggable)

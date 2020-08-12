@@ -42,14 +42,12 @@ def save_new_board_data(cursor: RealDictCursor, board_data: dict):
 
 @connection.connection_handler
 def update_new_board_default_statuses(cursor: RealDictCursor, new_board_id: int):
-    query = f"INSERT INTO board_statuses " \
-            f"(status_id, board_id)" \
-            f"VALUES " \
-            f"(1, {new_board_id})," \
-            f"(2, {new_board_id})," \
-            f"(3, {new_board_id})," \
-            f"(4, {new_board_id})" \
-            f"RETURNING *;"
+    query = sql.SQL("""
+    WITH ins1 AS (
+        INSERT INTO statuses (title) SELECT title FROM statuses WHERE id<5 ORDER BY id RETURNING id AS new_ids
+    )
+    INSERT INTO board_statuses (status_id, board_id) SELECT *, {new_board_id} FROM ins1 RETURNING *;
+                    """).format(new_board_id=sql.Literal(new_board_id))
     cursor.execute(query)
 
 

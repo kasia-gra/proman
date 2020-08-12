@@ -5,7 +5,11 @@ export let cardsHandler = {
 
     addCard : function (button) {
         let boardId = button.target.id.match(/\d+/)[0]; // return number of board where btn is clicked
-        let statusId = 1; // by default
+        let statusId;
+        document.querySelector(`#columns-board-id-${boardId} .board-column`).classList.forEach(
+                c => statusId = c.match(/^status-(\d+)$/)
+            ); // by default
+        statusId = statusId[1];
         let cardTitle = "Empty card"; // temporary
         dataHandler.createNewCard(cardTitle, boardId, statusId, function (newCard) {
             let cardElementHTML = cardsHandler.createCard(newCard);

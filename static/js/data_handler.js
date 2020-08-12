@@ -13,7 +13,7 @@ export let dataHandler = {
                 method: 'GET',
                 credentials: 'same-origin'
             })
-                .then(response => response.json(), error => alert(error))  // parse the response as JSON
+                .then(response => response.json(), error => console.log(error))  // parse the response as JSON
                 .then(json_response => callback(json_response));  // Call the `callback` with the returned object
         },
 
@@ -25,7 +25,7 @@ export let dataHandler = {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(dataDict)
             })
-                .then(response => response.json(), error => alert(error))
+                .then(response => response.json(), error => console.log(error))
                 .then(data => {callback(data)});
         },
 
@@ -35,8 +35,8 @@ export let dataHandler = {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(dataDict)
             })
-                .then(response => response.json(), error => alert(error))
-                .then(data => callback(data), error => alert('Whoops!'));
+                .then(response => response.json(), error => console.log(error))
+                .then(data => callback(data), error => console.log(error));
         },
 
         _api_delete: function (url, dataDict, callback) {
@@ -45,7 +45,7 @@ export let dataHandler = {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(dataDict)
             })
-                .then(response => response.json(), error => alert(error))
+                .then(response => response.json(), error => console.log(error))
                 .then(data => {callback(data)})
         },
 
