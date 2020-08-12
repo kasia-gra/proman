@@ -43,12 +43,12 @@ export let cardsHandler = {
         }
     },
 
-    createCard : function (title, id) {
-        if (!title) {title = "Empty card"}
+    createCard : function (card) {
+        if (!card.title) {card.title = "Empty card"}
         return `
-            <div class="card" draggable="true" id="${id}">
+            <div class="card" draggable="true" id="${card.id}" data-board-id='${card.board_id}' data-status='${card.status_id}'>
                 <div class="card-remove"><i class="fas fa-trash-alt delete-card"></i></div>
-                <div class="card-title">${title}</div>
+                <div class="card-title">${card.title}</div>
             </div>
         `
     },
@@ -56,7 +56,7 @@ export let cardsHandler = {
      deleteCard : function(e) {
          if (e.target && e.target.classList.contains('delete-card')) {
              let cardId = e.target.parentNode.parentNode.id;
-             dataHandler.deleteCardById(cardId, function (data) {
+             dataHandler.deleteCardById({cardId: cardId}, function (data) {
               e.target.parentNode.parentNode.remove()
              });
          }

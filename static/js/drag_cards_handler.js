@@ -1,72 +1,54 @@
 export let dragCardsHandler = {
 
-    InitCardsDragDropListeners: function f() {
-        DragStart();
-        DragEnd();
-        dragEnter();
-        dragLeave();
-        dragOver();
-        dragDrop();
-
-    }
+    InitCardsDragDropListeners: function () {
+    const draggables = document.querySelectorAll('.card')
+    const containers = document.querySelectorAll('.board-column-content')
+    allowCardsDragging(draggables);
+    swapCardsOnDragOver(containers);
+}
 }
 
-let DragStart = function () {
-    document.addEventListener('dragstart', function (e) {
-        if (e.target && e.target.className == 'card') {
-            e.target.classList.add("dragged")
+
+
+const getDragAfterElement = function (container, y) {
+    const draggableElements = [...container.querySelectorAll('.card:not(.dragging)')]
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect()
+        const offset = y - box.top - box.height / 2
+        if (offset < 0 && offset > closest.offset) {
+            return {offset: offset, element: child}
+        } else {
+            return closest
         }
-    });
+    }, {offset: Number.NEGATIVE_INFINITY}).element
 }
 
-
-let DragEnd = function () {
-    document.addEventListener('dragend', function (e) {
-        if (e.target && e.target.className == 'card') {
-            e.target.classList.remove("dragged");
-        }
-    });
+const allowCardsDragging = function (draggables) {
+    draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', () => {
+            draggable.classList.add('dragging')
+        })
+        draggable.addEventListener('dragend', () => {
+            draggable.classList.remove('dragging')
+        })
+    })
 }
 
-let dragEnter = function () {
-    document.addEventListener('dragenter', function (e) {
-        if (e.target && e.target.className == "board-column-content") {
-            let Slot = e.target;
-        }
-    });
+const swapCardsOnDragOver = function (containers) {
+    containers.forEach(container => {
+        container.addEventListener('dragover', e => {e.preventDefault();})
+        container.addEventListener('drop', e => {
+            const afterElement = getDragAfterElement(container, e.clientY)
+            const draggable = document.querySelector('.dragging')
+            const boardIdOfDraggable = (draggable.parentElement.parentElement.parentElement).id;
+            const boardIdOfContainer = (container.parentElement.parentElement).id
+            if (boardIdOfDraggable == boardIdOfContainer) {
+                if (afterElement == null) {
+                    container.appendChild(draggable)
+                } else {
+                    container.insertBefore(draggable, afterElement)
+                }
+            }
+        })
+    })
 }
-
-
-let dragLeave = function () {
-    document.addEventListener('dragleave', function (e) {
-        if (e.target && e.target.className == "board-column-content") {
-            let Slot = e.target;
-        }
-    });
-}
-
-
-let dragOver = function () {
-    document.addEventListener('dragover', function (e) {
-        if (e.target && e.target.className == "board-column-content") {
-            let Slot = e.target;
-            e.preventDefault();
-        }
-
-    });
-}
-
-
-let dragDrop = function () {
-    document.addEventListener('drop', function (e) {
-        if (e.target && e.target.className == "board-column-content") {
-            e.preventDefault();
-            let Slot = e.target;
-            let draggedElement = document.querySelector(".dragged");
-            Slot.append(draggedElement);
-            draggedElement.classList.remove("dragged");
-        }
-    });
-
-}
-
