@@ -91,6 +91,19 @@ def edit_board():
         return "Error"
 
 
+@app.route("/cards_statuses", methods=["PUT"])
+@json_response
+def update_cards_statuses():
+    if request.method == "PUT":
+        data = request.get_json()
+        data_dict = dict(data.items())
+        print(data_dict)
+        return "test"
+    else:
+        return "Error"
+
+
+
 @app.route("/register", methods=["GET", "POST"])
 @json_response
 def registration():
