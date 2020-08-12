@@ -164,8 +164,19 @@ def add_new_user(cursor: RealDictCursor, new_user_data: dict):
 @connection.connection_handler
 def get_names_and_emails(cursor: RealDictCursor):
 
-    cursor.execute('''
+    cursor.execute("""
         SELECT name, email
         FROM users
-        ''')
+        """)
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_user_by_email(cursor: RealDictCursor, input_email: str):
+
+    cursor.execute("""
+        SELECT email, password, id 
+        FROM users 
+        WHERE email = %(email)s
+        """, {'email': input_email})
+    return cursor.fetchone()
