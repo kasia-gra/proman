@@ -97,8 +97,7 @@ def update_cards_statuses():
     if request.method == "PUT":
         data = request.get_json()
         data_dict = dict(data.items())
-        print(data_dict)
-        return "test"
+        return util.update_cards_order(data_dict)
     else:
         return "Error"
 

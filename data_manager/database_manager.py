@@ -169,3 +169,15 @@ def add_new_user(cursor: RealDictCursor, new_user_data: dict):
         INSERT INTO users(name, password, email)
         VALUES (%(name)s, %(password)s, %(email)s)
        """, new_user_data)
+
+
+@connection.connection_handler
+def update_cards_statuses(cursor: RealDictCursor, data_dict: dict):
+    query = """
+    UPDATE cards
+    SET card_order = %(card_order)s,status_id = %(status_id)s 
+    WHERE id = %(card_id)s;
+    """
+    cursor.execute(query, {'card_id': data_dict["card_id"],
+                           'status_id': data_dict["status_id"],
+                           'card_order': data_dict["card_order"]})
