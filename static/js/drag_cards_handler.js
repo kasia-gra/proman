@@ -46,7 +46,6 @@ const swapCardsOnDragOver = function (containers) {
             const boardIdOfDraggable = draggable.closest('section').id.match(/\d+$/)[0];
             const draggableCardOriginContainer = draggable.parentElement;
             const boardIdOfDropContainer = container.closest('section').id.match(/\d+$/)[0];
-            console.log(boardIdOfDropContainer)
             if (boardIdOfDraggable == boardIdOfDropContainer) {
                 if (afterElement == null) {
                     container.appendChild(draggable)
