@@ -19,7 +19,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/boards", methods=["GET", "POST"])
+@app.route("/boards", methods=["GET", "POST", "PUT"])
 @json_response
 def get_boards():
     """
@@ -31,11 +31,14 @@ def get_boards():
         new_board_id = dict(new_board_data[0])["id"]
         database_manager.update_new_board_default_statuses(new_board_id);
         newly_created_board_data = database_manager.get_newly_created_board_data(new_board_id)
-        print(newly_created_board_data)
         return newly_created_board_data
-    else:
+    if request.method == "GET":
         boards = database_manager.get_boards()
         return boards
+    if request.method == "PUT":
+        data = request.get_json()
+        data_dict = dict(data.items())
+        return database_manager.update_board_title(data_dict)
 
 
 @app.route("/statuses", methods=['GET', 'POST'])
@@ -78,17 +81,6 @@ def cards(card_id=None):
         return database_manager.get_all_cards()
 
 
-@app.route("/edit-board", methods=["GET", "POST"])
-@json_response
-def edit_board():
-    if request.method == "POST":
-        data = request.get_json()
-        data_dict = dict(data.items())
-        print(data_dict)
-        database_manager.update_board_title(data_dict)
-        return "test"
-    else:
-        return "Error"
 
 
 @app.route("/cards_statuses", methods=["PUT"])
@@ -98,8 +90,6 @@ def update_cards_statuses():
         data = request.get_json()
         data_dict = dict(data.items())
         return util.update_cards_order(data_dict)
-    else:
-        return "Error"
 
 
 @app.route("/users", methods=["GET", "POST"])

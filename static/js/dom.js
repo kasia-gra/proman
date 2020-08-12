@@ -6,9 +6,12 @@ import {cardsHandler} from "./cards_handler.js"
 import {eventManager} from "./event_manager.js"
 import {dragCardsHandler} from "./drag_cards_handler.js"
 import {usersHandler} from "./users_handler.js"
+import {htmlTemplates} from "./html_templates.js";
 
 export let dom = {
     init: function () {
+        dom.loadBoards();
+        dom.addNewBoard();
         // This function should run once, when the page is loaded.
     },
 
@@ -25,7 +28,7 @@ export let dom = {
                 usersHandler.addListenerToRegister();
                 usersHandler.addListenerToLogin();
                 usersHandler.addListenerToLogoutBtn();
-
+                changeBoardName.addEventListenersToBoardTitles();
             }
         )
     }
@@ -36,21 +39,19 @@ export let dom = {
         // it adds necessary event listeners also
 
         boards.map(function (board) {
-            let boardElementHTML = boardsHandler.createBoard(board.title, board.id);
+            let boardElementHTML = htmlTemplates.createBoard(board.title, board.id);
             let boardsContainer = document.querySelector("#board-container");
             boardsContainer.insertAdjacentHTML("beforeend", boardElementHTML);
             dom.showStatuses(board);
-
         })
         dom.loadCards();
         addListenerToAddCardBtn();
-
     }
     ,
 
     showStatuses: function (board) {;
         for (let statusIndex=0; statusIndex < board["statuses_list"].length; statusIndex++) {
-            let statusColumnElementHTML = boardsHandler.createColumnsStatusesForBoard(board["ids"][statusIndex],
+            let statusColumnElementHTML = htmlTemplates.createColumnsStatusesForBoard(board["ids"][statusIndex],
                 board["statuses_list"][statusIndex]);
             let columnsContainer = document.querySelector(`#columns-board-id-${board.id}`)
             columnsContainer.insertAdjacentHTML("beforeend", statusColumnElementHTML);
@@ -65,8 +66,8 @@ export let dom = {
         })
     }
     ,
-    showCards: function (cards) {
 
+    showCards: function (cards) {
         cards.map(function (card) {
             let cardElementHTML = cardsHandler.createCard(card);
             let statusContainer;
@@ -78,17 +79,10 @@ export let dom = {
     ,
     addNewBoard: function () {
         boardsHandler.openAddDataModal("#modal-create-board", "#add-board-button");
-        const res = boardsHandler.submitModalData("#modal-create-board")
+        boardsHandler.submitModalData("#modal-create-board")
         changeBoardName.addEventListenersToBoardTitles();
-        // let modal = document.getElementById("add-board-button");
-        // modal.addEventListener("click", function () {dataHandler.createNewBoard(data, function () {
-        //     console.log(data)
-        // })})
     },
 
-    editBoardTitle: function () {
-        changeBoardName.addEventListenersToBoardTitles();
-    }
 // here comes more features
 };
 
@@ -121,7 +115,7 @@ function addNewStatusListeners() {
                     resolve(data) : reject(new Error('Cannot save the new status. Try again?')));
             })).then(newStatus => {
                 const columnsContainer = document.querySelector(`#columns-board-id-${boardId}`);
-                const newStatusColumn = boardsHandler.createColumnsStatusesForBoard(newStatus.id, newStatus.title);
+                const newStatusColumn = htmlTemplates.createColumnsStatusesForBoard(newStatus.id, newStatus.title);
                 columnsContainer.insertAdjacentHTML("beforeend", newStatusColumn);
             }, error => alert(error));
         } else alert('Use letters and numbers only. No big whitespace.')
