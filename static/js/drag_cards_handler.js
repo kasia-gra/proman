@@ -36,14 +36,18 @@ const allowCardsDragging = function (draggables) {
 
 const swapCardsOnDragOver = function (containers) {
     containers.forEach(container => {
-        container.addEventListener('dragover', e => {
-            e.preventDefault()
+        container.addEventListener('dragover', e => {e.preventDefault();})
+        container.addEventListener('drop', e => {
             const afterElement = getDragAfterElement(container, e.clientY)
             const draggable = document.querySelector('.dragging')
-            if (afterElement == null) {
-                container.appendChild(draggable)
-            } else {
-                container.insertBefore(draggable, afterElement)
+            const boardIdOfDraggable = (draggable.parentElement.parentElement.parentElement).id;
+            const boardIdOfContainer = (container.parentElement.parentElement).id
+            if (boardIdOfDraggable == boardIdOfContainer) {
+                if (afterElement == null) {
+                    container.appendChild(draggable)
+                } else {
+                    container.insertBefore(draggable, afterElement)
+                }
             }
         })
     })
