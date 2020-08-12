@@ -139,8 +139,8 @@ export let dataHandler = {
              })
          },
 
-        deleteCardById: function(cardId, callback) {
-            this._api_delete(`/cards/${cardId}`, (data) => {
+        deleteCardById: function(dict, callback) {
+            this._api_delete(`/cards/${dict.cardId}`, dict, (data) => {
                 this._data['deletedCard'] = data;
                 callback(data)
             })

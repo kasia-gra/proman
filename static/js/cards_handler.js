@@ -56,7 +56,7 @@ export let cardsHandler = {
      deleteCard : function(e) {
          if (e.target && e.target.classList.contains('delete-card')) {
              let cardId = e.target.parentNode.parentNode.id;
-             dataHandler.deleteCardById(cardId, function (data) {
+             dataHandler.deleteCardById({cardId: cardId}, function (data) {
               e.target.parentNode.parentNode.remove()
              });
          }
