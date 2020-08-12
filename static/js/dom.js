@@ -64,12 +64,12 @@ export let dom = {
     showCards: function (cards) {
 
         cards.map(function (card) {
-            let cardElementHTML = cardsHandler.createCard(card.title, card.id);
+            let cardElementHTML = cardsHandler.createCard(card);
             let statusContainer;
             statusContainer = document.querySelector(`#columns-board-id-${card.board_id} .status-${card.status_id} .board-column-content`);
             statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
-            dragCardsHandler.InitCardsDragDropListeners();
         })
+        dragCardsHandler.InitCardsDragDropListeners();
     }
     ,
     addNewBoard: function () {
