@@ -17,6 +17,7 @@ export let dom = {
                 dom.showBoards(boards)
                 addNewStatusListeners();
                 eventManager.addListener.renameStatus();
+                eventManager.addListener.deleteStatus();
                 addEventListenersToCards();
                 addListenersToDeleteCards();
                 addListenerToRegister();

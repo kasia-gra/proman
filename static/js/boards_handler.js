@@ -21,7 +21,10 @@ export let boardsHandler = {
     createColumnsStatusesForBoard: function (statusId, columnStatusTitle) {
         return `
             <div class="board-column status-${statusId}">
+            <div class="board-column-title-container">
                 <div class="board-column-title">${columnStatusTitle}</div>
+                <div class="status-remove"><i class="fas fa-trash-alt delete-status"></i></div>
+            </div>
                 <div class="board-column-content"></div>
             </div>
     `
