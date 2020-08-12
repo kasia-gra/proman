@@ -5,6 +5,7 @@ import {changeBoardName} from "./change_board_name.js"
 import {cardsHandler} from "./cards_handler.js"
 import {eventManager} from "./event_manager.js"
 import {dragCardsHandler} from "./drag_cards_handler.js"
+import {usersHandler} from "./users_handler.js"
 
 export let dom = {
     init: function () {
@@ -21,7 +22,10 @@ export let dom = {
                 eventManager.addListener.deleteStatus();
                 addEventListenersToCards();
                 addListenersToDeleteCards();
-                addListenerToRegister();
+                usersHandler.addListenerToRegister();
+                usersHandler.addListenerToLogin();
+                usersHandler.addListenerToLogoutBtn();
+
             }
         )
     }
@@ -139,46 +143,4 @@ function addEventListenersToCards() {
 
 function addListenersToDeleteCards() {
     document.addEventListener('click', cardsHandler.deleteCard)
-
-}
-
-function addListenerToRegister() {
-    let registerBtn = document.querySelector('#register')
-    registerBtn.addEventListener('click', function() {
-        const saveButton = document.querySelector('#save-user');
-        saveButton.addEventListener('click', getUserDataFromModal);
-    });
-}
-
-function getUserDataFromModal(e) {
-     e.preventDefault()
-        const newUserData = {}
-        let nameInput = document.querySelector('#user-name');
-        let emailInput = document.querySelector('#user-email');
-        let passwordInput = document.querySelector('#user-password');
-
-        if (validateInput(nameInput) && validateInputEmail(emailInput) && validateInput(passwordInput)) {
-            $('#modalRegisterForm').modal('toggle');
-            newUserData['name'] = nameInput.value;
-            newUserData['email'] = emailInput.value;
-            newUserData['password'] = passwordInput.value;
-            dataHandler.createNewUser(newUserData, function(){console.log(':D')})
-            nameInput.value = '';
-            emailInput.value = '';
-            passwordInput.value = '';
-        } else {
-            emailInput.value = '';
-            passwordInput.value = '';
-            alert('Wrong input! Use letters and numbers only. Minimum 3 characters')
-        }
-}
-
-
-function validateInputEmail(inputEmail) {
-    const emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    return emailReg.test(inputEmail.value);
-}
-
-function validateInput(inputName) {
-    return inputName.value.length >= 3;
 }

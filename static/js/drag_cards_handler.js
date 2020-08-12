@@ -65,13 +65,12 @@ const saveDataOfUpdatedContainers = function (draggableCardOriginContainer, cont
     const dropContainerStatusId = container.parentElement.className.replace("board-column status-", "");;
     const originContainerStatusId = draggableCardOriginContainer.parentElement.className.replace("board-column status-", "")
     for (let card of draggableCardOriginContainer.children) {
-        cardsInOriginContainer = [...cardsInOriginContainer,...card.id];
+        cardsInOriginContainer.push(card.id);
     }
     for (let card of container.children) {
-        cardsDropContainer = [...cardsDropContainer,...card.id];
+        cardsDropContainer.push(card.id);
     }
     const cardsStatusesToUpdate  = {cards_origin: cardsInOriginContainer, status_origin: originContainerStatusId,
     cards_dropped: cardsDropContainer, status_dropped: dropContainerStatusId};
-    console.log(cardsStatusesToUpdate);
     dataHandler.changeCardsStatuses(cardsStatusesToUpdate, function () {console.log("OK")});
 }

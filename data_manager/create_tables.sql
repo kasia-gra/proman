@@ -27,7 +27,7 @@ CREATE TABLE users (
 
 INSERT INTO users (name, password, email) VALUES
     ('public', null, null),
-    ('test', 'test', 'test@test.com');
+    ('test', '$2b$12$Fho8QWqqRxZVZyvz8.J2/OgbxTjPG6p8UylbTtwcEgMCUJGCb9Am6', 'test@test.com');
 SELECT pg_catalog.setval('users_id_seq', 2, true);
 
 
@@ -115,14 +115,14 @@ CREATE TABLE cards (
     board_id integer,
     title text,
     status_id integer,
-    "order" integer,
+    card_order integer,
     PRIMARY KEY (id)
 --     FOREIGN KEY (board_id) REFERENCES boards (id) ON DELETE CASCADE,
 --     FOREIGN KEY (status_id) REFERENCES statuses (id) ON DELETE CASCADE
 );
 
 
-INSERT INTO cards (board_id, title, status_id, "order") VALUES
+INSERT INTO cards (board_id, title, status_id, card_order) VALUES
        (1, 'new card 1', 1, 0),
        (1, 'new card 2', 1, 1),
        (1, 'in progress card', 2, 0),

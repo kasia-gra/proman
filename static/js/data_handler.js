@@ -147,10 +147,23 @@ export let dataHandler = {
         },
 
         createNewUser: function(dataDict, callback) {
-            this._api_post('/register', dataDict, (data) => {
+            this._api_post('/users', dataDict, (data) => {
                  this._data['user'] = data;
-                 callback()
+                 callback(data)
              })
+        },
+
+        loginUser: function(dataDict, callback) {
+            this._api_post('/login', dataDict, (data) => {
+                this._data['login'] = data;
+                callback(data)
+            })
+        },
+        logoutUser: function(callback) {
+            this._api_get('/logout', (data) => {
+                this._data['logout'] = data;
+                callback(data)
+            })
         },
 
         changeCardsStatuses: function(dataDict, callback) {
