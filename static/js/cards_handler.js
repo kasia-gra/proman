@@ -1,5 +1,5 @@
 import {dataHandler} from "./data_handler.js";
-
+import {dragCardsHandler} from "./drag_cards_handler.js";
 
 export let cardsHandler = {
 
@@ -15,6 +15,7 @@ export let cardsHandler = {
             let cardElementHTML = cardsHandler.createCard(newCard);
             let statusContainer = document.querySelector(`#board-id-${boardId} .board-column-content`);
         statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
+        dragCardsHandler.InitCardsDragDropListeners();
         });
     },
 
