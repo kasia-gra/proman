@@ -158,6 +158,13 @@ export let dataHandler = {
                 this._data['login'] = data;
                 callback(data)
             })
+        },
+        logoutUser: function(callback) {
+            this._api_get('/logout', (data) => {
+                this._data['logout'] = data;
+                callback(data)
+            })
         }
+
         // here comes more features
     };

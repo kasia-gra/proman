@@ -45,14 +45,24 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-              <li>
-                  <a class="nav-link" id="register" data-toggle="modal" data-target="#modalRegisterForm"
-                     href="#"><span class="link fas fa-user-plus"></span> Sign in</a>
-              </li>
-              <li>
-                  <a class="nav-link" id="login" data-toggle="modal" data-target="#modalLoginForm"
-                     href="#"><span class="link fas fa-sign-in-alt"></span> Log in</a>
-              </li>
+                {% if session.email %}
+                    <li>
+                        <a class="nav-link disabled">Logged in as {{ session.name }}</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" id="logout"
+                           href="#"><span class="link fas fa-sign-out-alt"></span> Log out</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a class="nav-link" id="register" data-toggle="modal" data-target="#modalRegisterForm"
+                         href="#"><span class="link fas fa-user-plus"></span> Sign in</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" id="login" data-toggle="modal" data-target="#modalLoginForm"
+                         href="#"><span class="link fas fa-sign-in-alt"></span> Log in</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
       </nav>

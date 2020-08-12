@@ -126,7 +126,9 @@ def login():
             and util.verify_password(login_user_data['password'], user['password']):
         session['email'] = login_user_data['email']
         session['user_id'] = user['id']
-        return 'You have been logged in.'
+        session['name'] = user['name']
+        return {'message': 'You have been logged in.',
+                'user': user}
 
     return "Wrong email or password"
 
@@ -134,7 +136,6 @@ def login():
 @app.route("/logout", methods=['GET', 'POST'])
 @json_response
 def logout():
-    """Remove data from session"""
 
     session.pop('email', None)
     return 'You have been logged out!'

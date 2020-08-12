@@ -185,7 +185,7 @@ def get_names_and_emails(cursor: RealDictCursor):
 def get_user_by_email(cursor: RealDictCursor, input_email: str):
 
     cursor.execute("""
-        SELECT email, password, id 
+        SELECT name, email, password, id 
         FROM users 
         WHERE email = %(email)s
         """, {'email': input_email})
