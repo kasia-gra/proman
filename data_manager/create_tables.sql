@@ -28,7 +28,7 @@ CREATE TABLE users (
 INSERT INTO users (name, password, email) VALUES
     ('public', null, null),
     ('test', '$2b$12$Fho8QWqqRxZVZyvz8.J2/OgbxTjPG6p8UylbTtwcEgMCUJGCb9Am6', 'test@test.com');
-SELECT pg_catalog.setval('users_id_seq', 2, true);
+-- SELECT pg_catalog.setval('users_id_seq', 2, true);
 
 
 DROP TABLE IF EXISTS public.user_boards;
@@ -41,10 +41,8 @@ CREATE TABLE user_boards (
 
 INSERT INTO user_boards (user_id, board_id) VALUES
     (1, 1),
-    (1, 2),
-    (1, 3),
-    (2, 4);
-SELECT pg_catalog.setval('user_boards_id_seq', 4, true);
+    (2, 2);
+-- SELECT pg_catalog.setval('user_boards_id_seq', 4, true);
 
 
 
@@ -58,10 +56,8 @@ CREATE TABLE boards (
 
 INSERT INTO boards (title) VALUES
     ('Board 1'),
-    ('Board 2'),
-    ('Board 3'),
-    ('Board 4');
-SELECT pg_catalog.setval('boards_id_seq', 3, true);
+    ('Board 2');
+-- SELECT pg_catalog.setval('boards_id_seq', 3, true);
 
 
 DROP TABLE IF EXISTS public.statuses;
@@ -72,6 +68,10 @@ CREATE TABLE statuses (
 );
 
 INSERT INTO statuses (title) VALUES
+    ('new'),
+    ('in progress'),
+    ('testing'),
+    ('done'),
     ('new'),
     ('in progress'),
     ('testing'),
@@ -97,16 +97,8 @@ INSERT INTO board_statuses (status_id, board_id) VALUES
     (1, 2),
     (2, 2),
     (3, 2),
-    (4, 2),
-    (1, 3),
-    (2, 3),
-    (3, 3),
-    (4, 3),
-    (1, 4),
-    (2, 4),
-    (3, 4),
-    (4, 4);
-SELECT pg_catalog.setval('board_statuses_id_seq', 16, true);
+    (4, 2);
+-- SELECT pg_catalog.setval('board_statuses_id_seq', 16, true);
 
 
 DROP TABLE IF EXISTS public.cards;
@@ -133,7 +125,7 @@ INSERT INTO cards (board_id, title, status_id, card_order) VALUES
        (2,'in progress card', 2, 0),
        (2,'planning', 3, 0),
        (2,'done card 1', 4, 0);
-SELECT pg_catalog.setval('cards_id_seq', 10, true);
+-- SELECT pg_catalog.setval('cards_id_seq', 10, true);
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id);
