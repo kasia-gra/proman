@@ -50,7 +50,8 @@
                      href="#"><span class="link fas fa-user-plus"></span> Sign in</a>
               </li>
               <li>
-                  <a class="nav-link" id="login" href="#"><span class="link fas fa-sign-in-alt"></span> Log in</a>
+                  <a class="nav-link" id="login" data-toggle="modal" data-target="#modalLoginForm"
+                     href="#"><span class="link fas fa-sign-in-alt"></span> Log in</a>
               </li>
             </ul>
         </div>
@@ -94,15 +95,16 @@
         </div>
     </div>
 
+
     <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content create-user">
 
           <div class="modal-header text-center">
-            <h4 class="modal-title">Sign up</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
+              <h4 class="modal-title">Sign up</h4>
           </div>
           <div class="modal-body mx-3">
             <div class="md-form">
@@ -128,6 +130,38 @@
         </div>
       </div>
     </div>
+
+
+    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content create-user">
+
+          <div class="modal-header text-center">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+              <h4 class="modal-title">Log in</h4>
+          </div>
+          <div class="modal-body mx-3">
+            <div class="md-form">
+                <i class="fas fa-envelope mr-2"></i>
+                <label data-error="wrong" data-success="right" for="user-email">Your email</label>
+                <input type="email" id="log-user-email" class="form-control validate" required>
+            </div>
+            <div class="md-form">
+                <i class="fas fa-lock mr-2"></i>
+                <label data-error="wrong" data-success="right" for="user-password">Your password</label>
+                <input type="password" id="log-user-password" class="form-control validate" required>
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+              <button class="btn" data-dismiss="modal">Cancel</button>
+              <button class="btn" id="login-user">Log in</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
         <div class="board-container" id="board-container">
             <button class="board-add" id="add-board-button">Add Board</button>
