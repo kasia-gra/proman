@@ -164,7 +164,13 @@ export let dataHandler = {
                 this._data['logout'] = data;
                 callback(data)
             })
-        }
+        },
 
+        changeCardsStatuses: function(dataDict, callback) {
+            this._api_put('/cards_statuses', dataDict, (data) => {
+                this._data['cards_statuses'] = data;
+                callback()
+            })
+        }
         // here comes more features
     };

@@ -101,7 +101,7 @@ function addUserMenu(user) {
             <a class="nav-link" id="logout" href="#"><span class="link fas fa-sign-out-alt"></span> Log out</a>
         </li>
         `;
-
+    usersHandler.addListenerToLogoutBtn();
 }
 
 function deleteUserMenu() {
