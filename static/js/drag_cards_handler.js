@@ -1,13 +1,14 @@
+import {dataHandler} from "./data_handler.js";
+
 export let dragCardsHandler = {
 
     InitCardsDragDropListeners: function () {
-    const draggables = document.querySelectorAll('.card')
-    const containers = document.querySelectorAll('.board-column-content')
-    allowCardsDragging(draggables);
-    swapCardsOnDragOver(containers);
+        const draggables = document.querySelectorAll('.card')
+        const containers = document.querySelectorAll('.board-column-content')
+        allowCardsDragging(draggables);
+        swapCardsOnDragOver(containers);
+    }
 }
-}
-
 
 
 const getDragAfterElement = function (container, y) {
@@ -36,19 +37,41 @@ const allowCardsDragging = function (draggables) {
 
 const swapCardsOnDragOver = function (containers) {
     containers.forEach(container => {
-        container.addEventListener('dragover', e => {e.preventDefault();})
+        container.addEventListener('dragover', e => {
+            e.preventDefault();
+        })
         container.addEventListener('drop', e => {
             const afterElement = getDragAfterElement(container, e.clientY)
             const draggable = document.querySelector('.dragging')
             const boardIdOfDraggable = (draggable.parentElement.parentElement.parentElement).id;
-            const boardIdOfContainer = (container.parentElement.parentElement).id
-            if (boardIdOfDraggable == boardIdOfContainer) {
+            const draggableCardOriginContainer = draggable.parentElement;
+            const boardIdOfDropContainer = (container.parentElement.parentElement).id;
+            if (boardIdOfDraggable == boardIdOfDropContainer) {
                 if (afterElement == null) {
                     container.appendChild(draggable)
                 } else {
                     container.insertBefore(draggable, afterElement)
                 }
+                saveDataOfUpdatedContainers(draggableCardOriginContainer, container);
             }
         })
     })
+}
+
+
+const saveDataOfUpdatedContainers = function (draggableCardOriginContainer, container) {
+    let cardsInOriginContainer = [];
+    let cardsDropContainer = [];
+    const dropContainerStatusId = container.parentElement.className.replace("board-column status-", "");;
+    const originContainerStatusId = draggableCardOriginContainer.parentElement.className.replace("board-column status-", "")
+    for (let card of draggableCardOriginContainer.children) {
+        cardsInOriginContainer = [...cardsInOriginContainer,...card.id];
+    }
+    for (let card of container.children) {
+        cardsDropContainer = [...cardsDropContainer,...card.id];
+    }
+    const cardsStatusesToUpdate  = {cards_origin: cardsInOriginContainer, status_origin: originContainerStatusId,
+    cards_dropped: cardsDropContainer, status_dropped: dropContainerStatusId};
+    console.log(cardsStatusesToUpdate);
+    dataHandler.changeCardsStatuses(cardsStatusesToUpdate, function () {console.log("OK")});
 }
