@@ -20,6 +20,7 @@ export let dom = {
                 addEventListenersToCards();
                 addListenersToDeleteCards();
                 addListenerToRegister();
+                addListenerToLogin();
             }
         )
     }
@@ -139,15 +140,41 @@ function addListenersToDeleteCards() {
 
 }
 
-function addListenerToRegister() {
-    let registerBtn = document.querySelector('#register')
-    registerBtn.addEventListener('click', function() {
-        const saveButton = document.querySelector('#save-user');
-        saveButton.addEventListener('click', getUserDataFromModal);
-    });
+
+function addListenerToLogin() {
+    const saveButton = document.querySelector('#login-user');
+    saveButton.addEventListener('click', getUserLoginDataFromModal)
+
 }
 
-function getUserDataFromModal(e) {
+function getUserLoginDataFromModal(e) {
+    e.preventDefault()
+    const loginData ={};
+    let emailInput = document.querySelector('#log-user-email');
+    let passwordInput = document.querySelector('#log-user-password');
+    if (validateInputEmail(emailInput) && validateInput(passwordInput)) {
+        loginData['email'] = emailInput.value;
+        loginData['password'] = passwordInput.value;
+
+        dataHandler.loginUser(loginData, function(message) {
+            console.log(message);
+            alert(message)
+            $('#modalLoginForm').modal('toggle')
+        });
+    }
+    else {
+            emailInput.value = '';
+            passwordInput.value = '';
+            alert('Wrong input! Use letters and numbers only. Minimum 3 characters') }
+}
+
+function addListenerToRegister() {
+    const saveButton = document.querySelector('#save-user');
+    saveButton.addEventListener('click', getUserRegistrationDataFromModal);
+
+}
+
+function getUserRegistrationDataFromModal(e) {
      e.preventDefault()
         const newUserData = {}
         let nameInput = document.querySelector('#user-name');

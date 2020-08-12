@@ -145,7 +145,14 @@ export let dataHandler = {
                  this._data['user'] = data;
                  callback(data)
              })
-        }
+        },
 
+        loginUser: function(dataDict, callback) {
+            console.log(dataDict)
+            this._api_post('/login', dataDict, (data) => {
+                this._data['login'] = data;
+                callback(data)
+            })
+        }
         // here comes more features
     };

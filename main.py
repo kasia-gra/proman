@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, session
 from util import json_response, jsonify
 import util
 import os
@@ -109,6 +109,24 @@ def user_registration():
     new_user_data['password'] = util.hash_password(new_user_data['password'])
     database_manager.add_new_user(new_user_data)
     return "You have been registered"
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return 'test'
+
+    login_user_data = request.get_json()
+    user = database_manager.get_user_by_email(login_user_data['email'])
+    print(user)
+    if user is not None \
+            and login_user_data['email'] in user['email'] \
+            and util.verify_password(login_user_data['password'], user['password']):
+        session['email'] = login_user_data['email']
+        session['user_id'] = user['id']
+        return 'You have been logged in.'
+
+    return "Wrong email or password"
 
 
 def main():
