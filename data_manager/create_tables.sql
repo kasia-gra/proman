@@ -115,14 +115,14 @@ CREATE TABLE cards (
     board_id integer,
     title text,
     status_id integer,
-    "order" integer,
+    card_order integer,
     PRIMARY KEY (id)
 --     FOREIGN KEY (board_id) REFERENCES boards (id) ON DELETE CASCADE,
 --     FOREIGN KEY (status_id) REFERENCES statuses (id) ON DELETE CASCADE
 );
 
 
-INSERT INTO cards (board_id, title, status_id, "order") VALUES
+INSERT INTO cards (board_id, title, status_id, card_order) VALUES
        (1, 'new card 1', 1, 0),
        (1, 'new card 2', 1, 1),
        (1, 'in progress card', 2, 0),

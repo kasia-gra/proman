@@ -8,7 +8,7 @@ export let cardsHandler = {
         let statusId = 1; // by default
         let cardTitle = "Empty card"; // temporary
         dataHandler.createNewCard(cardTitle, boardId, statusId, function (newCard) {
-            let cardElementHTML = cardsHandler.createCard(cardTitle, newCard.id);
+            let cardElementHTML = cardsHandler.createCard(newCard);
             let statusContainer = document.querySelector(`#board-id-${boardId} .board-column-content`);
         statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
         });

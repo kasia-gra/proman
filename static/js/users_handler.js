@@ -30,9 +30,7 @@ export let usersHandler = {
                 alert(message)
             })
         }
-        else { alert('Wrong input! Use letters and numbers only. Minimum 3 characters') }
-        emailInput.value = '';
-        passwordInput.value = '';
+        else { wrongInputAlert(emailInput, passwordInput)}
     },
 
 
@@ -45,14 +43,16 @@ export let usersHandler = {
             loginData['email'] = emailInput.value;
             loginData['password'] = passwordInput.value;
             dataHandler.loginUser(loginData, function(userData) {
-                 if (userData.message.includes('logged')) { $('#modalLoginForm').modal('toggle') }
+                if (userData.message.includes('logged')) {
+                    $('#modalLoginForm').modal('toggle')
+                    toggleUserMenu(userData.user)
+
+                }
                 alert(userData.message)
-                toggleUserMenu(userData.user)
+                passwordInput.value = ''
             });
         }
-        else { alert('Wrong input! Use letters and numbers only. Minimum 3 characters') }
-        emailInput.value = '';
-        passwordInput.value = '';
+        else { wrongInputAlert(emailInput, passwordInput)}
     },
 
 
@@ -88,7 +88,11 @@ function validateInput(inputName) {
     return inputName.value.length >= 3;
 }
 
-
+function wrongInputAlert(emailInput, passwordInput) {
+    alert('Wrong input! Use letters and numbers only. Minimum 3 characters')
+    emailInput.value = '';
+    passwordInput.value = '';
+}
 
 
 function addUserMenu(user) {

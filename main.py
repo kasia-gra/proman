@@ -97,8 +97,7 @@ def update_cards_statuses():
     if request.method == "PUT":
         data = request.get_json()
         data_dict = dict(data.items())
-        print(data_dict)
-        return "test"
+        return util.update_cards_order(data_dict)
     else:
         return "Error"
 
@@ -142,7 +141,7 @@ def login():
         return {'message': 'You have been logged in.',
                 'user': user}
 
-    return "Wrong email or password"
+    return {'message': "Wrong email or password"}
 
 
 @app.route("/logout", methods=['GET', 'POST'])

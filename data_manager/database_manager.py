@@ -82,7 +82,7 @@ def get_cards_for_board(cursor: RealDictCursor, board_id: int):
 def save_new_card(cursor:RealDictCursor, new_card: dict):
     query = (f"""
     INSERT INTO cards
-    (board_id, title, status_id, "order")
+    (board_id, title, status_id, card_order)
     VALUES (%(board_id)s, %(title)s, %(status_id)s, %(order)s)
     RETURNING *;
     """)
@@ -190,3 +190,15 @@ def get_user_by_email(cursor: RealDictCursor, input_email: str):
         WHERE email = %(email)s
         """, {'email': input_email})
     return cursor.fetchone()
+
+
+@connection.connection_handler
+def update_cards_statuses(cursor: RealDictCursor, data_dict: dict):
+    query = """
+    UPDATE cards
+    SET card_order = %(card_order)s,status_id = %(status_id)s 
+    WHERE id = %(card_id)s;
+    """
+    cursor.execute(query, {'card_id': data_dict["card_id"],
+                           'status_id': data_dict["status_id"],
+                           'card_order': data_dict["card_order"]})
