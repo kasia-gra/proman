@@ -82,7 +82,7 @@ def get_cards_for_board(cursor: RealDictCursor, board_id: int):
 def save_new_card(cursor:RealDictCursor, new_card: dict):
     query = (f"""
     INSERT INTO cards
-    (board_id, title, status_id, "order")
+    (board_id, title, status_id, card_order)
     VALUES (%(board_id)s, %(title)s, %(status_id)s, %(order)s)
     RETURNING *;
     """)
