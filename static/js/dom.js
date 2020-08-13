@@ -18,6 +18,7 @@ export let dom = {
 
     loadBoards: function () {
         // retrieves boards and makes showBoards called
+        let userId = localStorage.getItem("user_id");
         dataHandler.getBoards(function (boards) {
                 dom.showBoards(boards)
             }
@@ -77,6 +78,8 @@ export let dom = {
     addNewBoard: function () {
         boardsHandler.openAddDataModal("#modal-create-board", "#add-board-button");
         boardsHandler.submitModalData("#modal-create-board")
+        boardsHandler.openAddDataModal("#modal-create-private-board", "#add-private-board-button");
+        boardsHandler.submitModalData("#modal-create-private-board")
         changeBoardName.addEventListenersToBoardTitles();
     },
 

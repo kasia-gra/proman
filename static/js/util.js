@@ -16,5 +16,15 @@ export const util = {
         window.onload = function () {
             localStorage.clear();
         };
+    },
+
+    showButtonsForLoggedInUser: function () {
+        const addPrivateBoardButton = document.getElementById('add-private-board-button');
+        addPrivateBoardButton.classList.remove("hidden")
+    },
+
+    hideButtonsIfLoggedOut:  function () {
+        const addPrivateBoardButton = document.getElementById('add-private-board-button');
+        addPrivateBoardButton.classList.add("hidden")
     }
 }
