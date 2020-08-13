@@ -1,4 +1,3 @@
-
 export const util = {
     extractId: function (node) {
         let id;
@@ -11,5 +10,18 @@ export const util = {
         node.getAttribute('draggable') === 'true' ?
             node.setAttribute('draggable', 'false') :
             node.setAttribute('draggable', 'true');
+    },
+
+    keepSessionActive: function () {
+        window.onbeforeunload = function (e) {
+            window.onunload = function () {
+                window.localStorage.isMySessionActive = "false";
+            }
+            return undefined;
+        };
+
+        window.onload = function () {
+            window.localStorage.isMySessionActive = "true";
+        };
     }
 }
