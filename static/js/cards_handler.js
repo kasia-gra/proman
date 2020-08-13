@@ -21,6 +21,11 @@ export let cardsHandler = {
     },
 
     editCard: function (e) {
+        const toggleDraggable = function (node) {
+            node.getAttribute('draggable') === 'true' ?
+                node.setAttribute('draggable', 'false') :
+                node.setAttribute('draggable', 'true');
+        }
         let cardId = (e.target.parentNode.id);
         if (e.target && e.target.className === 'card-title') {
             if (!document.querySelector('#card-input')) {
@@ -33,7 +38,7 @@ export let cardsHandler = {
                 e.target.appendChild(input);
                 input.focus();
                 input.select();
-                input.closest('.card').setAttribute('draggable', 'false');
+                toggleDraggable(input.closest('.card'));
 
                 input.addEventListener('keyup', function (event) {    //add listener on input
                     if (event.key === 'Enter') {
@@ -42,11 +47,11 @@ export let cardsHandler = {
                         if (title.replace(/\s\s+/g, ' ').toLowerCase().match(/^[0-9a-z ]+$/)) {
                             dataHandler.editCard(title, cardId, function (editedCard) {
                             }); // ask mentor about callback
-                            input.closest('.card').setAttribute('draggable', 'true');
+                            toggleDraggable(input.closest('.card'));
                             e.target.innerHTML = title;
                         } else alert('Use letters and numbers only.')
                     } else if (event.key === 'Escape') {
-                        input.closest('.card').setAttribute('draggable', 'true');
+                        toggleDraggable(input.closest('.card'));
                         e.target.innerHTML = oldTitle
                     }
                 })
