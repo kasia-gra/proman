@@ -19,6 +19,7 @@ def index():
 
 
 @app.route("/boards", methods=["GET", "POST", "PUT"])
+
 @app.route("/boards/<int:board_id>", methods=['DELETE'])
 @json_response
 def boards(board_id=None):
@@ -31,6 +32,8 @@ def boards(board_id=None):
         new_board_id = dict(new_board_data[0])["id"]
         database_manager.update_new_board_default_statuses(new_board_id);
         newly_created_board_data = database_manager.get_newly_created_board_data(new_board_id)
+        newly_created_board_data["user_id"] = data["user_id"]
+        database_manager.save_user_data_for_new_board(newly_created_board_data)
         return newly_created_board_data
     if request.method == "GET":
         boards = database_manager.get_boards()

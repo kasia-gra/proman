@@ -62,7 +62,6 @@ export let dataHandler = {
                 callback(response);
             });
         },
-
         deleteBoardById: function (boardId, callback) {
             this._api_delete(`/boards/${boardId}`,boardId , data => {
                 callback(data);

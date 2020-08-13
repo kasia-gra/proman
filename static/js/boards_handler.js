@@ -17,12 +17,12 @@ export let boardsHandler = {
         submitModalDataButton.addEventListener("click", function () {
             const dataToPost = getDataFromModalInputs(modalInputs, modalId);
             const userId = localStorage.getItem("user_id");
-            userId ? console.log("you're logged in") : console.log("youre not loggedin")
+            userId ? console.log("you're logged in") : console.log("youre not loggedin");
+            dataToPost["user_id"] = userId;
             dataHandler.createNewBoard(dataToPost, function (new_board) {
                 appendHtmlWithBewBoard(new_board);
                 cardsHandler.addListenerToAddCardBtn();
                 boardsHandler.addListenerToDeleteBoardBtn();
-
             })
         })
     },
