@@ -49,8 +49,10 @@ export let usersHandler = {
             dataHandler.loginUser(loginData, function (userData) {
                 if (userData.message.includes('logged')) {
                     $('#modalLoginForm').modal('toggle')
-                    toggleUserMenu(userData.user)
-
+                    toggleUserMenu(userData.user);
+                    localStorage.setItem("user_id", `${userData["user"].id}`);
+                    const userId = localStorage.getItem("user_id");
+                    console.log(userId);
                 }
                 alert(userData.message)
                 passwordInput.value = ''
@@ -65,6 +67,9 @@ export let usersHandler = {
         dataHandler.logoutUser(function (message) {
             alert(message);
             toggleUserMenu()
+            localStorage.removeItem("user_id");
+            const userId = localStorage.getItem("user_id");
+            console.log(userId);
         })
     },
 
