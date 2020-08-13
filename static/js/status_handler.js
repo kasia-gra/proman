@@ -1,5 +1,6 @@
 import {dataHandler} from "./data_handler.js";
 import {htmlCreator} from "./html_creator.js";
+import {dragCardsHandler} from "./drag_cards_handler.js";
 
 export const statusesHandler = {
     manager: this,
@@ -40,6 +41,7 @@ export const statusesHandler = {
                         const columnsContainer = document.querySelector(`#columns-board-id-${boardId}`);
                         const newStatusColumn = htmlCreator.createColumnsStatusesForBoard(newStatus.id, newStatus.title)
                         columnsContainer.insertAdjacentHTML("beforeend", newStatusColumn);
+                        dragCardsHandler.InitCardsDragDropListeners();
                     }, error => alert(error));
                 } else alert('Use letters and numbers only. No big whitespace.')
             }
