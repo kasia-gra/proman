@@ -31,6 +31,7 @@ export let cardsHandler = {
                 let oldTitle = e.target.innerHTML;
                 e.target.innerHTML = '';
                 e.target.appendChild(input);
+                input.focus();
 
                 input.addEventListener('keyup', function (event) {    //add listener on input
                     if (event.key === 'Enter') {
