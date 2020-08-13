@@ -1,6 +1,7 @@
 import {dataHandler} from "./data_handler.js";
 import {dragCardsHandler} from "./drag_cards_handler.js";
 import {htmlCreator} from "./html_creator.js";
+import {util} from "./util.js"
 
 export let cardsHandler = {
 
@@ -21,11 +22,6 @@ export let cardsHandler = {
     },
 
     editCard: function (e) {
-        const toggleDraggable = function (node) {
-            node.getAttribute('draggable') === 'true' ?
-                node.setAttribute('draggable', 'false') :
-                node.setAttribute('draggable', 'true');
-        }
         let cardId = (e.target.parentNode.id);
         if (e.target && e.target.className === 'card-title') {
             if (!document.querySelector('#card-input')) {
@@ -36,9 +32,10 @@ export let cardsHandler = {
                 let oldTitle = e.target.innerHTML;
                 e.target.innerHTML = '';
                 e.target.appendChild(input);
+                const card = input.closest('.card');
                 input.focus();
                 input.select();
-                toggleDraggable(input.closest('.card'));
+                util.toggleDraggable(card);
 
                 input.addEventListener('keyup', function (event) {    //add listener on input
                     if (event.key === 'Enter') {
@@ -47,11 +44,11 @@ export let cardsHandler = {
                         if (title.replace(/\s\s+/g, ' ').toLowerCase().match(/^[0-9a-z ]+$/)) {
                             dataHandler.editCard(title, cardId, function (editedCard) {
                             }); // ask mentor about callback
-                            toggleDraggable(input.closest('.card'));
+                            util.toggleDraggable(card);
                             e.target.innerHTML = title;
                         } else alert('Use letters and numbers only.')
                     } else if (event.key === 'Escape') {
-                        toggleDraggable(input.closest('.card'));
+                        util.toggleDraggable(card);
                         e.target.innerHTML = oldTitle
                     }
                 })
