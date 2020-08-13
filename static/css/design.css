@@ -232,3 +232,12 @@ i {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+#manual-sync {
+    display: flex;
+}
+
+#manual-sync i {
+    float: right;
+    align-self: center;
+}
