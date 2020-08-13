@@ -124,13 +124,13 @@ CREATE TABLE cards (
 -- -- SELECT pg_catalog.setval('cards_id_seq', 10, true);
 
 ALTER TABLE ONLY cards
-    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id);
+    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES statuses(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY board_statuses
-    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id);
+    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY board_statuses
     ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES statuses(id) ON DELETE CASCADE;
@@ -139,4 +139,4 @@ ALTER TABLE ONLY user_boards
     ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id);
 
 ALTER TABLE ONLY user_boards
-    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id);
+    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
