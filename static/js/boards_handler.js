@@ -16,12 +16,28 @@ export let boardsHandler = {
         const modalInputs = modal.querySelectorAll("input");
         submitModalDataButton.addEventListener("click", function () {
             const dataToPost = getDataFromModalInputs(modalInputs, modalId);
-            dataHandler.createNewBoard(dataToPost, function (new_board) {
-                appendHtmlWithBewBoard(new_board);
-                cardsHandler.addListenerToAddCardBtn();
-                boardsHandler.addListenerToDeleteBoardBtn();
-
+            const userId = localStorage.getItem("user_id");
+            console.log(modalId);
+            if (modalId === "#modal-create-board") {
+                dataToPost["user_id"] = 0;
+                dataHandler.createNewBoard(dataToPost, function (new_board) {
+                    console.log("public")
+                    appendHtmlWithBewBoard(new_board);
+                    cardsHandler.addListenerToAddCardBtn();
+                    boardsHandler.addListenerToDeleteBoardBtn();
+                    return
             })
+            }
+            else if (modalId === "#modal-create-private-board") {
+                dataToPost["user_id"] = localStorage.getItem("user_id")
+                dataHandler.createNewPrivateBoard(dataToPost, function (new_board) {
+                    console.log("private");
+                    appendHtmlWithBewBoard(new_board);
+                    cardsHandler.addListenerToAddCardBtn();
+                    boardsHandler.addListenerToDeleteBoardBtn();
+                    return
+                })
+            }
         })
     },
 

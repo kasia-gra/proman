@@ -42,6 +42,20 @@ def save_new_board_data(cursor: RealDictCursor, board_data: dict):
 
 
 @connection.connection_handler
+def save_user_data_for_new_board(cursor: RealDictCursor, board_data: dict):
+    query = """
+    INSERT INTO user_boards
+    (user_id, board_id)
+    VALUES (%(user_id)s, %(board_id)s)
+    RETURNING *;
+    """
+    cursor.execute(query, {
+        'user_id': board_data["user_id"],
+        'board_id': board_data["id"]
+    })
+
+
+@connection.connection_handler
 def update_new_board_default_statuses(cursor: RealDictCursor, new_board_id: int):
     query = sql.SQL("""
     WITH ins1 AS (
@@ -67,7 +81,7 @@ def get_newly_created_board_data(cursor: RealDictCursor, board_id: int):
 
 
 @connection.connection_handler
-def save_new_card(cursor:RealDictCursor, new_card: dict):
+def save_new_card(cursor: RealDictCursor, new_card: dict):
     query = (f"""
     INSERT INTO cards
     (board_id, title, status_id, card_order)
@@ -113,11 +127,11 @@ def get_statuses(cursor: RealDictCursor):
 
 @connection.connection_handler
 def save_new_status(cursor: RealDictCursor, new_status: dict):
-    query = sql.SQL('INSERT INTO statuses (title) VALUES ({status_title}) RETURNING *;').\
+    query = sql.SQL('INSERT INTO statuses (title) VALUES ({status_title}) RETURNING *;'). \
         format(status_title=sql.Literal(new_status['title']))
     cursor.execute(query)
     new_status_response = cursor.fetchone()
-    query = sql.SQL('INSERT INTO board_statuses (status_id, board_id) VALUES ({status_id}, {board_id});').\
+    query = sql.SQL('INSERT INTO board_statuses (status_id, board_id) VALUES ({status_id}, {board_id});'). \
         format(status_id=sql.Literal(new_status_response['id']), board_id=sql.Literal(new_status['board']))
     cursor.execute(query)
     return new_status_response
@@ -125,7 +139,7 @@ def save_new_status(cursor: RealDictCursor, new_status: dict):
 
 @connection.connection_handler
 def edit_status(cursor: RealDictCursor, status_edit: dict):
-    query = sql.SQL('UPDATE ONLY statuses SET title = {new_title} WHERE id = {status_id} RETURNING *').\
+    query = sql.SQL('UPDATE ONLY statuses SET title = {new_title} WHERE id = {status_id} RETURNING *'). \
         format(new_title=sql.Literal(status_edit['title']), status_id=sql.Literal(status_edit['id']))
     cursor.execute(query)
     return cursor.fetchone()
@@ -135,7 +149,7 @@ def edit_status(cursor: RealDictCursor, status_edit: dict):
 def delete_status(cursor: RealDictCursor, status: dict):
     query = sql.SQL("""
     DELETE FROM statuses s WHERE s.id = {status_id} RETURNING *
-    """).\
+    """). \
         format(status_id=sql.Literal(status['statusId']))
     cursor.execute(query)
     return cursor.fetchone()
@@ -143,7 +157,6 @@ def delete_status(cursor: RealDictCursor, status: dict):
 
 @connection.connection_handler
 def delete_card(cursor: RealDictCursor, card_id: int):
-
     query = sql.SQL("""
         DELETE FROM cards
         WHERE id = {id}
@@ -153,7 +166,6 @@ def delete_card(cursor: RealDictCursor, card_id: int):
 
 @connection.connection_handler
 def delete_board(cursor: RealDictCursor, board_id: int):
-
     query = sql.SQL("""
         BEGIN;
         DELETE FROM statuses WHERE id IN (SELECT status_id FROM board_statuses WHERE board_id = {id});
@@ -173,7 +185,6 @@ def add_new_user(cursor: RealDictCursor, new_user_data: dict):
 
 @connection.connection_handler
 def get_names_and_emails(cursor: RealDictCursor):
-
     cursor.execute("""
         SELECT name, email
         FROM users
@@ -183,7 +194,6 @@ def get_names_and_emails(cursor: RealDictCursor):
 
 @connection.connection_handler
 def get_user_by_email(cursor: RealDictCursor, input_email: str):
-
     cursor.execute("""
         SELECT name, email, password, id 
         FROM users 

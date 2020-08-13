@@ -241,3 +241,7 @@ i {
     float: right;
     align-self: center;
 }
+
+.hidden {
+    visibility: hidden;
+}

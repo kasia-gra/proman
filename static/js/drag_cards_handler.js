@@ -62,7 +62,7 @@ const swapCardsOnDragOver = function (containers) {
 const saveDataOfUpdatedContainers = function (draggableCardOriginContainer, container) {
     let cardsInOriginContainer = [];
     let cardsDropContainer = [];
-    const dropContainerStatusId = container.parentElement.className.replace("board-column status-", "");;
+    const dropContainerStatusId = container.parentElement.className.replace("board-column status-", "");
     const originContainerStatusId = draggableCardOriginContainer.parentElement.className.replace("board-column status-", "")
     for (let card of draggableCardOriginContainer.children) {
         cardsInOriginContainer.push(card.id);

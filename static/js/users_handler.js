@@ -1,5 +1,6 @@
 import {dataHandler} from "./data_handler.js";
 import {htmlCreator} from "./html_creator.js"
+import {util} from "./util.js";
 
 
 export let usersHandler = {
@@ -53,6 +54,7 @@ export let usersHandler = {
                     localStorage.setItem("user_id", `${userData["user"].id}`);
                     const userId = localStorage.getItem("user_id");
                     console.log(userId);
+                    util.showButtonsForLoggedInUser();
                 }
                 alert(userData.message)
                 passwordInput.value = ''
@@ -68,8 +70,7 @@ export let usersHandler = {
             alert(message);
             toggleUserMenu()
             localStorage.removeItem("user_id");
-            const userId = localStorage.getItem("user_id");
-            console.log(userId);
+            util.hideButtonsIfLoggedOut()
         })
     },
 

@@ -41,3 +41,12 @@ def iterate_through_cards_dict(data_dict, cards_container, cards_status):
                      "status_id": int(data_dict.get(cards_container))}
         database_manager.update_cards_statuses(card_dict)
         card_order = card_order + 1
+
+
+def prepare_borad_data_to_post (data):
+    new_board_data = database_manager.save_new_board_data(data)
+    new_board_id = dict(new_board_data[0])["id"]
+    database_manager.update_new_board_default_statuses(new_board_id);
+    newly_created_board_data = database_manager.get_newly_created_board_data(new_board_id)
+    return newly_created_board_data
+
