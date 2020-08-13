@@ -167,8 +167,10 @@ def delete_card(cursor: RealDictCursor, card_id: int):
 @connection.connection_handler
 def delete_board(cursor: RealDictCursor, board_id: int):
     query = sql.SQL("""
-        DELETE FROM boards
-        WHERE id = {id}
+        BEGIN;
+        DELETE FROM statuses WHERE id IN (SELECT status_id FROM board_statuses WHERE board_id = {id});
+        DELETE FROM boards WHERE id = {id};
+        COMMIT;
         """).format(id=sql.Literal(board_id))
     cursor.execute(query)
 

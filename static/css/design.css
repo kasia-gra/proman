@@ -233,6 +233,15 @@ i {
   100% { transform: rotate(360deg); }
 }
 
+#manual-sync {
+    display: flex;
+}
+
+#manual-sync i {
+    float: right;
+    align-self: center;
+}
+
 .hidden {
     visibility: hidden;
 }

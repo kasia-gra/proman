@@ -46,6 +46,7 @@ export let dom = {
         usersHandler.addListenerToLogin();
         usersHandler.addListenerToLogoutBtn();
         boardsHandler.addListenerToDeleteBoardBtn();
+        dom.addRefreshListener();
     },
 
     showStatuses: function (board) {;
@@ -82,6 +83,11 @@ export let dom = {
         boardsHandler.submitModalData("#modal-create-private-board")
         changeBoardName.addEventListenersToBoardTitles();
     },
+
+    addRefreshListener: function () {
+        const syncButton = document.querySelector('#manual_sync');
+        syncButton ? syncButton.addEventListener('click', () => location.reload()) : null;
+    }
 
 // here comes more features
 };
