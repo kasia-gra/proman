@@ -55,11 +55,25 @@ export let cardsHandler = {
 
     deleteCard: function (e) {
         if (e.target && e.target.classList.contains('delete-card')) {
-            let cardId = e.target.parentNode.parentNode.id;
+            let cardId = e.target.parentNode.id;
             dataHandler.deleteCardById({cardId: cardId}, function (data) {
-                e.target.parentNode.parentNode.remove()
+                e.target.parentNode.remove()
             });
         }
+    },
+
+    archiveCard: function (e) {
+         if (e.target && e.target.classList.contains('archive-card')) {
+            let cardId = e.target.parentNode.id;
+            let dataDict = {
+                cardId: cardId,
+                archived: true
+            }
+            dataHandler.archiveCardById(dataDict, function (data){
+               e.target.parentNode.remove()
+            });
+        }
+
     },
 
     addListenerToAddCardBtn: function () {
@@ -71,9 +85,12 @@ export let cardsHandler = {
 
     addEventListenersToCards: function () {
         document.addEventListener('click', cardsHandler.editCard);
+
+        document.addEventListener("click", cardsHandler.archiveCard);
+
     },
 
     addListenersToDeleteCards: function () {
-        document.addEventListener('click', cardsHandler.deleteCard)
+        document.addEventListener('click', cardsHandler.deleteCard);
     }
 }

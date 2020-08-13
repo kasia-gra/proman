@@ -70,8 +70,8 @@ def get_newly_created_board_data(cursor: RealDictCursor, board_id: int):
 def save_new_card(cursor:RealDictCursor, new_card: dict):
     query = (f"""
     INSERT INTO cards
-    (board_id, title, status_id, card_order)
-    VALUES (%(board_id)s, %(title)s, %(status_id)s, %(order)s)
+    (board_id, title, status_id, card_order, archived)
+    VALUES (%(board_id)s, %(title)s, %(status_id)s, %(order)s, %(archived)s)
     RETURNING *;
     """)
     cursor.execute(query, new_card)

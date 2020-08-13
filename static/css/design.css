@@ -136,6 +136,15 @@ input.board-title-input {
     background: var(--status-4);
 }
 
+.card-archive {
+    display: block;
+    position: absolute;
+    top: 24px;
+    right: 3px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
 .card-remove{
     display: block;
     position: absolute;

@@ -104,6 +104,7 @@ CREATE TABLE cards (
     title text,
     status_id integer,
     card_order integer,
+    archived boolean,
     PRIMARY KEY (id)
 --     FOREIGN KEY (board_id) REFERENCES boards (id) ON DELETE CASCADE,
 --     FOREIGN KEY (status_id) REFERENCES statuses (id) ON DELETE CASCADE

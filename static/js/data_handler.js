@@ -101,7 +101,8 @@ export let dataHandler = {
             let dataDict = { 'board_id': boardId,
                             'title': cardTitle,
                             'status_id': statusId,
-                            'order': 0
+                            'order': 0,
+                            archived: false
             };
             this._api_post('/cards', dataDict, (data) => {
             this._data['newCard'] = data;
@@ -177,6 +178,13 @@ export let dataHandler = {
             this._api_put('/cards_statuses', dataDict, (data) => {
                 this._data['cards_statuses'] = data;
                 callback()
+            })
+        },
+
+        archiveCardById: function(dataDict, callback) {
+            this._api_put(`/cards/${dataDict.cardId}`, dataDict, (data) => {
+                this._data['card'] = data;
+                callback(data)
             })
         }
         // here comes more features
