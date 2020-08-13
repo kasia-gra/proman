@@ -15,9 +15,8 @@ export let boardsHandler = {
         const submitModalDataButton = modal.getElementsByClassName("submit-modal-data")[0];
         const modalInputs = modal.querySelectorAll("input");
         submitModalDataButton.addEventListener("click", function () {
-            const dataToPost = getDataFromModalInputs(modalInputs);
+            const dataToPost = getDataFromModalInputs(modalInputs, modalId);
             dataHandler.createNewBoard(dataToPost, function (new_board) {
-                modal.className = "modal-hide";
                 appendHtmlWithBewBoard(new_board);
                 cardsHandler.addListenerToAddCardBtn();
             })
@@ -49,11 +48,13 @@ function getAllModalInputFields(modalId) {
 }
 
 
-function getDataFromModalInputs(modalInputs) {
+function getDataFromModalInputs(modalInputs, modalId) {
+    const modal = document.querySelector(modalId);
     let dataInputsDict = {}
     for (let input of modalInputs) {
         dataInputsDict[input.name] = input.value
     }
+    modal.className = "modal-hide";
     return dataInputsDict
 }
 
