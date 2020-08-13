@@ -17,7 +17,6 @@ def get_boards(cursor: RealDictCursor):
     return cursor.fetchall()
 
 
-
 @connection.connection_handler
 def get_all_cards(cursor: RealDictCursor):
     cursor.execute(f"""
@@ -25,6 +24,7 @@ def get_all_cards(cursor: RealDictCursor):
                     FROM cards
                     """)
     return cursor.fetchall()
+
 
 @connection.connection_handler
 def save_new_board_data(cursor: RealDictCursor, board_data: dict):
@@ -158,6 +158,16 @@ def delete_card(cursor: RealDictCursor, card_id: int):
         DELETE FROM cards
         WHERE id = {id}
         """).format(id=sql.Literal(card_id))
+    cursor.execute(query)
+
+
+@connection.connection_handler
+def delete_board(cursor: RealDictCursor, board_id: int):
+
+    query = sql.SQL("""
+        DELETE FROM boards
+        WHERE id = {id}
+        """).format(id=sql.Literal(board_id))
     cursor.execute(query)
 
 

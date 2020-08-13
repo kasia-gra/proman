@@ -11,6 +11,9 @@ export const htmlCreator = {
                     <button class="board-toggle" data-toggle="collapse" data-target="#columns-board-id-${boardId}">
                         <i class="fas fa-chevron-down"></i>
                     </button>
+                    <div class="board-remove" id="add-status-board-${boardId}">
+                        <i class="fas fa-trash-alt delete-board"></i>
+                    </div>
                 </div>
                 <div class="board-columns collapse show" id="columns-board-id-${boardId}"></div>
             </section>`
@@ -40,8 +43,8 @@ export const htmlCreator = {
     },
 
     addUserMenu: function (user) {
-    let navbar =  document.querySelector(".navbar-right")
-    navbar.innerHTML = `
+        let navbar = document.querySelector(".navbar-right")
+        navbar.innerHTML = `
         <li>
             <a class="nav-link disabled">Logged in as ${user.name}</a>
         </li>
@@ -49,10 +52,10 @@ export const htmlCreator = {
             <a class="nav-link" id="logout" href="#"><span class="link fas fa-sign-out-alt"></span> Log out</a>
         </li>
         `;
-},
+    },
 
     deleteUserMenu: function () {
-        let navbar =  document.querySelector(".navbar-right")
+        let navbar = document.querySelector(".navbar-right")
         navbar.innerHTML = `
         <li>
             <a class="nav-link" id="register" data-toggle="modal" data-target="#modalRegisterForm"
@@ -62,6 +65,7 @@ export const htmlCreator = {
             <a class="nav-link" id="login" data-toggle="modal" data-target="#modalLoginForm"
                 href="#"><span class="link fas fa-sign-in-alt"></span> Log in</a>
         </li>
-    `;}
+    `;
+    }
 
 }
