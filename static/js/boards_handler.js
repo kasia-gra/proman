@@ -19,6 +19,8 @@ export let boardsHandler = {
             dataHandler.createNewBoard(dataToPost, function (new_board) {
                 appendHtmlWithBewBoard(new_board);
                 cardsHandler.addListenerToAddCardBtn();
+                boardsHandler.addListenerToDeleteBoardBtn();
+
             })
         })
     },
