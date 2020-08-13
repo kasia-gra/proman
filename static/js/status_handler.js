@@ -1,6 +1,7 @@
 import {dataHandler} from "./data_handler.js";
+import {htmlCreator} from "./html_creator.js";
 
-export const eventManager = {
+export const statusesHandler = {
     manager: this,
     addListener: {
         renameStatus: function () {
@@ -8,6 +9,41 @@ export const eventManager = {
         },
         deleteStatus: function () {
             document.addEventListener('click', handlers.deleteStatus)
+        },
+        addNewStatus: function () {
+            const modal = document.querySelector('#modal-create-status'); // Popup
+            const saveButton = document.querySelector('#save-status'); //"Save Status" button
+            //Add "Add Status" button listener
+            const addHandler = function (e) {
+                if (e.target.classList.contains('board-add-status')) {
+                    $('#modal-create-status').modal()
+                    const board = e.target.parentNode.parentNode
+                    const boardId = board.id.match(/\d+/)[0];
+                    modal.setAttribute('board', boardId)
+                }
+            }
+            document.addEventListener('click', addHandler)
+            //Add "Save Changes" button on new status popup listener
+            const saveHandler = function () {
+                const input = document.querySelector('#new-status-title');
+                if (input.value.replace(/ /g, '').toLowerCase().match(/^[0-9a-z]+$/)) {
+                    const boardId = modal.getAttribute('board');
+                    const newStatusTitle = input.value;
+                    input.value = '';
+                    $('#modal-create-status').modal('toggle');
+                    //Send request to save the new status and add it to DOM
+                    new Promise(((resolve, reject) => {
+                        const newStatus = {title: newStatusTitle, board: boardId};
+                        dataHandler.createNewStatus(newStatus, data => data ?
+                            resolve(data) : reject(new Error('Cannot save the new status. Try again?')));
+                    })).then(newStatus => {
+                        const columnsContainer = document.querySelector(`#columns-board-id-${boardId}`);
+                        const newStatusColumn = htmlCreator.createColumnsStatusesForBoard(newStatus.id, newStatus.title)
+                        columnsContainer.insertAdjacentHTML("beforeend", newStatusColumn);
+                    }, error => alert(error));
+                } else alert('Use letters and numbers only. No big whitespace.')
+            }
+            saveButton.addEventListener('click', saveHandler);
         }
     }
 };
@@ -65,8 +101,7 @@ const handlers = {
                     if (statusId === deletedStatus.id.toString()) {
                         document.querySelector(`.status-${statusId}`).remove();
                         removeButton.innerHTML = removeIcon;
-                    }
-                    else {
+                    } else {
                         alert('Critical error. Please contact system administrator.')
                     }
                 }
