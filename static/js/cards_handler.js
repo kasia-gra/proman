@@ -23,7 +23,7 @@ export let cardsHandler = {
             if (!document.querySelector('#card-input')) {
                 let input = document.createElement('input');    //create input
                 input.setAttribute('id', 'card-input');
-                input.setAttribute('value', e.target.innerHTML);
+                input.setAttribute('value', e.target.innergit getMatchedCSSRules());
                 input.type = 'text';
                 let oldTitle = e.target.innerHTML;
                 e.target.innerHTML = '';
