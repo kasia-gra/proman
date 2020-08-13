@@ -3,35 +3,20 @@ from psycopg2 import sql
 import connection
 
 
+
 @connection.connection_handler
 def get_boards(cursor: RealDictCursor):
     cursor.execute(f"""
-                    SELECT boards.id, boards.title, ARRAY_AGG(s.title ORDER BY s.id) AS statuses_list, 
+                    SELECT boards.id, boards.title, ARRAY_AGG(s.title ORDER BY s.id) AS statuses_list,
                     ARRAY_AGG(s.id ORDER BY s.id) AS ids
                     FROM boards
                     JOIN board_statuses bs on boards.id = bs.board_id
                     JOIN statuses s on bs.status_id = s.id
-                    LEFT JOIN user_boards on boards.id = user_boards.board_id 
+                    JOIN user_boards on boards.id = user_boards.board_id
                     GROUP BY boards.title, boards.id
-                    HAVING boards.id IS NULL
                     ORDER BY boards.id;
                     """)
     return cursor.fetchall()
-
-
-# @connection.connection_handler
-# def get_boards(cursor: RealDictCursor):
-#     cursor.execute(f"""
-#                     SELECT boards.id, boards.title, ARRAY_AGG(s.title ORDER BY s.id) AS statuses_list,
-#                     ARRAY_AGG(s.id ORDER BY s.id) AS ids
-#                     FROM boards
-#                     JOIN board_statuses bs on boards.id = bs.board_id
-#                     JOIN statuses s on bs.status_id = s.id
-#                     JOIN user_boards on boards.id = user_boards.board_id
-#                     GROUP BY boards.title, boards.id
-#                     ORDER BY boards.id;
-#                     """)
-#     return cursor.fetchall()
 
 
 
