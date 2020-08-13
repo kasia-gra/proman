@@ -7,11 +7,7 @@ export let cardsHandler = {
 
     addCard: function (button) {
         let boardId = button.target.id.match(/\d+/)[0]; // return number of board where btn is clicked
-        let statusId;
-        document.querySelector(`#columns-board-id-${boardId} .board-column`).classList.forEach(
-            c => statusId = c.match(/^status-(\d+)$/)
-        ); // by default
-        statusId = statusId[1];
+        const statusId = util.extractId(document.querySelector(`#columns-board-id-${boardId} .board-column`));
         let cardTitle = "Empty card"; // temporary
         dataHandler.createNewCard(cardTitle, boardId, statusId, function (newCard) {
             let cardElementHTML = htmlCreator.createCard(newCard);
@@ -22,8 +18,8 @@ export let cardsHandler = {
     },
 
     editCard: function (e) {
-        let cardId = (e.target.parentNode.id);
         if (e.target && e.target.className === 'card-title') {
+            let cardId = (e.target.parentNode.id);
             if (!document.querySelector('#card-input')) {
                 let input = document.createElement('input');    //create input
                 input.setAttribute('id', 'card-input');

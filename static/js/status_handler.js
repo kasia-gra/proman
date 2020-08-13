@@ -1,6 +1,7 @@
 import {dataHandler} from "./data_handler.js";
 import {htmlCreator} from "./html_creator.js";
 import {dragCardsHandler} from "./drag_cards_handler.js";
+import {util} from "./util.js"
 
 export const statusesHandler = {
     manager: this,
@@ -55,9 +56,7 @@ const handlers = {
         if (e.target.classList.contains('board-column-title')) {
             const status = e.target.parentNode.parentNode;
             const title = e.target;
-            let statusId;
-            status.classList.forEach(c => c.includes('status') ?
-                statusId = c.match(/\d+/)[0] : null);
+            const statusId = util.extractId(status);
             let isTitle = false;
             title.classList.forEach(c => c.includes('title') ? isTitle = true : null);
             if (status.classList.contains('board-column') && isTitle) {
@@ -89,12 +88,7 @@ const handlers = {
     },
     deleteStatus: function (e) {
         if (e.target.classList.contains('delete-status')) {
-            let statusId;
-            e.target.parentNode.parentNode.parentNode.classList.forEach(
-                c => statusId = c.match(/^status-(\d+)$/)
-            );
-            // noinspection JSUnusedAssignment
-            statusId = statusId[1];
+            const statusId = util.extractId(e.target.closest('.board-column'));
             const boardId = e.target.closest('section').id.match(/\d+$/)[0];
             const removeButton = e.target.closest('.status-remove');
             const removeIcon = removeButton.innerHTML;
