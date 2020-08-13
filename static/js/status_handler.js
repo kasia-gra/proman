@@ -69,6 +69,8 @@ const handlers = {
                     const oldTitle = title.innerHTML;
                     title.innerHTML = '';
                     title.appendChild(input);
+                    input.focus();
+                    input.select();
                     input.addEventListener('keyup', function (event) {    //add listener on input
                         if (event.key === 'Enter') {
                             event.preventDefault();

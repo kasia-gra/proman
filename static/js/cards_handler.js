@@ -32,6 +32,8 @@ export let cardsHandler = {
                 e.target.innerHTML = '';
                 e.target.appendChild(input);
                 input.focus();
+                input.select();
+                input.closest('.card').setAttribute('draggable', 'false');
 
                 input.addEventListener('keyup', function (event) {    //add listener on input
                     if (event.key === 'Enter') {
