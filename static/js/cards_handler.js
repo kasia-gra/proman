@@ -42,9 +42,11 @@ export let cardsHandler = {
                         if (title.replace(/\s\s+/g, ' ').toLowerCase().match(/^[0-9a-z ]+$/)) {
                             dataHandler.editCard(title, cardId, function (editedCard) {
                             }); // ask mentor about callback
+                            input.closest('.card').setAttribute('draggable', 'true');
                             e.target.innerHTML = title;
                         } else alert('Use letters and numbers only.')
                     } else if (event.key === 'Escape') {
+                        input.closest('.card').setAttribute('draggable', 'true');
                         e.target.innerHTML = oldTitle
                     }
                 })
