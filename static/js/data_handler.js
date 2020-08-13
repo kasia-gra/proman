@@ -62,6 +62,13 @@ export let dataHandler = {
                 callback(response);
             });
         },
+
+        deleteBoardById: function (boardId, callback) {
+            this._api_delete(`/boards/${boardId}`,boardId , data => {
+                callback(data);
+            });
+        },
+                
         getBoard: function (callback) {
             // the board is retrieved and then the callback function is called with the board
         },

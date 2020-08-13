@@ -19,8 +19,9 @@ def index():
 
 
 @app.route("/boards", methods=["GET", "POST", "PUT"])
+@app.route("/boards/<int:board_id>", methods=['DELETE'])
 @json_response
-def boards():
+def boards(board_id=None):
     """
     All the boards
     """
@@ -38,6 +39,9 @@ def boards():
         data = request.get_json()
         data_dict = dict(data.items())
         return database_manager.update_board_title(data_dict)
+    if request.method == "DELETE":
+        print(board_id)
+        return database_manager.delete_board(board_id)
 
 
 @app.route("/statuses", methods=['GET', 'POST'])

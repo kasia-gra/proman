@@ -35,15 +35,16 @@ export let dom = {
             dom.showStatuses(board);
         })
         dom.loadCards();
-        cardsHandler.addListenerToAddCardBtn();
         statusesHandler.addListener.addNewStatus();
         statusesHandler.addListener.renameStatus();
         statusesHandler.addListener.deleteStatus();
         cardsHandler.addEventListenersToCards();
         cardsHandler.addListenersToDeleteCards();
+        cardsHandler.addListenerToAddCardBtn();
         usersHandler.addListenerToRegister();
         usersHandler.addListenerToLogin();
         usersHandler.addListenerToLogoutBtn();
+        boardsHandler.addListenerToDeleteBoardBtn();
     },
 
     showStatuses: function (board) {;
