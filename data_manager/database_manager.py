@@ -22,6 +22,7 @@ def get_all_cards(cursor: RealDictCursor):
     cursor.execute(f"""
                     SELECT *
                     FROM cards
+                    ORDER BY card_order
                     """)
     return cursor.fetchall()
 
@@ -63,17 +64,6 @@ def get_newly_created_board_data(cursor: RealDictCursor, board_id: int):
                 """)
     cursor.execute(query, {'board_id': board_id})
     return cursor.fetchone()
-
-
-@connection.connection_handler
-def get_cards_for_board(cursor: RealDictCursor, board_id: int):
-    query = (f"""
-                    SELECT *
-                    FROM cards
-                    WHERE board_id = %(board_id)s;
-                    """)
-    cursor.execute(query, {'board_id': board_id})
-    return cursor.fetchall()
 
 
 @connection.connection_handler
