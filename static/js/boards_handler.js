@@ -21,6 +21,22 @@ export let boardsHandler = {
                 cardsHandler.addListenerToAddCardBtn();
             })
         })
+    },
+
+    deleteBoard: function (button) {
+        let boardId = button.target.parentNode.id.match(/\d+/)[0];
+        console.log(boardId)
+        dataHandler.deleteBoardById(boardId, function () {
+            const board = document.getElementById(`board-id-${boardId}`)
+            board.remove()
+        });
+    },
+
+    addListenerToDeleteBoardBtn: function() {
+        const deleteBoardsBtn = document.querySelectorAll(".board-remove");
+        for (let button of deleteBoardsBtn) {
+            button.addEventListener("click", boardsHandler.deleteBoard);
+        }
     }
 }
 
