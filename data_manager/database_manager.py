@@ -62,7 +62,7 @@ def get_newly_created_board_data(cursor: RealDictCursor, board_id: int):
                 ORDER BY boards.id;
                 """)
     cursor.execute(query, {'board_id': board_id})
-    return cursor.fetchall()
+    return cursor.fetchone()
 
 
 @connection.connection_handler
