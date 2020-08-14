@@ -5,7 +5,7 @@ import {util} from "./util.js"
 function init() {
     // init data
     dom.init();
-    util.keepSessionActive();
+    // util.keepSessionActive();
     // loads the boards to the screen
 }
 

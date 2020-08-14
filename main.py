@@ -21,42 +21,45 @@ def index():
 @app.route("/boards", methods=["GET", "POST", "PUT"])
 @app.route("/boards/<int:board_id>", methods=['DELETE'])
 @json_response
-def boards(board_id=None):
+def boards(board_id=None, user_id=None):
     """
     All the boards
     """
     if request.method == "POST":
         data = request.get_json()
-        newly_created_board_data = util.prepare_borad_data_to_post(data)
-        newly_created_board_data["user_id"] = None
-        database_manager.save_user_data_for_new_board(newly_created_board_data)
+        newly_created_board_data = util.prepare_board_data_to_post(data)
+        print(data)
+        print(newly_created_board_data)
+        database_manager.save_user_data_for_new_public_board(newly_created_board_data)
         return newly_created_board_data
     if request.method == "GET":
-        all_boards = database_manager.get_boards()
-        return all_boards
+        boards = database_manager.get_boards()
+        return boards
     if request.method == "PUT":
         data = request.get_json()
         data_dict = dict(data.items())
         return database_manager.update_board_title(data_dict)
     if request.method == "DELETE":
-        print(board_id)
+        data = request.get_json()
+        board_owner = database_manager.get_board_owner(board_id)
+        # if not board_owner["user_id"] or board_owner == data["user_id"]:
         return database_manager.delete_board(board_id)
+        # else:
+        #     return "Ooops you can't to this"
 
 
-@app.route("/private_boards", methods=["GET", "POST"])
-@app.route("/private_boards/<int:board_id>", methods=['DELETE'])
+@app.route("/boards/private/<int:user_id>", methods=["GET", "POST"])
 @json_response
-def private_boards(board_id=None):
+def private_boards(user_id=None):
+    if request.method == "GET":
+        print(user_id)
+        all_boards = database_manager.get_private_boards(user_id)
+        return all_boards
     if request.method == "POST":
         data = request.get_json()
-        print(data)
-        if data["user_id"]:
-            newly_created_board_data = util.prepare_borad_data_to_post(data)
-            newly_created_board_data["user_id"] = data["user_id"]
-            database_manager.save_user_data_for_new_board(newly_created_board_data)
-            return newly_created_board_data
-        else:
-            return "This action is not allowed"
+        newly_created_board_data = util.prepare_board_data_to_post(data)
+        database_manager.save_user_data_for_new_private_board(newly_created_board_data)
+        return newly_created_board_data
 
 
 @app.route("/statuses", methods=['GET', 'POST'])
@@ -94,16 +97,22 @@ def cards(card_id=None):
         return database_manager.update_card_data(data_dict)
     if request.method == 'DELETE':
         return database_manager.delete_card(card_id)
-    return database_manager.get_all_cards()
+    print (f'DATA GET CARDS {data}')
+    return database_manager.get_public_cards()
+
+
+@app.route("/cards/private/<int:user_id>", methods=["GET"])
+@json_response
+def private_cards(user_id=None):
+    return database_manager.get_private_cards(user_id)
 
 
 @app.route("/cards_statuses", methods=["PUT"])
 @json_response
 def update_cards_statuses():
-    if request.method == "PUT":
-        data = request.get_json()
-        data_dict = dict(data.items())
-        return util.update_cards_order(data_dict)
+    data = request.get_json()
+    data_dict = dict(data.items())
+    return util.update_cards_order(data_dict)
 
 
 @app.route("/users", methods=["GET", "POST"])

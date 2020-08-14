@@ -5,25 +5,65 @@ import connection
 
 @connection.connection_handler
 def get_boards(cursor: RealDictCursor):
-    cursor.execute(f"""
-                    SELECT boards.id, boards.title, ARRAY_AGG(s.title ORDER BY s.id) AS statuses_list, 
+    query = (f"""
+                    SELECT all_boards.title, all_boards.board_id AS id, 
+                            ARRAY_AGG(s.title ORDER BY s.id) AS statuses_list,
                     ARRAY_AGG(s.id ORDER BY s.id) AS ids
-                    FROM boards
-                    JOIN board_statuses bs on boards.id = bs.board_id
+                    FROM
+                    (SELECT *
+                    FROM user_boards
+                    JOIN boards b on user_boards.board_id = b.id
+                    WHERE user_id IS NULL) AS all_boards
+                    JOIN board_statuses bs on all_boards.board_id = bs.board_id
                     JOIN statuses s on bs.status_id = s.id
-                    GROUP BY boards.title, boards.id
-                    ORDER BY boards.id;
+                    GROUP BY all_boards.title, all_boards.board_id
+                    ORDER BY all_boards.board_id;
+                    """)
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_private_boards(cursor: RealDictCursor, user_id:int):
+    query = sql.SQL(f"""
+                    SELECT all_boards.title, all_boards.board_id AS id, 
+                            ARRAY_AGG(s.title ORDER BY s.id) AS statuses_list,
+                    ARRAY_AGG(s.id ORDER BY s.id) AS ids
+                    FROM
+                    (SELECT *
+                    FROM user_boards
+                    JOIN boards b on user_boards.board_id = b.id
+                    WHERE user_id = {user_id} OR user_id IS NULL) AS all_boards
+                    JOIN board_statuses bs on all_boards.board_id = bs.board_id
+                    JOIN statuses s on bs.status_id = s.id
+                    GROUP BY all_boards.title, all_boards.board_id
+                    ORDER BY all_boards.board_id;
+                    """).format(user_id=sql.Literal(user_id))
+    cursor.execute(query)
+    return cursor.fetchall()
+
+@connection.connection_handler
+def get_public_cards(cursor: RealDictCursor):
+    cursor.execute(f"""
+                    SELECT *
+                    FROM cards
+                    JOIN user_boards ub on cards.board_id = ub.board_id
+                    WHERE ub.user_id IS NULL
+                    ORDER BY card_order
                     """)
     return cursor.fetchall()
 
 
 @connection.connection_handler
-def get_all_cards(cursor: RealDictCursor):
-    cursor.execute(f"""
-                    SELECT *
-                    FROM cards
+def get_private_cards(cursor: RealDictCursor, user_id):
+    query = sql.SQL(f"""
+                    SELECT * 
+                    FROM cards 
+                    JOIN user_boards ub on cards.board_id = ub.board_id
+                    WHERE ub.user_id = {user_id} OR user_id IS NULL
                     ORDER BY card_order
-                    """)
+                    """).format(user_id=sql.Literal(user_id))
+    cursor.execute(query)
     return cursor.fetchall()
 
 
@@ -42,7 +82,20 @@ def save_new_board_data(cursor: RealDictCursor, board_data: dict):
 
 
 @connection.connection_handler
-def save_user_data_for_new_board(cursor: RealDictCursor, board_data: dict):
+def save_user_data_for_new_public_board(cursor: RealDictCursor, board_data: dict):
+    query = """
+    INSERT INTO user_boards
+    (user_id, board_id)
+    VALUES (NULL, %(board_id)s)
+    RETURNING *;
+    """
+    cursor.execute(query, {
+        'board_id': board_data["id"]
+    })
+
+
+@connection.connection_handler
+def save_user_data_for_new_private_board(cursor: RealDictCursor, board_data: dict):
     query = """
     INSERT INTO user_boards
     (user_id, board_id)
@@ -162,6 +215,14 @@ def delete_card(cursor: RealDictCursor, card_id: int):
         WHERE id = {id}
         """).format(id=sql.Literal(card_id))
     cursor.execute(query)
+
+
+@connection.connection_handler
+def get_board_owner(cursor: RealDictCursor, board_id:int):
+    cursor.execute(sql.SQL("""SELECT user_id
+                            FROM user_boards
+                            WHERE board_id = {id}""").format(id=sql.Literal(board_id)))
+    return cursor.fetchone()
 
 
 @connection.connection_handler
