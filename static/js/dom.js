@@ -11,8 +11,15 @@ import {htmlCreator} from "./html_creator.js"
 
 export let dom = {
     init: function () {
-        dom.loadBoards();
         dom.addNewBoard();
+        let userId = localStorage.getItem("user_id");
+        console.log(userId)
+        if (userId != null) {
+            dom.loadPrivateBoards(parseInt(userId));
+        } else {
+            dom.loadBoards();
+            console.log("load")
+        }
         // This function should run once, when the page is loaded.
     },
 
@@ -49,8 +56,9 @@ export let dom = {
         dom.addRefreshListener();
     },
 
-    showStatuses: function (board) {;
-        for (let statusIndex=0; statusIndex < board["statuses_list"].length; statusIndex++) {
+    showStatuses: function (board) {
+
+        for (let statusIndex = 0; statusIndex < board["statuses_list"].length; statusIndex++) {
             let statusColumnElementHTML = htmlCreator.createColumnsStatusesForBoard(board["ids"][statusIndex],
                 board["statuses_list"][statusIndex]);
             let columnsContainer = document.querySelector(`#columns-board-id-${board.id}`)
@@ -60,9 +68,16 @@ export let dom = {
 
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
-        dataHandler.getAllCards(function(cards){
-            dom.showCards(cards)
-        })
+        let userId = localStorage.getItem("user_id");
+        if (userId != null) {
+            dataHandler.getPrivateCards(parseInt(userId), function (cards) {
+                dom.showCards(cards)
+            })
+        } else {
+            dataHandler.getPublicCards(function (cards) {
+                dom.showCards(cards)
+            })
+        }
     },
 
     showCards: function (cards) {
@@ -87,6 +102,12 @@ export let dom = {
     addRefreshListener: function () {
         const syncButton = document.querySelector('#manual_sync');
         syncButton ? syncButton.addEventListener('click', () => location.reload()) : null;
+    },
+
+    loadPrivateBoards: function (userId) {
+        dataHandler.getPrivateBoards(userId, function (private_boards) {
+            dom.showBoards(private_boards)
+        })
     }
 
 // here comes more features

@@ -66,6 +66,16 @@ export const htmlCreator = {
                 href="#"><span class="link fas fa-sign-in-alt"></span> Log in</a>
         </li>
     `;
-    }
+    },
 
+    emptyBoardsContainerLoginUser: function () {
+        return `        
+            <button class="board-add" id="add-board-button">Add Board</button>
+            <button class="board-add" id="add-private-board-button">Add Private Board</button>`
+},
+    emptyBoardsContainerLogoutUser: function () {
+        return `        
+            <button class="board-add" id="add-board-button">Add Board</button>
+            <button class="board-add hidden" id="add-private-board-button">Add Private Board</button>`
+}
 }
