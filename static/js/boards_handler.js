@@ -1,6 +1,7 @@
 import {dataHandler} from "./data_handler.js";
 import {cardsHandler} from "./cards_handler.js"
 import {htmlCreator} from "./html_creator.js"
+import {util} from "./util.js";
 
 export let boardsHandler = {
 
@@ -15,42 +16,38 @@ export let boardsHandler = {
         const submitModalDataButton = modal.getElementsByClassName("submit-modal-data")[0];
         const modalInputs = modal.querySelectorAll("input");
         submitModalDataButton.addEventListener("click", function () {
-            const dataToPost = getDataFromModalInputs(modalInputs, modalId);
-            const userId = localStorage.getItem("user_id");
-            console.log(modalId);
-            if (modalId === "#modal-create-board") {
-                dataToPost["user_id"] = 0;
-                dataHandler.createNewBoard(dataToPost, function (new_board) {
-                    console.log("public")
-                    appendHtmlWithBewBoard(new_board);
-                    cardsHandler.addListenerToAddCardBtn();
-                    boardsHandler.addListenerToDeleteBoardBtn();
-                    return
+            let dataToPost = getDataFromModalInputs(modalInputs, modalId);
+            dataToPost["user_id"] = parseInt(localStorage.getItem("user_id"));
+            if (modalId === "#modal-create-private-board") {
+                dataHandler.createNewPrivateBoard(dataToPost, function (new_board) {
+                appendHtmlWithBewBoard(new_board);
+                cardsHandler.addListenerToAddCardBtn();
+                boardsHandler.addListenerToDeleteBoardBtn();
             })
             }
-            else if (modalId === "#modal-create-private-board") {
-                dataToPost["user_id"] = localStorage.getItem("user_id")
-                dataHandler.createNewPrivateBoard(dataToPost, function (new_board) {
-                    console.log("private");
-                    appendHtmlWithBewBoard(new_board);
-                    cardsHandler.addListenerToAddCardBtn();
-                    boardsHandler.addListenerToDeleteBoardBtn();
-                    return
-                })
+            else {
+                dataHandler.createNewBoard(dataToPost, function (new_board) {
+                appendHtmlWithBewBoard(new_board);
+                cardsHandler.addListenerToAddCardBtn();
+                boardsHandler.addListenerToDeleteBoardBtn();
+            })
             }
         })
     },
 
     deleteBoard: function (button) {
+        let boardData = {};
         let boardId = button.target.parentNode.id.match(/\d+/)[0];
-        console.log(boardId)
-        dataHandler.deleteBoardById(boardId, function () {
+        boardData["board_id"] = boardId;
+        boardData["user_id"] = localStorage.getItem("user_id");
+        boardData["user_name"] = localStorage.getItem("user_name");
+        dataHandler.deleteBoardById(boardData, function () {
             const board = document.getElementById(`board-id-${boardId}`)
             board.remove()
         });
     },
 
-    addListenerToDeleteBoardBtn: function() {
+    addListenerToDeleteBoardBtn: function () {
         const deleteBoardsBtn = document.querySelectorAll(".board-remove");
         for (let button of deleteBoardsBtn) {
             button.addEventListener("click", boardsHandler.deleteBoard);
