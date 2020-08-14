@@ -1,6 +1,7 @@
 import {dataHandler} from "./data_handler.js";
 import {htmlCreator} from "./html_creator.js"
 import {util} from "./util.js";
+import {dom}from "./dom.js";
 
 
 export let usersHandler = {
@@ -52,9 +53,11 @@ export let usersHandler = {
                     $('#modalLoginForm').modal('toggle')
                     toggleUserMenu(userData.user);
                     localStorage.setItem("user_id", `${userData["user"].id}`);
-                    const userId = localStorage.getItem("user_id");
-                    console.log(userId);
+                    localStorage.setItem("user_name", `${userData["user"].name}`);
+                    const userId = parseInt(localStorage.getItem("user_id"));
                     util.showButtonsForLoggedInUser();
+                    util.clearAllBoards();
+                    dom.loadPrivateBoards(userId);
                 }
                 alert(userData.message)
                 passwordInput.value = ''
@@ -69,8 +72,11 @@ export let usersHandler = {
         dataHandler.logoutUser(function (message) {
             alert(message);
             toggleUserMenu()
+            localStorage.removeItem("user_id")
             localStorage.removeItem("user_id");
-            util.hideButtonsIfLoggedOut()
+            util.hideButtonsIfLoggedOut();
+            util.clearAllBoards();
+            dom.loadBoards();
         })
     },
 
@@ -109,4 +115,3 @@ function wrongInputAlert(emailInput, passwordInput) {
     emailInput.value = '';
     passwordInput.value = '';
 }
-
