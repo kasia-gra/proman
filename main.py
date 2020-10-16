@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for, request, session
+from flask_socketio import SocketIO, send
 from util import json_response, jsonify
 import util
 import os
@@ -8,6 +9,7 @@ import data_handler, persistence
 
 app = Flask(__name__)
 app.secret_key = b'\xe8\x00\x04\xcd\x1b\xc1y\x9a\xba\x1f\xae\xc2\xf1\xed\xb0\x97\xdc`W\x91\x0fNc2'
+socketio = SocketIO(app)
 
 
 @app.route("/")
@@ -52,7 +54,6 @@ def boards(board_id=None, user_id=None):
 @json_response
 def private_boards(user_id=None):
     if request.method == "GET":
-        print(user_id)
         all_boards = database_manager.get_private_boards(user_id)
         return all_boards
     if request.method == "POST":
@@ -97,7 +98,6 @@ def cards(card_id=None):
         return database_manager.update_card_data(data_dict)
     if request.method == 'DELETE':
         return database_manager.delete_card(card_id)
-    print (f'DATA GET CARDS {data}')
     return database_manager.get_public_cards()
 
 
@@ -163,10 +163,15 @@ def logout():
     return 'You have been logged out!'
 
 
-def main():
-    app.run(debug=True)
+@socketio.on('message')
+def distribute_messages(msg):
+    send(msg, broadcast=True)
 
-    # Serving the favicon
+
+def main():
+    socketio.run(app, debug=True)
+
+    # Serving the favicon    // not sure if this will work with socketio
     with app.app_context():
         app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon/favicon.ico'))
 

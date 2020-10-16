@@ -50,4 +50,3 @@ def prepare_board_data_to_post (data):
     newly_created_board_data = database_manager.get_newly_created_board_data(new_board_id)
     newly_created_board_data["user_id"] = data["user_id"]
     return newly_created_board_data
-

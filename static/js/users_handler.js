@@ -115,4 +115,3 @@ function wrongInputAlert(emailInput, passwordInput) {
     emailInput.value = '';
     passwordInput.value = '';
 }
-
