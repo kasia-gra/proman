@@ -6,7 +6,7 @@ export let dragCardsHandler = {
         const draggables = document.querySelectorAll('.card')
         const containers = document.querySelectorAll('.board-column-content')
         allowCardsDragging(draggables);
-        swapCardsOnDragOver(containers);
+        swapCards(containers);
     }
 }
 
@@ -35,42 +35,58 @@ const allowCardsDragging = function (draggables) {
     })
 }
 
-const swapCardsOnDragOver = function (containers) {
+const swapCards = function (containers) {
     containers.forEach(container => {
         container.addEventListener('dragover', e => {
             e.preventDefault();
+            const afterElement = getDragAfterElement(container, e.clientY);
+            const draggable = document.querySelector('.dragging');
+            draggable.parentElement.classList.add("origin_container");
+            const boardIdOfDraggable = draggable.closest('section').id.match(/\d+$/)[0];
+            const boardIdOfDropContainer = container.closest('section').id.match(/\d+$/)[0];
+            changeCardsOrderOnDragOver(container, boardIdOfDraggable, boardIdOfDropContainer,
+                                             afterElement, draggable);
         })
         container.addEventListener('drop', e => {
-            const afterElement = getDragAfterElement(container, e.clientY)
             const draggable = document.querySelector('.dragging')
-            const boardIdOfDraggable = draggable.closest('section').id.match(/\d+$/)[0];
-            const draggableCardOriginContainer = draggable.parentElement;
-            const boardIdOfDropContainer = container.closest('section').id.match(/\d+$/)[0];
-            if (boardIdOfDraggable == boardIdOfDropContainer) {
-                if (afterElement == null) {
-                    container.appendChild(draggable)
-                } else {
-                    container.insertBefore(draggable, afterElement)
-                }
-                saveDataOfUpdatedContainers(draggableCardOriginContainer, container);
-            }
+            const draggableCardOriginContainer = document.querySelector('.origin_container');
+            const droppedContainer = draggable.parentElement;
+            saveDataOfUpdatedContainers(draggableCardOriginContainer, droppedContainer);
+            draggableCardOriginContainer.classList.remove("origin_container");
+
         })
     })
+}
+
+
+const changeCardsOrderOnDragOver = function (container, boardIdOfDraggable, boardIdOfDropContainer,
+                                             afterElement, draggable) {
+    if (boardIdOfDraggable == boardIdOfDropContainer) {
+        if (afterElement == null) {
+            container.appendChild(draggable)
+        } else {
+            container.insertBefore(draggable, afterElement);
+        }
+    }
 }
 
 
 const saveDataOfUpdatedContainers = function (draggableCardOriginContainer, container) {
     let cardsInOriginContainer = [];
     let cardsDropContainer = [];
-    const dropContainerStatusId = container.parentElement.className.replace("board-column status-", "");
-    const originContainerStatusId = draggableCardOriginContainer.parentElement.className.replace("board-column status-", "")
+    const dropContainerStatusId = container.parentElement.className.match(/\d+$/)[0];;
+    const originContainerStatusId = draggableCardOriginContainer.parentElement.className.match(/\d+$/)[0];
     for (let card of draggableCardOriginContainer.children) {
         cardsInOriginContainer.push(card.id);
     }
     for (let card of container.children) {
         cardsDropContainer.push(card.id);
     }
-    const cardsStatusesToUpdate  = {cards_origin: cardsInOriginContainer, status_origin: originContainerStatusId,
-    cards_dropped: cardsDropContainer, status_dropped: dropContainerStatusId};
-    dataHandler.changeCardsStatuses(cardsStatusesToUpdate, function () {console.log("  ")});
+    const cardsStatusesToUpdate = {
+        cards_origin: cardsInOriginContainer, status_origin: originContainerStatusId,
+        cards_dropped: cardsDropContainer, status_dropped: dropContainerStatusId
+    };
+    dataHandler.changeCardsStatuses(cardsStatusesToUpdate, function () {
+        console.log("")
+    });
 }

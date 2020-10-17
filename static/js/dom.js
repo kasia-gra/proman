@@ -13,12 +13,10 @@ export let dom = {
     init: function () {
         dom.addNewBoard();
         let userId = localStorage.getItem("user_id");
-        console.log(userId)
         if (userId != null) {
             dom.loadPrivateBoards(parseInt(userId));
         } else {
             dom.loadBoards();
-            console.log("load")
         }
         // This function should run once, when the page is loaded.
     },
