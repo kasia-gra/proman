@@ -28,6 +28,7 @@ const allowCardsDragging = function (draggables) {
     draggables.forEach(draggable => {
         draggable.addEventListener('dragstart', () => {
             draggable.classList.add('dragging')
+            draggable.parentElement.classList.add("origin_container");
         })
         draggable.addEventListener('dragend', () => {
             draggable.classList.remove('dragging')
@@ -41,7 +42,6 @@ const swapCards = function (containers) {
             e.preventDefault();
             const afterElement = getDragAfterElement(container, e.clientY);
             const draggable = document.querySelector('.dragging');
-            draggable.parentElement.classList.add("origin_container");
             const boardIdOfDraggable = draggable.closest('section').id.match(/\d+$/)[0];
             const boardIdOfDropContainer = container.closest('section').id.match(/\d+$/)[0];
             changeCardsOrderOnDragOver(container, boardIdOfDraggable, boardIdOfDropContainer,
@@ -53,6 +53,7 @@ const swapCards = function (containers) {
             const droppedContainer = draggable.parentElement;
             saveDataOfUpdatedContainers(draggableCardOriginContainer, droppedContainer);
             draggableCardOriginContainer.classList.remove("origin_container");
+            droppedContainer.classList.remove("origin_container");
 
         })
     })
