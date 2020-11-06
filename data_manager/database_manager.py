@@ -82,19 +82,6 @@ def save_new_board_data(cursor: RealDictCursor, board_data: dict):
 
 
 @connection.connection_handler
-def save_user_data_for_new_public_board(cursor: RealDictCursor, board_data: dict):
-    query = """
-    INSERT INTO user_boards
-    (user_id, board_id)
-    VALUES (NULL, %(board_id)s)
-    RETURNING *;
-    """
-    cursor.execute(query, {
-        'board_id': board_data["id"]
-    })
-
-
-@connection.connection_handler
 def save_user_data_for_new_private_board(cursor: RealDictCursor, board_data: dict):
     query = """
     INSERT INTO user_boards

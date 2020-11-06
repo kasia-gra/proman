@@ -66,58 +66,24 @@ export let dataHandler = {
             callback(response);
         });
     },
-    getPrivateBoards: function (userId, callback) {
-        // the boards are retrieved and then the callback function is called with the boards
 
-        // Here we use an arrow function to keep the value of 'this' on dataHandler.
-        //    if we would use function(){...} here, the value of 'this' would change.
-        this._api_get(`/boards/private/${userId}`, (response) => {
-            this._data['private_boards'] = response;
-            callback(response);
-        });
-    },
     deleteBoardById: function (boardData, callback) {
         this._api_delete(`/boards/${boardData["board_id"]}`, boardData, data => {
             callback(data);
         });
     },
 
-    getBoard: function (callback) {
-        // the board is retrieved and then the callback function is called with the board
-    },
-    getStatuses: function (callback) {
-        // the statuses are retrieved and then the callback function is called with the statuses
-        this._api_get('/statuses', (response) => {
-            this._data['title'] = response;
-            callback(response);
-        });
-    },
-    getStatus: function (statusId, callback) {
-        // the status is retrieved and then the callback function is called with the status
-    },
     getPublicCards: function (callback) {
         this._api_get('/cards', (response) => {
             this._data = response;
             callback(response);
         });
     },
-    getPrivateCards: function (userId, callback) {
-        this._api_get(`/cards/private/${userId}`, (response) => {
-            this._data = response;
-            callback(response);
-        });
-    },
+
     createNewBoard: function (dataDict, callback) {
         // creates new board, saves it and calls the callback function with its data
         this._api_post('/boards', dataDict, (data) => {
             this._data['new_board'] = data;
-            callback(data)
-        });
-        },
-    createNewPrivateBoard: function (dataDict, callback) {
-        // creates new board, saves it and calls the callback function with its data
-        this._api_post(`/boards/private/${dataDict["user_id"]}`, dataDict, (data) => {
-            this._data['new_private_board'] = data;
             callback(data)
         });
         },
