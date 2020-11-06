@@ -72,5 +72,5 @@ const saveDataOfUpdatedContainers = function (draggableCardOriginContainer, cont
     }
     const cardsStatusesToUpdate  = {cards_origin: cardsInOriginContainer, status_origin: originContainerStatusId,
     cards_dropped: cardsDropContainer, status_dropped: dropContainerStatusId};
-    dataHandler.changeCardsStatuses(cardsStatusesToUpdate, function () {console.log("OK")});
+    dataHandler.changeCardsStatuses(cardsStatusesToUpdate, function () {console.log("  ")});
 }

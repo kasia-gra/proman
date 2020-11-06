@@ -45,7 +45,7 @@ def get_private_boards(cursor: RealDictCursor, user_id:int):
 @connection.connection_handler
 def get_public_cards(cursor: RealDictCursor):
     cursor.execute(f"""
-                    SELECT *
+                    SELECT cards.*
                     FROM cards
                     JOIN user_boards ub on cards.board_id = ub.board_id
                     WHERE ub.user_id IS NULL
@@ -57,7 +57,7 @@ def get_public_cards(cursor: RealDictCursor):
 @connection.connection_handler
 def get_private_cards(cursor: RealDictCursor, user_id):
     query = sql.SQL(f"""
-                    SELECT * 
+                    SELECT cards.* 
                     FROM cards 
                     JOIN user_boards ub on cards.board_id = ub.board_id
                     WHERE ub.user_id = {user_id} OR user_id IS NULL
