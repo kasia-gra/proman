@@ -1,6 +1,7 @@
-import csv, os
+import csv
+import os
 
-FOLDER = FOLDER = f"{os.path.abspath(os.path.dirname(__file__))}"
+FOLDER = f"{os.path.abspath(os.path.dirname(__file__))}"
 STATUSES_FILE = FOLDER + '/data/statuses.csv'
 BOARDS_FILE = FOLDER + '/data/boards.csv'
 CARDS_FILE = FOLDER + '/data/cards.csv'
@@ -20,6 +21,27 @@ def _read_csv(file_name):
         for row in rows:
             formatted_data.append(dict(row))
         return formatted_data
+
+
+def save_new_status(dict_data):
+    with open(STATUSES_FILE, 'a', newline='') as csv_file:
+        filednames = ['id', 'title']
+        writer = csv.DictWriter(csv_file, fieldnames=filednames)
+        writer.writerow(dict_data)
+
+
+def save_new_board_data(dict_data):
+    with open(BOARDS_FILE, 'a', newline='') as csvfile:
+        fieldnames = ['id', 'title', 'statuses']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writerow(dict_data)
+
+
+def save_new_card_data(dict_data):
+    with open(CARDS_FILE, 'a', newline='') as csvfile:
+        fieldnames = ['id', 'board_id', 'title', 'status_id', 'order']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writerow(dict_data)
 
 
 def _get_data(data_type, file, force):
