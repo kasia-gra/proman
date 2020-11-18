@@ -12,12 +12,7 @@ import {htmlCreator} from "./html_creator.js"
 export let dom = {
     init: function () {
         dom.addNewBoard();
-        let userId = localStorage.getItem("user_id");
-        if (userId != null) {
-            dom.loadPrivateBoards(parseInt(userId));
-        } else {
-            dom.loadBoards();
-        }
+        dom.loadBoards();
         // This function should run once, when the page is loaded.
     },
 
@@ -66,16 +61,9 @@ export let dom = {
 
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
-        let userId = localStorage.getItem("user_id");
-        if (userId != null) {
-            dataHandler.getPrivateCards(parseInt(userId), function (cards) {
-                dom.showCards(cards)
-            })
-        } else {
-            dataHandler.getPublicCards(function (cards) {
-                dom.showCards(cards)
-            })
-        }
+        dataHandler.getPublicCards(function (cards) {
+            dom.showCards(cards)
+        })
     },
 
     showCards: function (cards) {
@@ -92,22 +80,15 @@ export let dom = {
     addNewBoard: function () {
         boardsHandler.openAddDataModal("#modal-create-board", "#add-board-button");
         boardsHandler.submitModalData("#modal-create-board")
-        boardsHandler.openAddDataModal("#modal-create-private-board", "#add-private-board-button");
-        boardsHandler.submitModalData("#modal-create-private-board")
+        // boardsHandler.openAddDataModal("#modal-create-private-board", "#add-private-board-button");
+        // boardsHandler.submitModalData("#modal-create-private-board")
         changeBoardName.addEventListenersToBoardTitles();
     },
 
     addRefreshListener: function () {
         const syncButton = document.querySelector('#manual_sync');
         syncButton ? syncButton.addEventListener('click', () => location.reload()) : null;
-    },
-
-    loadPrivateBoards: function (userId) {
-        dataHandler.getPrivateBoards(userId, function (private_boards) {
-            dom.showBoards(private_boards)
-        })
     }
-
 // here comes more features
 };
 

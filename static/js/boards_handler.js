@@ -18,20 +18,12 @@ export let boardsHandler = {
         submitModalDataButton.addEventListener("click", function () {
             let dataToPost = getDataFromModalInputs(modalInputs, modalId);
             dataToPost["user_id"] = parseInt(localStorage.getItem("user_id"));
-            if (modalId === "#modal-create-private-board") {
-                dataHandler.createNewPrivateBoard(dataToPost, function (new_board) {
-                appendHtmlWithBewBoard(new_board);
-                cardsHandler.addListenerToAddCardBtn();
-                boardsHandler.addListenerToDeleteBoardBtn();
+            dataHandler.createNewBoard(dataToPost, function (new_board) {
+            appendHtmlWithBewBoard(new_board);
+            cardsHandler.addListenerToAddCardBtn();
+            boardsHandler.addListenerToDeleteBoardBtn();
             })
-            }
-            else {
-                dataHandler.createNewBoard(dataToPost, function (new_board) {
-                appendHtmlWithBewBoard(new_board);
-                cardsHandler.addListenerToAddCardBtn();
-                boardsHandler.addListenerToDeleteBoardBtn();
-            })
-            }
+
         })
     },
 

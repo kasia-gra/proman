@@ -57,7 +57,7 @@ export let usersHandler = {
                     const userId = parseInt(localStorage.getItem("user_id"));
                     util.showButtonsForLoggedInUser();
                     util.clearAllBoards();
-                    dom.loadPrivateBoards(userId);
+                    dom.loadBoards(userId);
                 }
                 alert(userData.message)
                 passwordInput.value = ''
