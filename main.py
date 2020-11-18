@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, session
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO
+
 from util import json_response, jsonify
 import util
 import os
@@ -9,6 +10,8 @@ import data_handler, persistence
 
 app = Flask(__name__)
 app.secret_key = b'\xe8\x00\x04\xcd\x1b\xc1y\x9a\xba\x1f\xae\xc2\xf1\xed\xb0\x97\xdc`W\x91\x0fNc2'
+SESSION_COOKIE_SECURE = True
+SESSION_PERMANENT = False
 socketio = SocketIO(app)
 
 
@@ -29,13 +32,18 @@ def boards(board_id=None, user_id=None):
     """
     if request.method == "POST":
         data = request.get_json()
-        newly_created_board_data = util.prepare_board_data_to_post(data)
-        print(data)
-        print(newly_created_board_data)
-        database_manager.save_user_data_for_new_public_board(newly_created_board_data)
+        if 'name' in session:
+            user = session['user_id']
+        else:
+            user = None
+        newly_created_board_data = util.prepare_board_data_to_post(data, user)
+        database_manager.save_user_data_for_new_private_board(newly_created_board_data)
         return newly_created_board_data
     if request.method == "GET":
-        boards = database_manager.get_boards()
+        if 'name' in session:
+            boards = database_manager.get_private_boards(session['user_id'])
+        else:
+            boards = database_manager.get_boards()
         return boards
     if request.method == "PUT":
         data = request.get_json()
@@ -44,24 +52,16 @@ def boards(board_id=None, user_id=None):
     if request.method == "DELETE":
         data = request.get_json()
         board_owner = database_manager.get_board_owner(board_id)
-        # if not board_owner["user_id"] or board_owner == data["user_id"]:
-        return database_manager.delete_board(board_id)
-        # else:
-        #     return "Ooops you can't to this"
+        if 'user_id' in session:
+            if session["user_id"] == board_owner["user_id"] or board_owner["user_id"] is None:
+                return database_manager.delete_board(board_id)
+        elif board_owner["user_id"] is None:
+            return database_manager.delete_board(board_id)
+        else:
+            return "Ooops you can't to this"
 
 
-@app.route("/boards/private/<int:user_id>", methods=["GET", "POST"])
-@json_response
-def private_boards(user_id=None):
-    if request.method == "GET":
-        print(user_id)
-        all_boards = database_manager.get_private_boards(user_id)
-        return all_boards
-    if request.method == "POST":
-        data = request.get_json()
-        newly_created_board_data = util.prepare_board_data_to_post(data)
-        database_manager.save_user_data_for_new_private_board(newly_created_board_data)
-        return newly_created_board_data
+
 
 
 @app.route("/statuses", methods=['GET', 'POST'])
@@ -99,14 +99,12 @@ def cards(card_id=None):
         return database_manager.update_card_data(data_dict)
     if request.method == 'DELETE':
         return database_manager.delete_card(card_id)
-    print (f'DATA GET CARDS {data}')
-    return database_manager.get_public_cards()
-
-
-@app.route("/cards/private/<int:user_id>", methods=["GET"])
-@json_response
-def private_cards(user_id=None):
-    return database_manager.get_private_cards(user_id)
+    if 'name' in session:
+        user_id = session['user_id']
+    else:
+        user_id = 0
+    all_cards = database_manager.get_private_cards(user_id)
+    return all_cards
 
 
 @app.route("/cards_statuses", methods=["PUT"])
@@ -161,7 +159,7 @@ def login():
 @app.route("/logout", methods=['GET', 'POST'])
 @json_response
 def logout():
-    session.pop('email', None)
+    util.clear_session_cookie(session)
     return 'You have been logged out!'
 
 

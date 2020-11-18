@@ -45,7 +45,7 @@ def get_private_boards(cursor: RealDictCursor, user_id:int):
 @connection.connection_handler
 def get_public_cards(cursor: RealDictCursor):
     cursor.execute(f"""
-                    SELECT *
+                    SELECT cards.*
                     FROM cards
                     JOIN user_boards ub on cards.board_id = ub.board_id
                     WHERE ub.user_id IS NULL
@@ -57,7 +57,7 @@ def get_public_cards(cursor: RealDictCursor):
 @connection.connection_handler
 def get_private_cards(cursor: RealDictCursor, user_id):
     query = sql.SQL(f"""
-                    SELECT * 
+                    SELECT cards.* 
                     FROM cards 
                     JOIN user_boards ub on cards.board_id = ub.board_id
                     WHERE ub.user_id = {user_id} OR user_id IS NULL
@@ -79,19 +79,6 @@ def save_new_board_data(cursor: RealDictCursor, board_data: dict):
         'title': board_data["title"]
     })
     return cursor.fetchall()
-
-
-@connection.connection_handler
-def save_user_data_for_new_public_board(cursor: RealDictCursor, board_data: dict):
-    query = """
-    INSERT INTO user_boards
-    (user_id, board_id)
-    VALUES (NULL, %(board_id)s)
-    RETURNING *;
-    """
-    cursor.execute(query, {
-        'board_id': board_data["id"]
-    })
 
 
 @connection.connection_handler
