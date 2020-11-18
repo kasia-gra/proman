@@ -1,4 +1,6 @@
 from flask import Flask, render_template, url_for, request, session
+from flask_socketio import SocketIO
+
 from util import json_response, jsonify
 import util
 import os
@@ -6,9 +8,11 @@ import os
 from data_manager import database_manager
 import data_handler, persistence
 
-
 app = Flask(__name__)
 app.secret_key = b'\xe8\x00\x04\xcd\x1b\xc1y\x9a\xba\x1f\xae\xc2\xf1\xed\xb0\x97\xdc`W\x91\x0fNc2'
+SESSION_COOKIE_SECURE = True
+SESSION_PERMANENT = False
+socketio = SocketIO(app)
 
 
 @app.route("/")
@@ -20,25 +24,44 @@ def index():
 
 
 @app.route("/boards", methods=["GET", "POST", "PUT"])
+@app.route("/boards/<int:board_id>", methods=['DELETE'])
 @json_response
-def get_boards():
+def boards(board_id=None, user_id=None):
     """
     All the boards
     """
     if request.method == "POST":
         data = request.get_json()
-        new_board_data = database_manager.save_new_board_data(data)
-        new_board_id = dict(new_board_data[0])["id"]
-        database_manager.update_new_board_default_statuses(new_board_id);
-        newly_created_board_data = database_manager.get_newly_created_board_data(new_board_id)
+        if 'name' in session:
+            user = session['user_id']
+        else:
+            user = None
+        newly_created_board_data = util.prepare_board_data_to_post(data, user)
+        database_manager.save_user_data_for_new_private_board(newly_created_board_data)
         return newly_created_board_data
     if request.method == "GET":
-        boards = database_manager.get_boards()
+        if 'name' in session:
+            boards = database_manager.get_private_boards(session['user_id'])
+        else:
+            boards = database_manager.get_boards()
         return boards
     if request.method == "PUT":
         data = request.get_json()
         data_dict = dict(data.items())
         return database_manager.update_board_title(data_dict)
+    if request.method == "DELETE":
+        data = request.get_json()
+        board_owner = database_manager.get_board_owner(board_id)
+        if 'user_id' in session:
+            if session["user_id"] == board_owner["user_id"] or board_owner["user_id"] is None:
+                return database_manager.delete_board(board_id)
+        elif board_owner["user_id"] is None:
+            return database_manager.delete_board(board_id)
+        else:
+            return "Ooops you can't to this"
+
+
+
 
 
 @app.route("/statuses", methods=['GET', 'POST'])
@@ -59,7 +82,6 @@ def statuses(status_id=None):
     if request.method == 'DELETE':
         data_dict = request.get_json()
         return database_manager.delete_status(data_dict)
-    render_template('index.html')
 
 
 @app.route("/cards", methods={"GET", "POST"})
@@ -72,30 +94,30 @@ def cards(card_id=None):
         saved_data = database_manager.save_new_card(data_dict)
         data_dict["id"] = saved_data[0]["id"]
         return data_dict
-    elif request.method == 'PUT':
+    if request.method == 'PUT':
         data_dict = dict(data.items())
         return database_manager.update_card_data(data_dict)
-    elif request.method == 'DELETE':
+    if request.method == 'DELETE':
         return database_manager.delete_card(card_id)
+    if 'name' in session:
+        user_id = session['user_id']
     else:
-        return database_manager.get_all_cards()
-
-
+        user_id = 0
+    all_cards = database_manager.get_private_cards(user_id)
+    return all_cards
 
 
 @app.route("/cards_statuses", methods=["PUT"])
 @json_response
 def update_cards_statuses():
-    if request.method == "PUT":
-        data = request.get_json()
-        data_dict = dict(data.items())
-        return util.update_cards_order(data_dict)
+    data = request.get_json()
+    data_dict = dict(data.items())
+    return util.update_cards_order(data_dict)
 
 
 @app.route("/users", methods=["GET", "POST"])
 @json_response
 def user_registration():
-
     if request.method == 'GET':
         return "test?"
 
@@ -137,15 +159,19 @@ def login():
 @app.route("/logout", methods=['GET', 'POST'])
 @json_response
 def logout():
-
-    session.pop('email', None)
+    util.clear_session_cookie(session)
     return 'You have been logged out!'
 
 
-def main():
-    app.run(debug=True)
+@socketio.on('message')
+def distribute_messages(msg):
+    send(msg, broadcast=True)
 
-    # Serving the favicon
+
+def main():
+    socketio.run(app, debug=True)
+
+    # Serving the favicon    // not sure if this will work with socketio
     with app.app_context():
         app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon/favicon.ico'))
 

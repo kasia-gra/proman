@@ -1,5 +1,7 @@
 import {dataHandler} from "./data_handler.js";
-import {htmlTemplates} from "./html_templates.js";
+import {cardsHandler} from "./cards_handler.js"
+import {htmlCreator} from "./html_creator.js"
+import {util} from "./util.js";
 
 export let boardsHandler = {
 
@@ -9,22 +11,41 @@ export let boardsHandler = {
         closeModalOnClick(modal);
     },
 
-
     submitModalData: function (modalId) {
         const modal = document.querySelector(modalId);
         const submitModalDataButton = modal.getElementsByClassName("submit-modal-data")[0];
         const modalInputs = modal.querySelectorAll("input");
         submitModalDataButton.addEventListener("click", function () {
-            const dataToPost = getDataFromModalInputs(modalInputs);
+            let dataToPost = getDataFromModalInputs(modalInputs, modalId);
+            dataToPost["user_id"] = parseInt(localStorage.getItem("user_id"));
             dataHandler.createNewBoard(dataToPost, function (new_board) {
-                modal.className = "modal-hide";
-                appendHtmlWithBewBoard(new_board);
-                return new_board
+            appendHtmlWithBewBoard(new_board);
+            cardsHandler.addListenerToAddCardBtn();
+            boardsHandler.addListenerToDeleteBoardBtn();
             })
+
         })
+    },
+
+    deleteBoard: function (button) {
+        let boardData = {};
+        let boardId = button.target.parentNode.id.match(/\d+/)[0];
+        boardData["board_id"] = boardId;
+        boardData["user_id"] = localStorage.getItem("user_id");
+        boardData["user_name"] = localStorage.getItem("user_name");
+        dataHandler.deleteBoardById(boardData, function () {
+            const board = document.getElementById(`board-id-${boardId}`)
+            board.remove()
+        });
+    },
+
+    addListenerToDeleteBoardBtn: function () {
+        const deleteBoardsBtn = document.querySelectorAll(".board-remove");
+        for (let button of deleteBoardsBtn) {
+            button.addEventListener("click", boardsHandler.deleteBoard);
+        }
     }
 }
-
 
 function getAllModalInputFields(modalId) {
     const modal = document.querySelector(modalId);
@@ -34,14 +55,15 @@ function getAllModalInputFields(modalId) {
 }
 
 
-function getDataFromModalInputs(modalInputs) {
+function getDataFromModalInputs(modalInputs, modalId) {
+    const modal = document.querySelector(modalId);
     let dataInputsDict = {}
     for (let input of modalInputs) {
         dataInputsDict[input.name] = input.value
     }
+    modal.className = "modal-hide";
     return dataInputsDict
 }
-
 
 function openModalOnClick(modal, openingButtonId) {
     let openingButton = document.querySelector(openingButtonId);
@@ -49,7 +71,6 @@ function openModalOnClick(modal, openingButtonId) {
         modal.className = "modal-background";
     });
 }
-
 
 function closeModalOnClick(modal) {
     let closeModalIcon = modal.getElementsByClassName("close-modal")[0];
@@ -60,11 +81,11 @@ function closeModalOnClick(modal) {
 
 
 let appendHtmlWithBewBoard = function (newBoard) {
-    let boardElementHTML = htmlTemplates.createBoard(newBoard.title, newBoard.id);
+    let boardElementHTML = htmlCreator.createBoard(newBoard.title, newBoard.id);
     let boardsContainer = document.querySelector("#board-container");
     boardsContainer.insertAdjacentHTML("beforeend", boardElementHTML);
     for (let statusIndex = 0; statusIndex < newBoard["statuses_list"].length; statusIndex++) {
-        let statusColumnElementHTML = htmlTemplates.createColumnsStatusesForBoard(newBoard["ids"][statusIndex],
+        let statusColumnElementHTML = htmlCreator.createColumnsStatusesForBoard(newBoard["ids"][statusIndex],
             newBoard["statuses_list"][statusIndex]);
         let columnsContainer = document.querySelector(`#columns-board-id-${newBoard.id}`)
         columnsContainer.insertAdjacentHTML("beforeend", statusColumnElementHTML);

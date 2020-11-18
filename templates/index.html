@@ -18,10 +18,10 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <!-- Optional JavaScript -->
 {#        <script src="/static/script.js" defer></script>#}
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" defer></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous" defer></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous" defer></script>
-
+        <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous" defer></script>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/design.css') }}">
 
@@ -37,7 +37,7 @@
         <div class="container-fluid">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Something</a>
+                    <a id="manual-sync" class="nav-link" href="">Synchronize&nbsp;<i class="fas fa-sync-alt"></i></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Your Boards</a>
@@ -83,6 +83,21 @@
         </div>
         </div>
     </div>
+
+<div id="modal-create-private-board" class="modal-hide">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content create-board">
+            <div class="modal-header">
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <label>Board Title</label>
+                <input type="text" id="new-private-board-title" name="title">
+                <button type="button" class="submit-modal-data" id="submit-new-private-board">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <div id="modal-create-status" class="modal-create-status modal fade" role="dialog" tabindex="-1"
      aria-labelledby="Set a new status column" aria-hidden="true">
@@ -175,6 +190,7 @@
 
         <div class="board-container" id="board-container">
             <button class="board-add" id="add-board-button">Add Board</button>
+            <button class="board-add hidden" id="add-private-board-button">Add Private Board</button>
         </div>
 
     </body>

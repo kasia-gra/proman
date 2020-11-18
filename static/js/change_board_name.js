@@ -14,6 +14,7 @@ const updateValue = function (e) {
         dataToPost["title"] = e.target.value;
         dataToPost["id"] = e.target.parentNode.parentNode.id.replace("header-board-", "");
         dataHandler.editBoard(dataToPost, function (edited_board_data) {
+            console.log(edited_board_data)
         })
     }
 }

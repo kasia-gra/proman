@@ -1,27 +1,25 @@
 import {dataHandler} from "./data_handler.js";
 import {dragCardsHandler} from "./drag_cards_handler.js";
+import {htmlCreator} from "./html_creator.js";
+import {util} from "./util.js"
 
 export let cardsHandler = {
 
-    addCard : function (button) {
+    addCard: function (button) {
         let boardId = button.target.id.match(/\d+/)[0]; // return number of board where btn is clicked
-        let statusId;
-        document.querySelector(`#columns-board-id-${boardId} .board-column`).classList.forEach(
-                c => statusId = c.match(/^status-(\d+)$/)
-            ); // by default
-        statusId = statusId[1];
+        const statusId = util.extractId(document.querySelector(`#columns-board-id-${boardId} .board-column`));
         let cardTitle = "Empty card"; // temporary
         dataHandler.createNewCard(cardTitle, boardId, statusId, function (newCard) {
-            let cardElementHTML = cardsHandler.createCard(newCard);
+            let cardElementHTML = htmlCreator.createCard(newCard);
             let statusContainer = document.querySelector(`#board-id-${boardId} .board-column-content`);
-        statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
-        dragCardsHandler.InitCardsDragDropListeners();
+            statusContainer.insertAdjacentHTML("beforeend", cardElementHTML);
+            dragCardsHandler.InitCardsDragDropListeners();
         });
     },
 
-    editCard : function (e) {
-        let cardId = (e.target.parentNode.id);
-        if(e.target && e.target.className === 'card-title') {
+    editCard: function (e) {
+        if (e.target && e.target.className === 'card-title') {
+            let cardId = (e.target.parentNode.id);
             if (!document.querySelector('#card-input')) {
                 let input = document.createElement('input');    //create input
                 input.setAttribute('id', 'card-input');
@@ -30,6 +28,10 @@ export let cardsHandler = {
                 let oldTitle = e.target.innerHTML;
                 e.target.innerHTML = '';
                 e.target.appendChild(input);
+                const card = input.closest('.card');
+                input.focus();
+                input.select();
+                util.toggleDraggable(card);
 
                 input.addEventListener('keyup', function (event) {    //add listener on input
                     if (event.key === 'Enter') {
@@ -38,32 +40,40 @@ export let cardsHandler = {
                         if (title.replace(/\s\s+/g, ' ').toLowerCase().match(/^[0-9a-z ]+$/)) {
                             dataHandler.editCard(title, cardId, function (editedCard) {
                             }); // ask mentor about callback
+                            util.toggleDraggable(card);
                             e.target.innerHTML = title;
-                        }
-                        else alert('Use letters and numbers only.')
+                        } else alert('Use letters and numbers only.')
+                    } else if (event.key === 'Escape') {
+                        util.toggleDraggable(card);
+                        e.target.innerHTML = oldTitle
                     }
-                    else if (event.key === 'Escape') { e.target.innerHTML = oldTitle }
                 })
             }
         }
     },
 
-    createCard : function (card) {
-        if (!card.title) {card.title = "Empty card"}
-        return `
-            <div class="card" draggable="true" id="${card.id}" data-board-id='${card.board_id}' data-status='${card.status_id}'>
-                <div class="card-remove"><i class="fas fa-trash-alt delete-card"></i></div>
-                <div class="card-title">${card.title}</div>
-            </div>
-        `
+
+    deleteCard: function (e) {
+        if (e.target && e.target.classList.contains('delete-card')) {
+            let cardId = e.target.parentNode.parentNode.id;
+            dataHandler.deleteCardById({cardId: cardId}, function (data) {
+                e.target.parentNode.parentNode.remove()
+            });
+        }
     },
 
-     deleteCard : function(e) {
-         if (e.target && e.target.classList.contains('delete-card')) {
-             let cardId = e.target.parentNode.parentNode.id;
-             dataHandler.deleteCardById({cardId: cardId}, function (data) {
-              e.target.parentNode.parentNode.remove()
-             });
-         }
-     }
+    addListenerToAddCardBtn: function () {
+        let addButtons = document.querySelectorAll(".board-add-card");
+        for (let button of addButtons) {
+            button.addEventListener("click", cardsHandler.addCard);
+        }
+    },
+
+    addEventListenersToCards: function () {
+        document.addEventListener('click', cardsHandler.editCard);
+    },
+
+    addListenersToDeleteCards: function () {
+        document.addEventListener('click', cardsHandler.deleteCard)
+    }
 }
